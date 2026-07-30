@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================================
+   ESTÉTICA RETRÔ — Mac OS X "Aqua" / web do início dos anos 2000.
+   Só repintura visual: nenhuma lógica depende destas classes.
+   Legibilidade preservada (fontes >= 13px, contraste alto).
+   ========================================================================= */
+
+:root {
+  --link: #1b3fc8;
+  --link-visited: #6a2fa0;
+  --win-border: #7c7c7c;
+  --box-border: #9a9a9a;
+  --aqua-1: #6aa4f4;
+  --aqua-2: #2f6fd0;
+  --aqua-dark: #1b4f9c;
+  --metal-1: #f4f4f4;
+  --metal-2: #cfcfcf;
+  --ink: #1d1d1f;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  color: var(--ink);
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Segoe UI", Geneva, Verdana, Tahoma, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  /* Fundo Aqua: pinstripe azulado sutil, como as janelas do Mac OS X. */
+  background-color: #a9c7ea;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.35) 0, rgba(255,255,255,0.35) 1px, transparent 1px, transparent 4px),
+    linear-gradient(180deg, #bcd6f2, #9ebfe4);
+  background-attachment: fixed;
+}
+
+/* --- Janela (window chrome) --------------------------------------------- */
+.win {
+  background: #ffffff;
+  border: 1px solid var(--win-border);
+  border-radius: 8px 8px 6px 6px;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.7) inset;
+  overflow: hidden;
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 26px;
+  padding: 0 10px;
+  background: linear-gradient(180deg, #ececec 0%, #d3d3d3 50%, #c3c3c3 100%);
+  border-bottom: 1px solid #9a9a9a;
+  box-shadow: inset 0 1px 0 #ffffff;
+}
+.titlebar .title {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #3a3a3a;
+  text-shadow: 0 1px 0 #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lights { display: flex; gap: 6px; }
+.light { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 0 1px rgba(0,0,0,0.4); }
+.light.r { background: radial-gradient(circle at 35% 30%, #ff9a92, #e14b3f); }
+.light.y { background: radial-gradient(circle at 35% 30%, #ffe08a, #e0a92e); }
+.light.g { background: radial-gradient(circle at 35% 30%, #b9f08a, #35a63a); }
+
+/* Barra "brushed metal" (toolbar / rodapé) */
+.metalbar {
+  background: linear-gradient(180deg, #f6f6f6, #d8d8d8);
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #9a9a9a;
+}
+
+.win-body { padding: 18px; }
+
+/* --- Caixas de conteúdo (paineis tabulares) ----------------------------- */
+.box {
+  border: 1px solid var(--box-border);
+  background: #ffffff;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.box + .box { margin-top: 14px; }
+
+/* Cabeçalho de caixa com "orelha" azul Aqua (como os sites de 2001) */
+.box-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  background: linear-gradient(180deg, var(--aqua-1), var(--aqua-2));
+  border-bottom: 1px solid var(--aqua-dark);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.35);
+}
+.box-hd .badge {
+  background: #ffcf3f;
+  color: #5a3d00;
+  border: 1px solid #b98f10;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 5px;
+  text-shadow: none;
+}
+.box-bd { padding: 12px 14px; }
+
+/* cabeçalho secundário (bege/oliva, estilo "Hot News Headlines" da Apple) */
+.bar-olive {
+  background: linear-gradient(180deg, #b7b482, #9a9768);
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 3px 10px;
+  border: 1px solid #83814f;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+}
+
+/* --- Botões ------------------------------------------------------------- */
+/* Botão gel azul (Aqua "default") */
+.aqua-btn {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #10305f;
+  padding: 6px 18px;
+  border: 1px solid #3f6fb0;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 48%, rgba(140,185,240,0.25) 52%, rgba(120,170,235,0.55) 100%),
+    linear-gradient(180deg, #eaf3ff, #b9d6fb);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 2px rgba(0,0,0,0.25);
+  cursor: pointer;
+}
+.aqua-btn:hover { filter: brightness(1.04); }
+.aqua-btn:active { box-shadow: inset 0 2px 3px rgba(0,0,0,0.25); }
+.aqua-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* Botão cinza com bisel 3D clássico (outset) */
+.bevel-btn {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 13px;
+  color: #1d1d1f;
+  padding: 5px 16px;
+  background: linear-gradient(180deg, #fdfdfd, #d9d9d9);
+  border: 1px solid;
+  border-color: #ffffff #808080 #6f6f6f #ffffff;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.bevel-btn:active {
+  border-color: #6f6f6f #ffffff #ffffff #808080;
+  background: linear-gradient(180deg, #d0d0d0, #ececec);
+}
+
+/* --- Alternativas (linhas clicáveis estilo lista do Finder) ------------- */
+.answer {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #1d1d1f;
+  padding: 10px 12px 10px 34px;
+  position: relative;
+  background: linear-gradient(180deg, #ffffff, #f2f2f2);
+  border: 1px solid;
+  border-color: #ffffff #b6b6b6 #b0b0b0 #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.answer + .answer { margin-top: 8px; }
+.answer::before {
+  content: "";
+  position: absolute;
+  left: 11px; top: 50%;
+  width: 13px; height: 13px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  border: 1px solid #8aa0bf;
+  background: radial-gradient(circle at 40% 35%, #ffffff, #dfe7f2);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.8);
+}
+.answer:hover {
+  background: linear-gradient(180deg, #eaf2ff, #d7e6fb);
+  border-color: #ffffff #7fa8e6 #7fa8e6 #ffffff;
+}
+.answer.sel {
+  color: #ffffff;
+  background: linear-gradient(180deg, var(--aqua-1), var(--aqua-2));
+  border-color: var(--aqua-dark);
+  text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+}
+.answer.sel::before {
+  background: radial-gradient(circle at 40% 35%, #ffffff 0 45%, #2f6fd0 50%);
+  border-color: #ffffff;
+}
+.answer.dim { opacity: 0.5; }
+
+/* --- Links clássicos ---------------------------------------------------- */
+.retro-link {
+  color: var(--link);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.retro-link:visited { color: var(--link-visited); }
+.retro-link:hover { color: #d02020; }
+
+/* --- Barra de progresso Aqua (candy stripes) ---------------------------- */
+.aqua-progress {
+  height: 16px;
+  border: 1px solid #6f88ad;
+  border-radius: 9px;
+  background: #dfe6ef;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+.aqua-progress-fill {
+  height: 100%;
+  border-radius: 9px 0 0 9px;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0) 55%),
+    repeating-linear-gradient(-45deg, #4f8ff0 0 9px, #2f6fd0 9px 18px);
+  background-size: auto, 26px 26px;
+  animation: stripes 0.8s linear infinite;
+  transition: width 0.5s ease-out;
+}
+@keyframes stripes { from { background-position: 0 0, 0 0; } to { background-position: 0 0, 26px 0; } }
+
+/* Linha técnica discreta (paixão/fixação demovidas para nota de rodapé) */
+.ficha {
+  margin-top: 12px;
+  font-size: 11.5px;
+  color: #77787a;
+  font-style: italic;
+  border-top: 1px dotted #cccccc;
+  padding-top: 8px;
+}
+
+/* --- Divisor clássico --------------------------------------------------- */
+.rule { border: none; border-top: 1px solid #b9b9b9; box-shadow: 0 1px 0 #ffffff; margin: 14px 0; }
+
+/* --- Tipografia de destaque --------------------------------------------- */
+.serif-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  letter-spacing: -0.01em;
+}
+.pill {
+  display: inline-block;
+  background: linear-gradient(180deg, var(--aqua-1), var(--aqua-2));
+  color: #fff;
+  font-weight: 700;
+  padding: 3px 12px;
+  border: 1px solid var(--aqua-dark);
+  border-radius: 12px;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in { animation: fadeIn 220ms ease-out; }
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
