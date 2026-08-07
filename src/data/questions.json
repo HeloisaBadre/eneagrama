@@ -1,12 +1,12 @@
 {
   "_meta": {
     "descricao": "Banco de perguntas do teste de eneagrama. Cenarios indiretos de multipla escolha.",
-    "principio_alternativas": "Cada alternativa mapeia para uma categoria (triade/tipo/instinto) para a pontuacao, mas a redacao NAO entrega a categoria por palavras-chave. A diferenca esta na motivacao de fundo.",
-    "distratores": "Alternativas extras (eixo 'distrator', peso 0, mapa nulo) sao reacoes humanas plausiveis que NAO mapeiam para nenhuma categoria: aumentam a tensao de escolha sem enviesar a inferencia. O motor ignora alternativas de categoria nula. Ha tambem 'variantes matizadas' (peso baixo) que apontam para uma categoria de forma mais fraca.",
-    "eixos_tematicos_cobertos": ["motivacao", "falha percebida", "autoridade", "imagem", "seguranca/recursos", "rejeicao/critica", "raiva", "sentido", "culpa", "vergonha", "medo", "status/grupo", "vinculo individual", "autossacrificio vs autopreservacao", "vulnerabilidade", "desejo/valorizacao", "autoaperfeicoamento"],
+    "principio_cobertura": "REGRA DE OURO: toda alternativa mapeia para um centro/tipo/instinto real (nada de opcao nula). Em cada pergunta, uma pessoa de qualquer tipo candidato precisa encontrar ao menos uma alternativa com a qual se identifique, mapeada para o SEU centro. Como cada pessoa escolhe so uma opcao por item, ter varias opcoes de um mesmo centro NAO enviesa o resultado: apenas garante que ninguem fique sem casa.",
+    "fase1_cobertura": "Cada cenario da Fase 1 tem opcoes cobrindo os tres centros. O centro instintivo aparece nas suas TRES formas de raiva: explosiva (8), contida/corretiva (1) e anestesiada/apaziguadora (9). Assim um 9 se reconhece no instintivo (era o bug: as opcoes instintivas so tinham a forma assertiva, e as reacoes de apaziguar/anestesiar caiam em opcoes sem pontuacao).",
+    "eixos": { "fixacao": "distorcao cognitiva, peso maior", "paixao": "reacao passional, sensivel ao tempo", "emocao": "emocao reativa de base" },
     "triades": { "instintiva": [8, 9, 1], "emocional": [2, 3, 4], "mental": [5, 6, 7] },
     "instintos": ["autopreservacao", "social", "sexual"],
-    "nota_calibracao": "Pesos e limiares sao heuristicas transparentes, nao validadas por amostra. Sem travessoes."
+    "nota_calibracao": "Pesos e limiares sao heuristicas ajustaveis, nao validadas por amostra. Sem travessoes."
   },
 
   "fase1": [
@@ -15,144 +15,131 @@
       "cenario": "Algo importante que você vinha construindo desanda bem na sua frente. No primeiro instante, o que mais te toma?",
       "par_gemeo_id": null, "flag_desejabilidade_social": false,
       "alternativas": [
-        { "id": "a", "texto": "Você já quer agir e pôr aquilo de volta no lugar; ficar parado diante do erro é insuportável.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "b", "texto": "Bate o peso do que isso diz sobre você, de como fica a sua figura depois.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "c", "texto": "A cabeça dispara atrás do que ainda pode desandar e de como se resguardar do próximo tropeço.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Uma decepção quieta com você mesmo, uma sensação de que devia ter dado conta melhor.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 0.5, "desejavel": false },
-        { "id": "e", "texto": "Sinceramente, dou de ombros; já aprendi que remoer não muda o que passou.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "a", "texto": "Já parto para consertar, com uma revolta contra o que ou quem deixou aquilo desandar.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "b", "texto": "Meio que desligo, minimizo, digo a mim mesmo que não é tão grave e sigo tocando.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "c", "texto": "Bate o peso do que isso diz sobre mim, de como fica a minha figura depois.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "d", "texto": "A cabeça dispara atrás do que ainda pode piorar e de como me resguardar do próximo tropeço.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "e", "texto": "Bate um desânimo pesado, como se isso confirmasse que há algo de errado comigo.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false }
       ]
     },
     {
-      "id": "f1_02", "fase": 1, "dominio": "trabalho",
+      "id": "f1_02", "fase": 1, "dominio": "geral",
+      "cenario": "Alguém ultrapassa de novo um limite importante seu. O que mais combina com a sua reação de fundo?",
+      "par_gemeo_id": null, "flag_desejabilidade_social": false,
+      "alternativas": [
+        { "id": "a", "texto": "Confronto na hora e imponho o meu limite, sem rodeios.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "b", "texto": "Seguro por fora, mas por dentro fervo com o quanto aquilo é errado, e vou remoendo.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "c", "texto": "Deixo passar para não virar conflito, engolindo um incômodo surdo que fica ali.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "d", "texto": "Fico magoado que me tratem assim, ainda mais depois de tudo que faço pela pessoa.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "e", "texto": "Me afasto em silêncio e passo a manter aquela pessoa a uma boa distância.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false }
+      ]
+    },
+    {
+      "id": "f1_03", "fase": 1, "dominio": "trabalho",
       "cenario": "Numa reunião, alguém questiona uma decisão sua na frente de todos. A primeira coisa que sobe em você é:",
       "par_gemeo_id": null, "flag_desejabilidade_social": false,
       "alternativas": [
-        { "id": "a", "texto": "Dá vontade de responder ali mesmo e deixar claro que com você não é assim.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
-        { "id": "b", "texto": "O que fica é a impressão que sobrou, o jeito como os outros passaram a te olhar.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
-        { "id": "c", "texto": "Antes de qualquer reação, você já mede se a pessoa é confiável e onde vai poder se apoiar depois.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Você trava por um segundo e só bem depois consegue nomear o que sentiu.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "a", "texto": "Vontade de rebater ali mesmo e não deixar barato.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "b", "texto": "A pressa de recuperar a boa imagem diante de todos.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "c", "texto": "Uma defensiva cautelosa, avaliando se a pessoa é confiável e o que ela quer com aquilo.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "d", "texto": "Uma pontada de que aquilo me expõe e mexe com o meu medo de não ser bom o bastante.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "e", "texto": "Contorno com leveza, jogo charme e sigo em frente sem me abalar muito.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false }
       ]
     },
     {
-      "id": "f1_03", "fase": 1, "dominio": "romance",
-      "cenario": "Você contava muito com alguém próximo e a pessoa simplesmente não apareceu, sem avisar. A sós, sem ninguém por perto, o que domina?",
-      "par_gemeo_id": "gemeo_deixado_na_mao", "flag_desejabilidade_social": false,
-      "alternativas": [
-        { "id": "a", "texto": "Sobe uma indignação firme, de quem tinha um acordo e viu ser desrespeitado.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "b", "texto": "Fica a sensação de não ter importado o bastante, de valer pouco para a pessoa.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "c", "texto": "Você já procura explicação e garantia: o que aconteceu, e se ainda dá para contar com ela.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Uma parte quer cobrar, outra quer deixar pra lá; você fica dividido e sem saber.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
-      ]
-    },
-    {
-      "id": "f1_09", "fase": 1, "dominio": "trabalho",
-      "cenario": "Diante de vários colegas, alguém com quem você contava te deixa na mão numa entrega combinada. Na frente de todo mundo, o que domina?",
-      "par_gemeo_id": "gemeo_deixado_na_mao", "flag_desejabilidade_social": false,
-      "alternativas": [
-        { "id": "a", "texto": "Sobe uma indignação firme, de quem tinha um acordo e viu ser desrespeitado.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "b", "texto": "Fica a sensação de não ter importado o bastante, de valer pouco para a pessoa.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "c", "texto": "Você já procura explicação e garantia: o que aconteceu, e se ainda dá para contar com ela.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Uma parte quer cobrar, outra quer deixar pra lá; você fica dividido e sem saber.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
-      ]
-    },
-    {
-      "id": "f1_12", "fase": 1, "dominio": "trabalho",
-      "cenario": "Você discorda de uma decisão de alguém que tem autoridade sobre você. Por dentro, o que mais pesa?",
+      "id": "f1_04", "fase": 1, "dominio": "familia",
+      "cenario": "Uma tensão dentro de casa vai crescendo. Qual é o seu movimento mais automático?",
       "par_gemeo_id": null, "flag_desejabilidade_social": false,
       "alternativas": [
-        { "id": "a", "texto": "Um impulso de bater de frente; você não engole com facilidade uma ordem que acha errada.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "b", "texto": "O receio de desagradar e de cair no conceito de quem você gostaria que te aprovasse.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "c", "texto": "Uma ponderação cautelosa de quando vale resistir e quando é mais seguro ir junto.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Quase nada; se manda em mim, uma hora acato e sigo em frente.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "a", "texto": "Apaziguar e ceder, fazer o possível para o clima não piorar.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "b", "texto": "Ficar tenso querendo pôr ordem e corrigir o que está errado ali.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "c", "texto": "Uma hora estouro e imponho um basta.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "d", "texto": "Me preocupar com cada um e tentar cuidar para todo mundo ficar bem.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "e", "texto": "Ficar em alerta, medindo até onde aquilo pode ir e como me resguardar.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false }
       ]
     },
     {
-      "id": "f1_04", "fase": 1, "dominio": "geral", "indireto": true,
-      "cenario": "Um colega recusa uma tarefa extra dizendo só “agora não dá”, sem explicar. O que mais te incomoda nessa cena, se algo incomoda?",
-      "par_gemeo_id": null, "flag_desejabilidade_social": false,
-      "alternativas": [
-        { "id": "a", "texto": "Sinceramente, nada; a pessoa marcou a posição dela e ponto, isso me soa o mais natural.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "b", "texto": "Podia ter explicado melhor; do jeito seco que saiu, soou a pouco caso.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "c", "texto": "Fico com a pulga atrás da orelha: será que está sobrecarregado, será que tem algo por trás.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "d", "texto": "Me incomoda a tarefa ter ficado sem dono, e já penso em como resolver isso.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 0.5, "desejavel": false }
-      ]
-    },
-    {
-      "id": "f1_05", "fase": 1, "dominio": "familia",
-      "cenario": "Uma tensão dentro de casa vai crescendo. Para onde a sua energia corre quase sem você decidir?",
-      "par_gemeo_id": null, "flag_desejabilidade_social": false,
-      "alternativas": [
-        { "id": "a", "texto": "A energia vai para resolver e pôr ordem, agir logo, marcar até onde você aceita.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "b", "texto": "Você fica atento à relação: se ainda é querido apesar disso, como ficam vocês depois.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "c", "texto": "A cabeça já corre para o depois, imaginando como aquilo desdobra e como se preparar.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Você tende a se retrair e sair de cena até a poeira baixar.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 0.5, "desejavel": false },
-        { "id": "e", "texto": "Fico meio anestesiado, como se aquilo não fosse comigo.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
-      ]
-    },
-    {
-      "id": "f1_06", "fase": 1, "dominio": "geral", "indireto": true,
-      "cenario": "Pense em alguém que você acha “demais”, exagerado. O que nessa pessoa costuma te soar exagerado?",
-      "par_gemeo_id": null, "flag_desejabilidade_social": false,
-      "alternativas": [
-        { "id": "a", "texto": "Quando fica presa no que os outros acham dela, em vez de simplesmente ser.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "b", "texto": "Aquele jeito de esperar sempre o pior e desconfiar de tudo sem precisar.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "c", "texto": "Quando atropela os outros como se só a vontade dela contasse.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "d", "texto": "Honestamente, não julgo muito; cada um é como é.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
-      ]
-    },
-    {
-      "id": "f1_07", "fase": 1, "dominio": "amizade",
-      "cenario": "Um amigo te procura para desabafar um problema pessoal. Sem pensar, para onde a sua atenção corre primeiro?",
-      "par_gemeo_id": null, "flag_desejabilidade_social": true,
-      "alternativas": [
-        { "id": "a", "texto": "Para o que dá para fazer agora; você já quer ajudar a resolver e tirar aquilo do caminho dele.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "b", "texto": "Para como ele está se sentindo e para o vínculo; você quer que ele se sinta acolhido e perto de você.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": true },
-        { "id": "c", "texto": "Para entender a fundo a situação, juntar o que falta saber e pensar no que pode complicar.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Confesso que penso em quanto aquilo vai me custar de tempo e energia.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
-      ]
-    },
-    {
-      "id": "f1_08", "fase": 1, "dominio": "trabalho",
+      "id": "f1_05", "fase": 1, "dominio": "trabalho",
       "cenario": "Você recebe uma tarefa sem instruções claras e com prazo curto. Qual é o desconforto de fundo?",
       "par_gemeo_id": null, "flag_desejabilidade_social": false,
       "alternativas": [
-        { "id": "a", "texto": "A impaciência com a enrolação; você só quer espaço para fazer do seu jeito e tocar.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
-        { "id": "b", "texto": "A atenção em como o resultado vai ser avaliado; precisa ficar bom aos olhos de quem importa.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
-        { "id": "c", "texto": "A insegurança de agir sem um guia claro; você busca uma referência antes de se comprometer.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Nenhum grande drama; vou tocando e resolvo conforme aparece.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "a", "texto": "Impaciência com a enrolação; só quero espaço para fazer do meu jeito e tocar logo.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "b", "texto": "Vou empurrando com a barriga e deixo fluir, sem me estressar muito com isso.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "c", "texto": "Foco em entregar bem e no prazo, custe o que custar; preciso me sair bem.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "d", "texto": "Insegurança de agir sem um guia; busco uma referência antes de me comprometer.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
+        { "id": "e", "texto": "Me recolho para entender o problema sozinho antes de mexer em qualquer coisa.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false }
+      ]
+    },
+    {
+      "id": "f1_06", "fase": 1, "dominio": "amizade",
+      "cenario": "Um amigo te procura para desabafar um problema pessoal. Sem pensar, para onde a sua atenção vai primeiro?",
+      "par_gemeo_id": null, "flag_desejabilidade_social": true,
+      "alternativas": [
+        { "id": "a", "texto": "Já quero acolher e cuidar; me sinto bem sendo necessário para ele.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": true },
+        { "id": "b", "texto": "Já quero ajudar a resolver na prática e tirar o problema do caminho dele.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "c", "texto": "Escuto, mas guardo distância; me cansa ser sugado emocionalmente.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "d", "texto": "Me conecto pela dor; entendo bem por dentro o que é sofrer assim.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "e", "texto": "Já fico pensando no que ele deveria fazer para se precaver e não repetir isso.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false }
+      ]
+    },
+    {
+      "id": "f1_07", "fase": 1, "dominio": "geral", "indireto": true,
+      "cenario": "Pense em alguém que você acha “demais”, exagerado. O que nessa pessoa costuma te soar mais exagerado?",
+      "par_gemeo_id": null, "flag_desejabilidade_social": false,
+      "alternativas": [
+        { "id": "a", "texto": "Quando é relapsa, faz malfeito e não se importa nem um pouco em fazer certo.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "b", "texto": "Quando passa por cima dos outros como se só a vontade dela contasse.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "c", "texto": "Quando vive de aparência, só pensando em como está sendo vista.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "d", "texto": "Quando vive esperando o pior e desconfiando de tudo sem necessidade.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "e", "texto": "Quando não leva nada a sério e foge de qualquer compromisso mais pesado.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false }
+      ]
+    },
+    {
+      "id": "f1_08", "fase": 1, "dominio": "geral",
+      "cenario": "O que mais te faz sentir exposto, sem defesa?",
+      "par_gemeo_id": null, "flag_desejabilidade_social": false,
+      "alternativas": [
+        { "id": "a", "texto": "Ficar sem controle da situação, à mercê da vontade dos outros.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "b", "texto": "Ser forçado a tomar partido e entrar num conflito que eu queria evitar.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "c", "texto": "Ser visto num momento de fraqueza, ter a imagem que passo desfeita.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "d", "texto": "Ficar sem chão, sem saber em quem me apoiar.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "e", "texto": "Ser invadido, ter gente exigindo de mim uma intimidade que eu não quero dar.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false }
+      ]
+    },
+    {
+      "id": "f1_09", "fase": 1, "dominio": "romance",
+      "cenario": "Num relacionamento longo, o que seria mais insuportável a longo prazo?",
+      "par_gemeo_id": null, "flag_desejabilidade_social": false,
+      "alternativas": [
+        { "id": "a", "texto": "Ter a minha autonomia sufocada, a minha vontade constantemente dobrada pela do outro.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "b", "texto": "Viver em atrito constante, sem paz dentro de casa.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "c", "texto": "Sentir que não faço falta, que a pessoa não precisa de mim.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "d", "texto": "Ser amado por uma versão de mim, e não por quem eu realmente sou.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "e", "texto": "Não poder contar com a pessoa, o chão sumir sem aviso.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false }
       ]
     },
     {
       "id": "f1_10", "fase": 1, "dominio": "geral",
-      "cenario": "Quando algo dá errado e você revisita aquilo mais tarde, que tipo de pensamento mais se repete?",
+      "cenario": "Quando algo dá errado e você revisita aquilo mais tarde, que pensamento mais se repete?",
       "par_gemeo_id": null, "flag_desejabilidade_social": false,
       "alternativas": [
-        { "id": "a", "texto": "“Isto está errado e precisa ser consertado”, a atenção vai para o que deveria ter sido feito.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "b", "texto": "“O que isto diz sobre mim?”, a atenção vai para o seu valor e a sua figura.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "c", "texto": "“O que eu deixei de prever?”, a atenção vai para a falha em antecipar e para o risco.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "d", "texto": "Procuro não voltar nisso; olhar para trás só atrapalha.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "a", "texto": "“Eu deveria ter feito melhor”, e bate uma cobrança dura comigo mesmo.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "b", "texto": "Prefiro nem voltar nisso; ficar remoendo só tira a minha paz.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "c", "texto": "“O que isto diz da minha imagem?”, e já penso em como recuperar.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "d", "texto": "“O que eu deixei de prever?”, com o foco na falha em antecipar o risco.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
+        { "id": "e", "texto": "Já viro a página e foco no que vem de bom pela frente.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false }
       ]
     },
     {
-      "id": "f1_13", "fase": 1, "dominio": "geral",
-      "cenario": "O que mais te faz sentir exposto, sem defesa?",
+      "id": "f1_11", "fase": 1, "dominio": "geral",
+      "cenario": "O que mais te dá uma sensação de paz e de que a vida está no lugar?",
       "par_gemeo_id": null, "flag_desejabilidade_social": false,
       "alternativas": [
-        { "id": "a", "texto": "Ficar sem controle da situação, à mercê da vontade dos outros.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "b", "texto": "Ser visto num momento de fraqueza, ter a imagem que passo desfeita.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "c", "texto": "Ficar sem chão, sem saber em que ou em quem me apoiar.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.2, "desejavel": false },
-        { "id": "d", "texto": "Sinceramente, pouca coisa; não costumo me sentir assim.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
-      ]
-    },
-    {
-      "id": "f1_11", "fase": 1, "dominio": "romance",
-      "cenario": "Num relacionamento longo, o que seria mais insuportável a longo prazo?",
-      "par_gemeo_id": null, "flag_desejabilidade_social": false,
-      "alternativas": [
-        { "id": "a", "texto": "Sentir a sua autonomia sufocada, ter a sua vontade constantemente dobrada pela do outro.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "b", "texto": "Sentir que só é amado por uma versão sua, e não por quem você realmente é.", "mapa": { "triade": "emocional", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "c", "texto": "Sentir que não pode contar com a pessoa, que o chão pode sumir sem aviso.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "O tédio, a relação virar sempre a mesma coisa sem nada novo.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "a", "texto": "Tudo em harmonia ao redor, sem conflito, nada me puxando de um lado para o outro.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "b", "texto": "Sentir que estou no controle da minha vida, sem ninguém mandando em mim.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "c", "texto": "Estar cercado de gente querida que gosta de mim e precisa de mim.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "d", "texto": "Alcançar algo que valha a pena e ser reconhecido por isso.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
+        { "id": "e", "texto": "Um tempo só meu, sem demandas, para me recolher e recarregar.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false }
       ]
     }
   ],
@@ -172,8 +159,8 @@
       "cenario": "Diante de uma incerteza de verdade, para onde você tende primeiro?",
       "par_gemeo_id": null, "flag_desejabilidade_social": false,
       "alternativas": [
-        { "id": "a", "texto": "Para a ação imediata: agir já, mesmo sem ter tudo mapeado.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
-        { "id": "b", "texto": "Para o recolhimento: juntar mais informação e adiar o passo até se sentir seguro.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": false }
+        { "id": "a", "texto": "Para a ação ou para o meu jeito de sempre: sigo pelo corpo, mesmo sem ter tudo mapeado.", "mapa": { "triade": "instintiva", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
+        { "id": "b", "texto": "Para o recolhimento e a análise: junto mais informação e adio o passo até me sentir seguro.", "mapa": { "triade": "mental", "tipo": null, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": false }
       ]
     },
     {
@@ -197,7 +184,7 @@
           { "id": "a", "texto": "Você confronta direto, na hora, e deixa claro que ali não passa.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "Você evita o embate, mas vai juntando por dentro uma irritação que só escapa depois, meio sem querer.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "Você pondera qual seria a forma certa e justa de lidar, e só age depois de concluir o que é devido.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Você corta a relação em silêncio, sem dar explicação, e segue sem aquela pessoa.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Você aguenta calado por muito tempo, até que um dia se afasta de vez, em silêncio.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -208,7 +195,7 @@
           { "id": "a", "texto": "“Já que fizeram isso comigo, é justo que sintam o peso da minha resposta.”", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "“Eu jamais faria isso; existe um jeito certo de agir, e a pessoa simplesmente falhou.”", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "“Não vale o desgaste; melhor deixar quieto do que virar um problema entre nós.”", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "“Provavelmente fui eu que exagerei; deixa que já passa.”", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "“Provavelmente nem foi por mal; deixa que já passa.”", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -219,7 +206,7 @@
           { "id": "a", "texto": "Você segue do seu jeito e assume o custo; regra que atrapalha o que é certo para você não te prende.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Você se incomoda, mas tende a se acomodar e seguir para não criar atrito; a paz pesa mais.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Você contesta pelos canais próprios; se existe uma forma mais justa, luta por ela com princípio.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Você negocia nos bastidores até achar uma brecha que sirva para você.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Você bate o pé com firmeza e enfrenta a autoridade de peito aberto.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -230,7 +217,7 @@
           { "id": "a", "texto": "Ela sai e passa rápido; você põe para fora, resolve ali e não fica remoendo.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "Ela some; você quase não percebe que estava com raiva, adormece antes de sentir.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "Ela fica presa como uma tensão contida, uma cobrança que você não se permite soltar.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Ela vira uma frieza; eu me afasto e paro de dar atenção à pessoa.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Ela vira ironia e comentários afiados, mais do que um confronto aberto.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -241,7 +228,7 @@
           { "id": "a", "texto": "“A vida é disputa; quem não toma o que é seu fica sem.”", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "“Não vale a pena bater de frente; melhor não balançar o barco.”", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "“Existe um jeito certo de fazer as coisas, e cabe a mim alcançá-lo.”", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "“No fim tudo se ajeita; não vale se preocupar tanto.”", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "“Cada um que cuide do seu; eu não me meto e não gosto que se metam comigo.”", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -252,7 +239,7 @@
           { "id": "a", "texto": "Subir o tom e conduzir; quem é mais firme puxa a cena.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "Se apagar, concordar por fora e sumir por dentro para o clima não piorar.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "Se conter e apontar, com certa frieza, quem tem razão e quem está errado.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Sair da sala e encerrar o assunto por ali.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Tentar mediar, acalmar os ânimos e reconciliar todo mundo.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -263,7 +250,7 @@
           { "id": "a", "texto": "Assumir a frente e enfrentar direto, impondo a sua posição mesmo diante de todos.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "Amenizar, ceder e buscar consenso para dissolver o atrito, evitando se posicionar demais.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "Manter a compostura e defender, com rigor, o procedimento correto.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Adiar a discussão para depois, longe da plateia.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Segurar tudo na hora e só depois, em particular, deixar sair a irritação.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -274,7 +261,7 @@
           { "id": "a", "texto": "Que às vezes sou duro ou excessivo, e machuco antes de perceber.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
           { "id": "b", "texto": "Que me acomodo, adio, e deixo a minha própria vontade se dissolver para não incomodar.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
           { "id": "c", "texto": "Que sou crítico e exigente demais, comigo e com os outros, e raramente acho algo bom o bastante.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": true },
-          { "id": "d", "texto": "Sinceramente, me aceito bastante como sou.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Que me perco no que os outros querem e esqueço de mim no meio do caminho.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -285,7 +272,7 @@
           { "id": "a", "texto": "Passo a página rápido; não fico me martirizando por isso.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Fico incomodado por ter criado um mal-estar, e quero que a paz volte logo.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Bate uma culpa pesada; eu deveria ter agido melhor do que agi.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Depende muito de quem foi e do que aconteceu.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Se a pessoa mereceu, não sinto muita coisa; foi ela que provocou.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -296,7 +283,7 @@
           { "id": "a", "texto": "Uma conta em aberto; em algum nível, você quer virar o jogo e que o mundo sinta o que você sentiu.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Um dar de ombros; já faz tempo, você prefere não mexer nisso e seguir em paz.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Uma indignação de princípio; foi errado, e algo em você precisa que isso seja reconhecido como errado.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Uma tristeza pelo que aquilo me tirou, mais do que qualquer vontade de acerto de contas.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Você se conforma e conta a si mesmo que no fundo não foi tão grave assim.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -307,7 +294,7 @@
           { "id": "a", "texto": "Intenso e protetor, bom de ter do lado numa hora difícil.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "Tranquilo e fácil de conviver, sem grandes exigências.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "Confiável e correto, alguém que faz a coisa direito.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Reservado, alguém que custa a se abrir de verdade.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Firme, alguém que não leva desaforo para casa.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -318,7 +305,7 @@
           { "id": "a", "texto": "Ir com mais intensidade ainda, agir, causar impacto; a vida só ganha gosto no muito.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "paixao", "peso": 1.2, "desejavel": false },
           { "id": "b", "texto": "Amortecer, buscar conforto e distração, baixar a intensidade até quase não sentir.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "paixao", "peso": 1.2, "desejavel": false },
           { "id": "c", "texto": "Conter e canalizar; segurar o impulso e transformá-lo em algo produtivo e certo.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "paixao", "peso": 1.2, "desejavel": false },
-          { "id": "d", "texto": "Compartilhar na hora com alguém de confiança para digerir junto.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Manter a rotina de sempre, como se nada tivesse acontecido.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -329,7 +316,7 @@
           { "id": "a", "texto": "Confundir controle com cuidado; proteger e mandar te parecem a mesma coisa.", "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Se fundir na vontade do outro a ponto de perder de vista o que você mesmo quer.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Querer melhorar o outro, transformar o amor num projeto de aperfeiçoamento.", "mapa": { "triade": "instintiva", "tipo": 1, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Guardar uma parte de você a sete chaves, sem entregar tudo.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Evitar as conversas difíceis e deixar as coisas se arrastarem para não brigar.", "mapa": { "triade": "instintiva", "tipo": 9, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       }
     ],
@@ -343,7 +330,7 @@
           { "id": "a", "texto": "Me tornar necessário para alguém; ser aquele de quem não conseguem abrir mão.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Conquistar, entregar resultado, me sair bem naquilo que os outros valorizam.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Ser fiel a uma diferença minha, alguém que não se confunde com a média.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Honestamente, não fico caçando me sentir valioso; tento só viver.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Ser admirado, formar de mim uma imagem que os outros olhem e aprovem.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -354,7 +341,7 @@
           { "id": "a", "texto": "“Eu não preciso de você.”", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "“Você fracassou, decepcionou.”", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "“Você é comum, igual a qualquer um.”", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "“Não dá mais para confiar em você.”", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "“Você não é quem eu pensava; sua imagem era só fachada.”", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -365,7 +352,7 @@
           { "id": "a", "texto": "Ponho as minhas de lado e me ocupo das dos outros; a minha carência quase não aparece.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Adio, guardo para depois; não posso deixar que atrapalhem o que preciso entregar.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Mergulho nelas, às vezes fundo demais; elas dizem quem eu sou.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Racionalizo até elas perderem a força e sumirem.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Uso um bom humor ou uma agitação para não deixar a tristeza aparecer.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -376,7 +363,7 @@
           { "id": "a", "texto": "A de alguém generoso e caloroso, de quem as pessoas gostam de se aproximar.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "A de alguém bem-sucedido e capaz, que se sai bem no que faz.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "A de alguém profundo e sensível, que não é raso como a maioria.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Sinceramente, não me importo muito com a imagem que passo.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "A de alguém especial, que se destaca por não ser igual a ninguém.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -387,7 +374,7 @@
           { "id": "a", "texto": "O medo de que parem de gostar de você, de deixar de fazer falta.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "A pressa de recuperar a imagem, de mostrar que ainda dá conta.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "A confirmação, meio amarga, de que você nunca foi bom o bastante mesmo.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Um alívio, na real; expectativa dos outros não é problema meu.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "A culpa de ter decepcionado quem contava com você.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -398,7 +385,7 @@
           { "id": "a", "texto": "“Eu me realizo cuidando dos outros.”", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": true },
           { "id": "b", "texto": "“Eu me realizo vencendo e sendo reconhecido.”", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
           { "id": "c", "texto": "“Eu me realizo sendo fiel à minha diferença, mesmo que doa.”", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
-          { "id": "d", "texto": "“Eu me realizo tendo a minha paz e a minha independência.”", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "“Eu me realizo sendo alguém que os outros admiram.”", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -409,7 +396,7 @@
           { "id": "a", "texto": "Ver alguém sendo cuidado e amparado de um jeito que você também gostaria, mas não pede.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Ver alguém colhendo o reconhecimento e o sucesso que você persegue.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Ver alguém tendo, com naturalidade, uma inteireza que a você sempre pareceu faltar.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Ver alguém com uma liberdade e um sossego que eu queria para mim.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Ver alguém sendo escolhido e amado no seu lugar.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -420,7 +407,7 @@
           { "id": "a", "texto": "Perceber que faço falta, que a pessoa precisa de mim e me procura.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Ser admirado, sentir que a pessoa se orgulha de estar comigo.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Ser escolhido justamente pelo que tenho de único, visto a fundo como ninguém vê.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Sentir que pode contar comigo e que eu estou sempre por perto.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Sentir que sou o preferido, colocado acima de todo o resto.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -431,7 +418,7 @@
           { "id": "a", "texto": "Ser insubstituível, o grande amor sem o qual a pessoa não ficaria bem.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "Ser admirado, formar um par que os outros olhem e aprovem.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "Ser compreendido no que você tem de mais fundo e único.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Ter liberdade e espaço, sem me sentir cobrado o tempo todo.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Sentir uma intensidade que confirme que aquilo é raro e verdadeiro.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -442,7 +429,7 @@
           { "id": "a", "texto": "Dar e dar esperando, sem dizer, uma retribuição na mesma medida, e magoar quando ela não vem.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Sacrificar a intimidade real pela imagem do relacionamento perfeito.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Desvalorizar o que está perto e disponível, e desejar sempre o que falta.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Me fechar e resolver tudo sozinho em vez de dividir.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Me moldar tanto ao que o outro quer que sumo dentro da relação.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -453,7 +440,7 @@
           { "id": "a", "texto": "Uma agitação afetuosa, sempre voltada para alguém, para algum vínculo.", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "Uma inquietação produtiva, a lista do que ainda falta fazer e conquistar.", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "Uma melancolia de fundo, uma saudade de algo que você nem sabe nomear.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Uma calmaria tranquila, sem grandes agitações.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Um vaivém de humores, ora animado, ora pra baixo.", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -464,7 +451,7 @@
           { "id": "a", "texto": "“Não sei o que seria de mim sem você.”", "mapa": { "triade": "emocional", "tipo": 2, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "“Você é impressionante no que faz.”", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "“Nunca conheci ninguém como você.”", "mapa": { "triade": "emocional", "tipo": 4, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "“Você é uma pessoa de paz, dá gosto estar por perto.”", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "“Todo mundo admira você.”", "mapa": { "triade": "emocional", "tipo": 3, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       }
     ],
@@ -478,7 +465,7 @@
           { "id": "a", "texto": "Me recolher, reduzir o que preciso e guardar energia; sozinho eu me protejo melhor.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Procurar uma referência confiável, conferir, garantir; e ainda assim ficar na dúvida.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Manter várias saídas abertas e me voltar para o que é mais leve e promissor.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Encaro logo de frente e resolvo na marra.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Fico revirando a mesma questão na cabeça, sem conseguir soltar.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -489,7 +476,7 @@
           { "id": "a", "texto": "Sentir o meu espaço e a minha energia sendo drenados; preciso recuar para me recompor.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "A insegurança de não saber se posso contar de verdade, o teste constante da confiança.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "A sensação de ficar preso, sem margem, com as outras possibilidades se fechando.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Ter que ceder o tempo todo e engolir o que penso.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "A obrigação de conviver de perto o tempo todo, sem um canto só meu.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -500,7 +487,7 @@
           { "id": "a", "texto": "Prefiro querer pouco; assim não fico dependente nem à mercê de ninguém.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Desconfio dos meus próprios impulsos; antes de me lançar, questiono se é seguro.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Quero experimentar tudo; adiar o prazer me parece um desperdício.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Vou atrás do que quero com força, sem muita cerimônia.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Fico dividido entre me jogar e me segurar, e acabo hesitando.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -511,7 +498,7 @@
           { "id": "a", "texto": "Fico à distância; cumpro o mínimo necessário e preservo o meu canto.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "Oscilo entre me apoiar nela e desconfiar dela, entre obedecer e me rebelar.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "Não a levo muito a sério; me viro no charme e sigo fazendo o que quero.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Respeito quando é competente e me incomodo quando não é.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Procuro entender bem as regras para saber exatamente onde piso.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -522,7 +509,7 @@
           { "id": "a", "texto": "“Quanto menos eu precisar, mais livre eu sou.”", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "“É melhor prevenir; nunca se sabe em quem confiar.”", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "“Sempre tem um jeito, sempre tem uma saída melhor.”", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "“Quem não arrisca não petisca.”", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "“Melhor entender tudo antes de me envolver.”", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -533,7 +520,7 @@
           { "id": "a", "texto": "“Eu me basto; não peço quase nada a ninguém.”", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
           { "id": "b", "texto": "“Eu sou leal e responsável, cumpro com o que assumo.”", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": true },
           { "id": "c", "texto": "“Eu aproveito a vida e vejo o lado bom de tudo.”", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
-          { "id": "d", "texto": "“Eu não devo satisfação a ninguém sobre como vivo.”", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "“Eu penso por conta própria e não sigo a manada.”", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -544,7 +531,7 @@
           { "id": "a", "texto": "Recolho para dentro, sozinho, e tento entendê-la à distância.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Fico remoendo os perigos, procurando o que fazer para não ser pego desprevenido.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Desvio o foco rápido para algo mais agradável; não gosto de me demorar no que dói.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Descarrego logo, boto para fora e alivio na hora.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Já penso num plano ou numa próxima aventura para virar a página.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -555,7 +542,7 @@
           { "id": "a", "texto": "Me recolho para entender por conta própria, no meu tempo, até a peça encaixar.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Procuro uma referência confiável que me diga em que versão dá para acreditar.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Rearranjo depressa numa explicação que me deixe otimista e livre para seguir.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Deixo pra lá; nem tudo precisa fazer sentido.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Estudo a fundo até dominar o assunto melhor do que a maioria.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -566,7 +553,7 @@
           { "id": "a", "texto": "Reservado e independente, difícil de conhecer por completo.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "Leal e atento, alguém que se preocupa e leva as coisas a sério.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "Animado e cheio de ideias, bom de levantar o astral.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Firme e direto, alguém que não leva desaforo para casa.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Divertido e inquieto, sempre com um plano novo na manga.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -577,7 +564,7 @@
           { "id": "a", "texto": "Me retrair quando o outro se aproxima demais, guardando um canto onde ninguém entra.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "Ficar testando a lealdade da pessoa, procurando sinais de que não dá para confiar.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "Fugir para a próxima novidade quando a relação pede profundidade e permanência.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "Querer conduzir tudo e não abrir mão do controle.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Idealizar demais e me decepcionar quando a realidade aparece.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -588,7 +575,7 @@
           { "id": "a", "texto": "Um tempo só meu, sem demandas, sem ninguém puxando você.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "b", "texto": "Saber exatamente onde piso, com quem contar e o que esperar.", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
           { "id": "c", "texto": "Ter opções abertas e algo bom pela frente para antecipar.", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-          { "id": "d", "texto": "Estar cercado de gente querida, na maior animação.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "Ter poucos compromissos e ninguém dependendo de mim.", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       },
       {
@@ -599,7 +586,7 @@
           { "id": "a", "texto": "“Você enxerga coisas que ninguém mais enxerga.”", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "b", "texto": "“Você é a pessoa mais confiável que eu conheço.”", "mapa": { "triade": "mental", "tipo": 6, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
           { "id": "c", "texto": "“Do seu lado a vida fica mais leve e divertida.”", "mapa": { "triade": "mental", "tipo": 7, "instinto": null }, "eixo": "fixacao", "peso": 1.5, "desejavel": false },
-          { "id": "d", "texto": "“Você tem uma força que impõe respeito.”", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+          { "id": "d", "texto": "“Você tem uma mente brilhante.”", "mapa": { "triade": "mental", "tipo": 5, "instinto": null }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
         ]
       }
     ]
@@ -704,7 +691,7 @@
         { "id": "a", "texto": "Para garantir o essencial: ter onde me apoiar, o que me sustentar, o chão firme sob os pés.", "mapa": { "triade": null, "tipo": null, "instinto": "autopreservacao" }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
         { "id": "b", "texto": "Para o meu lugar entre as pessoas: se ainda pertenço, qual é o meu papel, se estou dentro ou fora.", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
         { "id": "c", "texto": "Para aquela pessoa específica em quem me jogo por inteiro; é nela que me ancoro.", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "paixao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Para a tarefa em si; foco em resolver e deixo o resto para depois.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "d", "texto": "Para o meu conforto e a minha rotina; me recolho ao que já conheço e me acalma.", "mapa": { "triade": null, "tipo": null, "instinto": "autopreservacao" }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
       ]
     },
     {
@@ -715,7 +702,7 @@
         { "id": "a", "texto": "Antecipando o que pode faltar, cuidando de provisão, conforto, do que garante o amanhã.", "mapa": { "triade": null, "tipo": null, "instinto": "autopreservacao" }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
         { "id": "b", "texto": "Lendo o ambiente entre as pessoas, quem está com quem, onde eu me encaixo.", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
         { "id": "c", "texto": "Pensando numa pessoa em particular, na atração, no ciúme, na intensidade daquele laço.", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
-        { "id": "d", "texto": "Ruminando ideias e assuntos que nada têm a ver com o meu dia.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "d", "texto": "Pensando na causa ou no grupo com que me importo e no meu papel nele.", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
       ]
     },
     {
@@ -726,7 +713,7 @@
         { "id": "a", "texto": "A minha estabilidade e o que me dá base material, o chão sob os pés.", "mapa": { "triade": null, "tipo": null, "instinto": "autopreservacao" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
         { "id": "b", "texto": "O meu lugar entre os meus, ser deixado de fora, perder pertencimento.", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
         { "id": "c", "texto": "Aquela conexão única, a fusão intensa com quem mais me acende.", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "A minha liberdade de fazer o que quero, na hora que quero.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "d", "texto": "Ser reconhecido e ter um bom nome dentro do meu círculo.", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
       ]
     },
     {
@@ -737,7 +724,7 @@
         { "id": "a", "texto": "Achar um canto confortável, cuidar do meu próprio gasto de energia, ficar à vontade.", "mapa": { "triade": null, "tipo": null, "instinto": "autopreservacao" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
         { "id": "b", "texto": "Circular, sentir o clima, perceber onde estão os grupos e qual é o meu papel ali.", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
         { "id": "c", "texto": "Fisgar numa pessoa e mergulhar numa conversa intensa, esquecendo o resto da sala.", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Contar as horas para ir embora e voltar para casa.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "d", "texto": "Me manter perto de uma ou duas pessoas com quem tenho ligação forte.", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
       ]
     },
     {
@@ -748,7 +735,7 @@
         { "id": "a", "texto": "“Você se preocupa demais com conforto, com ter tudo garantido, com segurança.”", "mapa": { "triade": null, "tipo": null, "instinto": "autopreservacao" }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
         { "id": "b", "texto": "“Você liga demais para o que o grupo pensa, para o seu papel entre as pessoas.”", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
         { "id": "c", "texto": "“Você se intensifica demais, se consome numa pessoa de cada vez.”", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
-        { "id": "d", "texto": "“Você pensa demais e vive dentro da própria cabeça.”", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "d", "texto": "“Você guarda demais para o dia de amanhã e economiza até no que não precisa.”", "mapa": { "triade": null, "tipo": null, "instinto": "autopreservacao" }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
       ]
     },
     {
@@ -759,7 +746,7 @@
         { "id": "a", "texto": "Se aquilo é estável e confiável, se cabe na minha vida sem ameaçar o meu chão.", "mapa": { "triade": null, "tipo": null, "instinto": "autopreservacao" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
         { "id": "b", "texto": "Como o casal aparece para os outros, se combinamos, o que aquilo comunica.", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
         { "id": "c", "texto": "A intensidade da atração e da fusão; quero me consumir e ser consumido por aquilo.", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Se vou ter espaço para continuar sendo eu mesmo dentro da relação.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "d", "texto": "Se essa pessoa vai me acender de um jeito que ninguém acendeu.", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
       ]
     },
     {
@@ -770,7 +757,7 @@
         { "id": "a", "texto": "Recolher, cuidar do corpo, comida boa, uma rotina previsível e aconchegante.", "mapa": { "triade": null, "tipo": null, "instinto": "autopreservacao" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
         { "id": "b", "texto": "Estar entre os meus, participar, sentir que faço parte de algo maior.", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
         { "id": "c", "texto": "Mergulhar em alguém ou em algo que me acenda por inteiro, com intensidade total.", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "emocao", "peso": 1.0, "desejavel": false },
-        { "id": "d", "texto": "Ficar sozinho com meus pensamentos, sem ninguém me interrompendo.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "d", "texto": "Um encontro a dois, fechado, com a pessoa certa.", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
       ]
     },
     {
@@ -781,7 +768,7 @@
         { "id": "a", "texto": "O de quem organiza a vida toda em torno de segurança e de não faltar nada.", "mapa": { "triade": null, "tipo": null, "instinto": "autopreservacao" }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
         { "id": "b", "texto": "O de quem vive para o grupo, para a causa, para o seu lugar e reconhecimento.", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
         { "id": "c", "texto": "O de quem se joga inteiro numa única pessoa, num laço que consome tudo ao redor.", "mapa": { "triade": null, "tipo": null, "instinto": "sexual" }, "eixo": "fixacao", "peso": 1.3, "desejavel": false },
-        { "id": "d", "texto": "O de quem larga tudo por uma ideia ou um princípio.", "mapa": { "triade": null, "tipo": null, "instinto": null }, "eixo": "distrator", "peso": 0, "desejavel": false }
+        { "id": "d", "texto": "O de quem precisa estar sempre no meio da turma, no centro da vida social.", "mapa": { "triade": null, "tipo": null, "instinto": "social" }, "eixo": "emocao", "peso": 0.6, "desejavel": false }
       ]
     }
   ],
