@@ -182,10 +182,6 @@ export default function App() {
             )}
           </div>
         </div>
-
-        <p className="text-center" style={{ fontSize: 11, color: '#1c3a63', marginTop: 10 }}>
-          © 2001. Questionário heurístico e educativo. Best viewed in any browser.
-        </p>
       </div>
     </div>
   );

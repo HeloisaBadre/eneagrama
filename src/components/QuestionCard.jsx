@@ -58,7 +58,7 @@ export default function QuestionCard({ item, onAnswer }) {
       </div>
 
       <p style={{ fontSize: 12, color: '#33536f', margin: '12px 2px 8px' }}>
-        Escolha a resposta mais honesta por dentro:
+        Escolha a alternativa mais verdadeira para você:
       </p>
 
       <div>
@@ -84,7 +84,7 @@ export default function QuestionCard({ item, onAnswer }) {
 function rotuloDominio(d) {
   const map = {
     trabalho: 'No trabalho',
-    familia: 'Na familia',
+    familia: 'Na família',
     amizade: 'Entre amigos',
     romance: 'No amor',
     geral: '',
