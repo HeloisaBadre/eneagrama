@@ -1,15 +1,19 @@
 import { triades, tipos, instintos, subtipos, rotulos } from '../data/results.js';
+import { TRIADE_DE } from '../engine/fluxo.js';
 
 /**
  * Relatorio final (repintura retro; lógica de dados inalterada). Recebe:
  *  - analise: saida de analisarFinal()
- *  - tipoDisponivel: se a Fase 2 daquela triade existe nesta fatia
  *  - itensPorId: mapa id->item para citar textos de respostas decisivas
  */
-export default function Report({ analise, tipoDisponivel, itensPorId, onRestart }) {
+export default function Report({ analise, itensPorId, onRestart }) {
   const { triade, tipo, instinto, confiabilidade } = analise;
-  const triadeInfo = triades[triade.top.categoria];
   const tipoNum = tipo.top ? tipo.top.categoria : null;
+  const triadeTriagem = triade.top ? triade.top.categoria : null;
+  // O tipo manda: a triade e o centro do tipo encontrado. A Fase 1 e so triagem.
+  const triadeFinalKey = tipoNum != null ? TRIADE_DE[tipoNum] : triadeTriagem;
+  const triadeDivergiu = triadeTriagem !== null && triadeFinalKey !== triadeTriagem;
+  const triadeInfo = triadeFinalKey ? triades[triadeFinalKey] : null;
   const tipoInfo = tipoNum != null ? tipos[tipoNum] : null;
   const instintoKey = instinto.top ? instinto.top.categoria : null;
   const subKey = tipoNum != null && instintoKey ? `${tipoNum}-${instintoKey}` : null;
@@ -25,12 +29,33 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
 
       {/* 1. TRIADE */}
       <Secao numero="1" titulo="Centro dominante (tríade)">
-        <div className="pill" style={{ fontSize: 15 }}>{triadeInfo.nome}</div>
-        <p style={{ marginTop: 12 }}>{triadeInfo.texto}</p>
-        <p style={{ marginTop: 10, fontSize: 13, color: '#4a4a4a' }}>
-          A emoção reativa de fundo aqui é <strong>{triadeInfo.emocao}</strong>. A pergunta
-          silenciosa que organiza suas reações: <em>“{triadeInfo.pergunta}”</em>
-        </p>
+        {triadeInfo ? (
+          <>
+            <div className="pill" style={{ fontSize: 15 }}>{triadeInfo.nome}</div>
+            <p style={{ marginTop: 12 }}>{triadeInfo.texto}</p>
+            <p style={{ marginTop: 10, fontSize: 13, color: '#4a4a4a' }}>
+              A emoção reativa de fundo aqui é <strong>{triadeInfo.emocao}</strong>. A pergunta
+              silenciosa que organiza suas reações: <em>“{triadeInfo.pergunta}”</em>
+            </p>
+          </>
+        ) : (
+          <SemResultado>
+            Suas respostas não apontaram um centro dominante. Isso acontece quando quase nenhuma
+            alternativa pareceu com você.
+          </SemResultado>
+        )}
+        {triadeDivergiu && (
+          <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
+            <div className="bar-olive">A triagem inicial apontou outro centro</div>
+            <div className="box-bd" style={{ fontSize: 13 }}>
+              Nas primeiras perguntas o seu centro aparente foi{' '}
+              <strong>{(triades[triadeTriagem]?.nome || '').toLowerCase()}</strong>, mas as perguntas
+              de motivação apontaram um tipo da tríade acima. Isso é comum em quem tem um
+              comportamento parecido com o de outro centro (por exemplo, um 6 sexual ou um 4 sexual que
+              se comportam como 8). O centro exibido acima segue o tipo encontrado.
+            </div>
+          </div>
+        )}
         <PorQue
           rotulo="Como esta tríade foi inferida"
           scores={triade.scores}
@@ -43,7 +68,7 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
       </Secao>
 
       {/* 2. TIPO */}
-      {tipoDisponivel && tipoInfo && !tipoInfo._stub ? (
+      {tipoInfo ? (
         <Secao numero="2" titulo="Eneatipo">
           <div className="pill" style={{ fontSize: 15 }}>{tipoInfo.nome}</div>
           <p style={{ marginTop: 12 }}>{tipoInfo.nucleo}</p>
@@ -65,7 +90,7 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
           )}
 
           <PorQue
-            rotulo="Como este tipo foi inferido dentro da tríade"
+            rotulo="Como este tipo foi inferido"
             scores={tipo.scores}
             decisivo={analise.decisivos.tipo}
             itensPorId={itensPorId}
@@ -76,27 +101,22 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
         </Secao>
       ) : (
         <Secao numero="2" titulo="Eneatipo">
-          <div className="box" style={{ borderColor: '#c9b96a' }}>
-            <div className="bar-olive">Ainda não disponível para esta tríade</div>
-            <div className="box-bd" style={{ fontSize: 13, lineHeight: 1.55 }}>
-              <p style={{ marginTop: 0 }}>
-                Esta versão tem a Fase 2 desenvolvida por completo para a{' '}
-                <strong>tríade instintiva (8/9/1)</strong>. Como seu centro dominante saiu{' '}
-                <strong>{triadeInfo.nome.toLowerCase()}</strong>, a distinção entre os três tipos
-                dessa tríade será adicionada numa próxima etapa.
-              </p>
-              <p style={{ marginBottom: 0 }}>
-                Mesmo assim, o centro, o instinto e o índice de confiabilidade abaixo já são válidos.
-              </p>
-            </div>
-          </div>
+          <SemResultado>
+            Não foi possível identificar o seu tipo, porque você não se reconheceu nas alternativas
+            das perguntas que distinguem os tipos. Refazer o teste escolhendo a opção mais próxima,
+            mesmo quando nenhuma for perfeita, costuma resolver.
+          </SemResultado>
         </Secao>
       )}
 
       {/* 3. INSTINTO / SUBTIPO */}
       <Secao numero="3" titulo="Instinto dominante (subtipo)">
-        <div className="pill" style={{ fontSize: 15 }}>{instintos[instintoKey]?.nome}</div>
-        <p style={{ marginTop: 8, fontSize: 13, color: '#4a4a4a' }}>{instintos[instintoKey]?.resumo}</p>
+        {instintoKey && (
+          <>
+            <div className="pill" style={{ fontSize: 15 }}>{instintos[instintoKey]?.nome}</div>
+            <p style={{ marginTop: 8, fontSize: 13, color: '#4a4a4a' }}>{instintos[instintoKey]?.resumo}</p>
+          </>
+        )}
         {subInfo ? (
           <>
             <p style={{ marginTop: 12, fontWeight: 700, color: '#12325e' }}>{subInfo.titulo}</p>
@@ -104,9 +124,9 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
           </>
         ) : (
           <p style={{ marginTop: 12, fontSize: 13, color: '#4a4a4a' }}>
-            O texto do subtipo específico ({tipoNum ?? '?'} · {instintos[instintoKey]?.nome}) será
-            exibido quando a Fase 2 desta tríade estiver disponível. O instinto dominante já está
-            identificado acima.
+            {instintoKey
+              ? 'O texto do subtipo depende do tipo, que não pôde ser identificado. O instinto dominante está indicado acima.'
+              : 'Suas respostas não apontaram um instinto dominante.'}
           </p>
         )}
         <PorQue
@@ -136,6 +156,12 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
         </span>
 
         <ul style={{ marginTop: 12, paddingLeft: 18, fontSize: 13, lineHeight: 1.6 }}>
+          <li>
+            <strong>“Nenhuma dessas”:</strong>{' '}
+            {confiabilidade.nulas
+              ? `${confiabilidade.nulas.marcadas} de ${confiabilidade.nulas.total} perguntas (nível ${confiabilidade.nulas.nivel}).`
+              : 'não medido.'}
+          </li>
           <li>
             <strong>Desejabilidade social:</strong> {confiabilidade.desejabilidade.marcadas} de{' '}
             {confiabilidade.desejabilidade.total} itens elogiáveis marcados (nível{' '}
@@ -227,6 +253,17 @@ function Secao({ numero, titulo, children }) {
   );
 }
 
+function SemResultado({ children }) {
+  return (
+    <div className="box" style={{ borderColor: '#c9b96a' }}>
+      <div className="bar-olive">Resultado inconclusivo</div>
+      <div className="box-bd" style={{ fontSize: 13, lineHeight: 1.55 }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function Ambiguidade({ a, b, diferenca }) {
   return (
     <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
@@ -244,12 +281,15 @@ function PorQue({ rotulo, scores, decisivo, itensPorId, ambiguo, segundo, rotula
   const entradas = Object.entries(scores)
     .map(([k, v]) => ({ k: coerce(k), v }))
     .sort((a, b) => b.v - a.v);
-  const max = entradas.length ? entradas[0].v : 1;
+  const max = entradas.length && entradas[0].v > 0 ? entradas[0].v : 1;
 
   const itemDecisivo = decisivo ? itensPorId.get(decisivo.itemId) : null;
+  // Prefere a alternativa escolhida (altId): o item pode ter mais de uma
+  // alternativa da mesma categoria, e a primeira nem sempre e a escolhida.
   const altDecisiva =
     itemDecisivo && decisivo
-      ? itemDecisivo.alternativas.find(
+      ? itemDecisivo.alternativas.find((al) => al.id === decisivo.altId) ||
+        itemDecisivo.alternativas.find(
           (al) =>
             (al.mapa.tipo != null && al.mapa.tipo === decisivo.categoria) ||
             al.mapa.triade === decisivo.categoria ||
@@ -332,7 +372,10 @@ function truncar(s, n) {
   return s.length > n ? s.slice(0, n - 1) + '…' : s;
 }
 
-/** Diferenca central entre dois tipos da triade instintiva, para o caso ambiguo. */
+/**
+ * Diferenca central entre dois tipos, para o caso ambiguo. Os pares da triade
+ * instintiva tem texto proprio; os demais usam paixao e fixacao de results.js.
+ */
 function diferencaTipos(a, b) {
   const par = [a, b].sort((x, y) => x - y).join('-');
   const mapa = {
@@ -340,5 +383,12 @@ function diferencaTipos(a, b) {
     '8-9': 'no 8 a raiva explode e se impõe; no 9 ela é anestesiada e a vontade se dissolve para manter a paz.',
     '1-9': 'no 1 há uma tensão ativa de corrigir o que está errado; no 9 há uma acomodação que evita o conflito e apaga o próprio querer.',
   };
-  return mapa[par] || 'observe qual paixão/fixação ressoa mais com sua experiência interna.';
+  if (mapa[par]) return mapa[par];
+  const [ta, tb] = [tipos[a], tipos[b]];
+  if (!ta || !tb) return 'observe qual paixão/fixação ressoa mais com sua experiência interna.';
+  return (
+    `no ${a} a paixão é ${ta.paixao.toLowerCase()}, e a fixação, ${ta.fixacao.toLowerCase()}. ` +
+    `No ${b} a paixão é ${tb.paixao.toLowerCase()}, e a fixação, ${tb.fixacao.toLowerCase()}. ` +
+    'Observe qual das duas descreve melhor o que acontece por dentro, e não só o comportamento.'
+  );
 }

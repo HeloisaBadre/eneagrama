@@ -50,6 +50,10 @@ export const LIMIARES = {
 
   // Ambiguidade: margem relativa (top1 - top2) / top1 abaixo disso => empate tecnico
   margemAmbiguo: 0.15,
+
+  // "Nenhuma dessas se parece comigo": proporcao de uso que reduz a confianca
+  nulasModerado: 0.15,
+  nulasAlto: 0.3,
 };
 
 // ---------------------------------------------------------------------------
@@ -126,8 +130,31 @@ export function calcularContexto(respostas, itens) {
   }
   const taxaDeliberacao = visceralTotal > 0 ? visceralDeliberado / visceralTotal : 0;
 
+  // Respostas "Nenhuma dessas se parece comigo"
+  let nulasTotal = 0;
+  let nulasMarcadas = 0;
+  for (const r of respostas) {
+    const item = porId.get(r.itemId);
+    if (!item) continue;
+    nulasTotal += 1;
+    const alt = altDe(item, r.altId);
+    if (alt && alt.nula) nulasMarcadas += 1;
+  }
+  const razaoNulas = nulasTotal > 0 ? nulasMarcadas / nulasTotal : 0;
+
   return {
     medianaRt: medRt,
+    nulas: {
+      total: nulasTotal,
+      marcadas: nulasMarcadas,
+      razao: razaoNulas,
+      nivel:
+        razaoNulas >= LIMIARES.nulasAlto
+          ? 'alto'
+          : razaoNulas >= LIMIARES.nulasModerado
+            ? 'moderado'
+            : 'baixo',
+    },
     desejabilidade: {
       total: desejTotal,
       marcadas: desejMarcadas,
@@ -221,8 +248,10 @@ export function analisarGemeos(respostas, itens, campo) {
  * @param itens      itens SO desta fase
  * @param campo      'triade' | 'tipo' | 'instinto'
  * @param contexto   saida de calcularContexto (pode ser do conjunto completo)
+ * @param opcoes     { multiplicador(item) } fator extra por item (opcional)
  */
-export function pontuarFase(respostas, itens, campo, contexto) {
+export function pontuarFase(respostas, itens, campo, contexto, opcoes = {}) {
+  const multiplicador = opcoes.multiplicador || (() => 1);
   const ctx = contexto || calcularContexto(respostas, itens);
   const porId = indexarItens(itens);
   const { fatorPorItem: fatorGemeo, divergencias } = analisarGemeos(respostas, itens, campo);
@@ -242,10 +271,11 @@ export function pontuarFase(respostas, itens, campo, contexto) {
     const fImediato = fatorImediatismo(r.rtMs, ctx.medianaRt, alt);
     const fConf = fatorConfiabilidade(item, alt, ctx.desejabilidade.nivel);
 
-    const valor = alt.peso * fGemeo * fImediato * fConf;
+    const valor = alt.peso * fGemeo * fImediato * fConf * multiplicador(item);
     scores[categoria] = (scores[categoria] || 0) + valor;
     contribuicoes.push({
       itemId: item.id,
+      altId: alt.id,
       categoria,
       valor,
       eixo: alt.eixo,
@@ -290,6 +320,93 @@ export function pontuarFase(respostas, itens, campo, contexto) {
   };
 }
 
+/**
+ * Pontuacao por TAXA DE ESCOLHA quando a categoria estava disponivel.
+ *
+ * Problema que resolve: se um tipo aparece em mais itens do que outro, a soma
+ * bruta favorece quem aparece mais (era isso que empurrava 4 e 6 para 8).
+ * Aqui cada categoria recebe: (o que foi escolhido) / (o que poderia ter sido
+ * escolhido nos itens em que ela era opcao). Respostas "nula" nao contam como
+ * exposicao. Resultado em 0..100.
+ *
+ * @param componentes [{ respostas, itens, peso }]
+ * @param candidatos  categorias elegiveis para o ranking (ou null = todas)
+ */
+export function pontuarPorTaxa(componentes, campo, contexto, candidatos = null) {
+  const ctx = contexto;
+  const acumulado = {}; // cat -> { soma, pesoTotal }
+  const contribuicoes = [];
+  const divergencias = [];
+
+  for (const comp of componentes) {
+    const porId = indexarItens(comp.itens);
+    const { fatorPorItem, divergencias: div } = analisarGemeos(comp.respostas, comp.itens, campo);
+    divergencias.push(...div);
+    const escolhido = {};
+    const exposto = {};
+    for (const r of comp.respostas) {
+      const item = porId.get(r.itemId);
+      if (!item) continue;
+      const alt = altDe(item, r.altId);
+      if (!alt || alt.nula) continue;
+      const fGemeo = fatorPorItem.get(item.id) || 1.0;
+      const fImediato = fatorImediatismo(r.rtMs, ctx.medianaRt, alt);
+      const fConf = fatorConfiabilidade(item, alt, ctx.desejabilidade.nivel);
+      const valor = alt.peso * fGemeo * fImediato * fConf;
+      const presentes = new Set(
+        item.alternativas
+          .filter((a) => !a.nula)
+          .map((a) => chaveCategoria(a, campo))
+          .filter((k) => k !== null && k !== undefined)
+      );
+      for (const k of presentes) exposto[k] = (exposto[k] || 0) + valor;
+      const cat = chaveCategoria(alt, campo);
+      if (cat === null || cat === undefined) continue;
+      escolhido[cat] = (escolhido[cat] || 0) + valor;
+      contribuicoes.push({ itemId: item.id, altId: alt.id, categoria: coerceKey(String(cat)), valor, eixo: alt.eixo });
+    }
+    for (const k of Object.keys(exposto)) {
+      if (!acumulado[k]) acumulado[k] = { soma: 0, pesoTotal: 0 };
+      acumulado[k].soma += comp.peso * ((escolhido[k] || 0) / exposto[k]);
+      acumulado[k].pesoTotal += comp.peso;
+    }
+  }
+
+  const permitido = candidatos ? new Set(candidatos.map(String)) : null;
+  const scores = {};
+  for (const [k, v] of Object.entries(acumulado)) {
+    if (permitido && !permitido.has(String(k))) continue;
+    scores[k] = v.pesoTotal > 0 ? (100 * v.soma) / v.pesoTotal : 0;
+  }
+
+  const ranking = Object.entries(scores)
+    .map(([categoria, score]) => ({ categoria: coerceKey(categoria), score }))
+    .sort((a, b) => b.score - a.score);
+  const top = ranking[0] || null;
+  const segundo = ranking[1] || null;
+  const margem = top && segundo && top.score > 0 ? (top.score - segundo.score) / top.score : top ? 1 : 0;
+  const ambiguo = !!(top && segundo) && margem < LIMIARES.margemAmbiguo;
+  const validas = contribuicoes.filter((c) => !permitido || permitido.has(String(c.categoria)));
+  const aoVencedor = top ? validas.filter((c) => c.categoria === top.categoria).length : 0;
+  const consistenciaInterna = validas.length ? aoVencedor / validas.length : 0;
+  const decisivo = top
+    ? validas.filter((c) => c.categoria === top.categoria).sort((a, b) => b.valor - a.valor)[0] || null
+    : null;
+
+  return {
+    scores,
+    ranking,
+    top,
+    segundo,
+    margem,
+    ambiguo,
+    consistenciaInterna,
+    divergenciasGemeas: divergencias,
+    decisivo,
+    contribuicoes: validas,
+  };
+}
+
 /** Categorias de tipo/instinto vem como string das chaves do objeto; recupera numero quando aplicavel. */
 function coerceKey(k) {
   const n = Number(k);
@@ -319,6 +436,13 @@ export function avaliarConfiabilidade(contexto, divergenciasGemeas, consistencia
         'e das fixacoes dos tipos 1 e 3), e foi levado em conta ao ponderar essas respostas.'
     );
   }
+  if (contexto.nulas && contexto.nulas.nivel !== 'baixo') {
+    notas.push(
+      `Em ${contexto.nulas.marcadas} de ${contexto.nulas.total} perguntas voce indicou que nenhuma ` +
+        'alternativa se parecia com voce. O resultado foi calculado so com as respostas em que voce ' +
+        'se reconheceu, mas vale ler as descricoes dos tipos vizinhos antes de fechar uma conclusao.'
+    );
+  }
   if (divergenciasGemeas && divergenciasGemeas.length) {
     notas.push(
       `Suas respostas divergiram em ${divergenciasGemeas.length} par(es) de cenarios quase-identicos ` +
@@ -335,11 +459,18 @@ export function avaliarConfiabilidade(contexto, divergenciasGemeas, consistencia
       : 0;
 
   let confianca = 'alto';
-  if (desejabilidade.nivel === 'alto' || deliberacao.nivel === 'alto' || consMedia < 0.45) {
+  const nivelNulas = contexto.nulas ? contexto.nulas.nivel : 'baixo';
+  if (
+    desejabilidade.nivel === 'alto' ||
+    deliberacao.nivel === 'alto' ||
+    nivelNulas === 'alto' ||
+    consMedia < 0.45
+  ) {
     confianca = 'baixo';
   } else if (
     desejabilidade.nivel === 'moderado' ||
     deliberacao.nivel === 'moderado' ||
+    nivelNulas === 'moderado' ||
     (divergenciasGemeas && divergenciasGemeas.length) ||
     consMedia < 0.6
   ) {
@@ -349,6 +480,7 @@ export function avaliarConfiabilidade(contexto, divergenciasGemeas, consistencia
   return {
     desejabilidade,
     deliberacao,
+    nulas: contexto.nulas || null,
     divergenciasGemeas: divergenciasGemeas || [],
     consistenciaInternaMedia: consMedia,
     confiancaAutorrelato: confianca,
@@ -362,36 +494,69 @@ export function avaliarConfiabilidade(contexto, divergenciasGemeas, consistencia
 
 /**
  * @param dados {
- *   fase1: { respostas, itens },
- *   fase2: { respostas, itens, triade },
- *   fase3: { respostas, itens }
+ *   fase1:  { respostas, itens },
+ *   fase2:  { respostas, itens },   // itens da(s) triade(s) + desempates intra-triade
+ *   fase2x: { respostas, itens },   // itens cruzados (pares de triades diferentes)
+ *   fase3:  { respostas, itens },
+ *   fase4:  { respostas, itens },   // confirmacao de subtipo (opcional)
  * }
+ * O TIPO final e decidido por taxa de escolha (nao por soma bruta), combinando
+ * Fase 1, Fase 2 da triade e itens cruzados, e so entre os tipos que chegaram a
+ * ser testados na Fase 2. Assim, errar a triade na Fase 1 nao condena mais o
+ * resultado: os candidatos de outra triade continuam no jogo.
  */
+export const PESOS = { tipoF1: 1.0, tipoF2: 1.0, tipoCruz: 1.5, instF3: 1.0, instF4: 1.5 };
+
 export function analisarFinal(dados) {
+  const vazio = { respostas: [], itens: [] };
+  const f2x = dados.fase2x || vazio;
+  const f4 = dados.fase4 || vazio;
   const todas = [
     ...dados.fase1.respostas,
     ...dados.fase2.respostas,
+    ...f2x.respostas,
     ...dados.fase3.respostas,
+    ...f4.respostas,
   ];
-  const todosItens = [...dados.fase1.itens, ...dados.fase2.itens, ...dados.fase3.itens];
+  const todosItens = [
+    ...dados.fase1.itens,
+    ...dados.fase2.itens,
+    ...f2x.itens,
+    ...dados.fase3.itens,
+    ...f4.itens,
+  ];
   const contexto = calcularContexto(todas, todosItens);
 
   const triade = pontuarFase(dados.fase1.respostas, dados.fase1.itens, 'triade', contexto);
-  const tipo = pontuarFase(dados.fase2.respostas, dados.fase2.itens, 'tipo', contexto);
-  const instinto = pontuarFase(dados.fase3.respostas, dados.fase3.itens, 'instinto', contexto);
+
+  const candidatos = tiposTestados([...dados.fase2.itens, ...f2x.itens]);
+  const tipo = pontuarPorTaxa(
+    [
+      { respostas: dados.fase1.respostas, itens: dados.fase1.itens, peso: PESOS.tipoF1 },
+      { respostas: dados.fase2.respostas, itens: dados.fase2.itens, peso: PESOS.tipoF2 },
+      { respostas: f2x.respostas, itens: f2x.itens, peso: PESOS.tipoCruz },
+    ].filter((c) => c.respostas.length),
+    'tipo',
+    contexto,
+    candidatos.length ? candidatos : null
+  );
+
+  const instinto = pontuarPorTaxa(
+    [
+      { respostas: dados.fase3.respostas, itens: dados.fase3.itens, peso: PESOS.instF3 },
+      { respostas: f4.respostas, itens: f4.itens, peso: PESOS.instF4 },
+    ].filter((c) => c.respostas.length),
+    'instinto',
+    contexto
+  );
 
   const confiabilidade = avaliarConfiabilidade(
     contexto,
-    [
-      ...triade.divergenciasGemeas,
-      ...tipo.divergenciasGemeas,
-      ...instinto.divergenciasGemeas,
-    ],
+    [...triade.divergenciasGemeas, ...tipo.divergenciasGemeas, ...instinto.divergenciasGemeas],
     [triade.consistenciaInterna, tipo.consistenciaInterna, instinto.consistenciaInterna]
   );
 
-  const subtipo =
-    tipo.top && instinto.top ? `${tipo.top.categoria}-${instinto.top.categoria}` : null;
+  const subtipo = tipo.top && instinto.top ? `${tipo.top.categoria}-${instinto.top.categoria}` : null;
 
   return {
     contexto,
@@ -403,8 +568,18 @@ export function analisarFinal(dados) {
     decisivos: {
       triade: triade.decisivo,
       tipo: tipo.decisivo,
-      gemeoRevelador:
-        [...triade.divergenciasGemeas, ...tipo.divergenciasGemeas][0] || null,
+      gemeoRevelador: [...triade.divergenciasGemeas, ...tipo.divergenciasGemeas][0] || null,
     },
   };
+}
+
+/** Tipos que apareceram como alternativa em algum item (exceto "nula"). */
+export function tiposTestados(itens) {
+  const s = new Set();
+  for (const it of itens) {
+    for (const a of it.alternativas) {
+      if (!a.nula && a.mapa && a.mapa.tipo !== null && a.mapa.tipo !== undefined) s.add(a.mapa.tipo);
+    }
+  }
+  return [...s];
 }

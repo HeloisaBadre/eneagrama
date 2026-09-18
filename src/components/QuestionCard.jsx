@@ -16,18 +16,16 @@ function embaralhar(arr) {
  * Nenhuma pista visual de cronometragem (por design).
  *
  * A ORDEM das alternativas e aleatorizada a cada exibicao (por item.id), para
- * que a posicao nunca vire uma pista de categoria. Isso e puramente visual: a
- * pontuacao usa o `id`/`mapa` de cada alternativa, nao a posicao, entao itens
- * gemeos e captura de tempo continuam intactos.
+ * que a posicao nunca vire uma pista de categoria. A alternativa "nula"
+ * ("Nenhuma dessas se parece comigo") fica sempre por ultimo, separada.
  */
 export default function QuestionCard({ item, onAnswer }) {
   const inicioRef = useRef(0);
   const [selecionada, setSelecionada] = useState(null);
 
-  // Ordem embaralhada, estavel enquanto o mesmo item estiver na tela.
-  const alternativas = useMemo(() => embaralhar(item.alternativas), [item.id]);
+  const alternativas = useMemo(() => embaralhar(item.alternativas.filter((a) => !a.nula)), [item.id]);
+  const nula = useMemo(() => item.alternativas.find((a) => a.nula) || null, [item.id]);
 
-  // Reinicia o cronometro toda vez que muda o item exibido.
   useEffect(() => {
     inicioRef.current = performance.now();
     setSelecionada(null);
@@ -37,8 +35,23 @@ export default function QuestionCard({ item, onAnswer }) {
     if (selecionada) return; // evita duplo clique
     const rtMs = Math.round(performance.now() - inicioRef.current);
     setSelecionada(altId);
-    // Pequeno atraso apenas para o feedback visual da selecao; o rt ja foi medido.
     setTimeout(() => onAnswer(altId, rtMs), 180);
+  }
+
+  function botao(alt, extraStyle) {
+    const ativa = selecionada === alt.id;
+    const cls = 'answer' + (ativa ? ' sel' : '') + (selecionada && !ativa ? ' dim' : '');
+    return (
+      <button
+        key={alt.id}
+        onClick={() => escolher(alt.id)}
+        disabled={!!selecionada}
+        className={cls}
+        style={extraStyle}
+      >
+        {alt.texto}
+      </button>
+    );
   }
 
   return (
@@ -58,25 +71,14 @@ export default function QuestionCard({ item, onAnswer }) {
       </div>
 
       <p style={{ fontSize: 12, color: '#33536f', margin: '12px 2px 8px' }}>
-        Escolha a alternativa mais verdadeira para você:
+        Escolha a alternativa mais verdadeira para você, mesmo que não seja perfeita:
       </p>
 
-      <div>
-        {alternativas.map((alt) => {
-          const ativa = selecionada === alt.id;
-          const cls = 'answer' + (ativa ? ' sel' : '') + (selecionada && !ativa ? ' dim' : '');
-          return (
-            <button
-              key={alt.id}
-              onClick={() => escolher(alt.id)}
-              disabled={!!selecionada}
-              className={cls}
-            >
-              {alt.texto}
-            </button>
-          );
-        })}
-      </div>
+      <div>{alternativas.map((alt) => botao(alt))}</div>
+
+      {nula && (
+        <div style={{ marginTop: 10 }}>{botao(nula, { opacity: 0.8, fontStyle: 'italic' })}</div>
+      )}
     </div>
   );
 }

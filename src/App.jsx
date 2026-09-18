@@ -1,139 +1,189 @@
 import { useRef, useState } from 'react';
 import banco from './data/questions.json';
-import { pontuarFase, calcularContexto, analisarFinal } from './engine/scoring.js';
+import { pontuarPorTaxa, calcularContexto, analisarFinal, PESOS } from './engine/scoring.js';
+import {
+  itensFase1,
+  itensFase3,
+  resultadoFase1,
+  planejarFase2,
+  itensDesempateTipo,
+  itensFase4,
+  tipoProvisorio,
+} from './engine/fluxo.js';
 import Landing from './components/Landing.jsx';
 import QuestionCard from './components/QuestionCard.jsx';
 import ProgressBar from './components/ProgressBar.jsx';
 import Report from './components/Report.jsx';
 
-const CAMPO_POR_FASE = { fase1: 'triade', fase2: 'tipo', fase3: 'instinto' };
+/**
+ * Maquina de estados:
+ *   fase1  -> triagem (triade + tipo), com desempate de triade
+ *   fase2  -> itens da(s) triade(s) candidata(s) + itens cruzados, com desempate de tipo
+ *   fase3  -> instinto
+ *   fase4  -> confirmacao de subtipo dentro do tipo encontrado
+ *
+ * Os itens cruzados (fase2_cruzada) sao guardados separadamente (fase2x) porque
+ * recebem peso proprio na decisao do tipo.
+ */
+const FASES = ['fase1', 'fase2', 'fase3', 'fase4'];
+
+function vazio() {
+  return { fase1: [], fase2: [], fase2x: [], fase3: [], fase4: [] };
+}
 
 export default function App() {
   const [stage, setStage] = useState('landing'); // landing | quiz | report
   const [itemAtual, setItemAtual] = useState(null);
   const [respondidas, setRespondidas] = useState(0);
   const [analise, setAnalise] = useState(null);
-  const [tipoDisponivel, setTipoDisponivel] = useState(false);
 
-  // Estado do fluxo em refs (evita closures obsoletas nas transicoes).
   const fluxo = useRef(null);
 
   function iniciar() {
     fluxo.current = {
       faseKey: 'fase1',
-      itens: [...banco.fase1],
+      fila: itensFase1(banco), // itens da fase atual, na ordem de apresentacao
       idx: 0,
-      respostas: { fase1: [], fase2: [], fase3: [] },
-      itensApresentados: { fase1: [], fase2: [], fase3: [] },
-      desempateAplicado: { fase1: false, fase2: false, fase3: false },
-      triade: null,
+      respostas: vazio(),
+      itens: vazio(), // itens apresentados, por "balde"
+      desempateAplicado: { fase1: false, fase2: false, fase3: false, fase4: false },
+      cruzadosIds: new Set(),
+      tipoFinal: null,
     };
-    fluxo.current.itensApresentados.fase1 = [...banco.fase1];
     setRespondidas(0);
     setAnalise(null);
-    setTipoDisponivel(false);
-    setItemAtual(fluxo.current.itens[0]);
+    setItemAtual(fluxo.current.fila[0]);
     setStage('quiz');
   }
 
+  function balde(f, item) {
+    if (f.faseKey === 'fase2' && f.cruzadosIds.has(item.id)) return 'fase2x';
+    return f.faseKey;
+  }
+
   function todasRespostas(f) {
-    return [...f.respostas.fase1, ...f.respostas.fase2, ...f.respostas.fase3];
+    return Object.values(f.respostas).flat();
   }
   function todosItens(f) {
-    return [
-      ...f.itensApresentados.fase1,
-      ...f.itensApresentados.fase2,
-      ...f.itensApresentados.fase3,
-    ];
+    return Object.values(f.itens).flat();
   }
 
   function aoResponder(altId, rtMs) {
     const f = fluxo.current;
-    const item = f.itens[f.idx];
-    f.respostas[f.faseKey].push({ itemId: item.id, altId, rtMs });
+    const item = f.fila[f.idx];
+    const b = balde(f, item);
+    f.respostas[b].push({ itemId: item.id, altId, rtMs });
+    if (!f.itens[b].some((i) => i.id === item.id)) f.itens[b].push(item);
     setRespondidas((n) => n + 1);
 
-    const proxIdx = f.idx + 1;
-    if (proxIdx < f.itens.length) {
-      f.idx = proxIdx;
-      setItemAtual(f.itens[proxIdx]);
+    const prox = f.idx + 1;
+    if (prox < f.fila.length) {
+      f.idx = prox;
+      setItemAtual(f.fila[prox]);
       return;
     }
-
-    // Fase terminou — pontuar e decidir.
     finalizarFase();
+  }
+
+  function anexar(extras, { cruzados = false } = {}) {
+    const f = fluxo.current;
+    if (!extras.length) return false;
+    if (cruzados) extras.forEach((it) => f.cruzadosIds.add(it.id));
+    const novoIdx = f.fila.length;
+    f.fila = [...f.fila, ...extras];
+    f.idx = novoIdx;
+    setItemAtual(f.fila[novoIdx]);
+    return true;
+  }
+
+  function iniciarFase(faseKey, itens) {
+    const f = fluxo.current;
+    f.faseKey = faseKey;
+    f.fila = [...itens];
+    f.idx = 0;
+    if (!f.fila.length) return avancar();
+    setItemAtual(f.fila[0]);
   }
 
   function finalizarFase() {
     const f = fluxo.current;
-    const campo = CAMPO_POR_FASE[f.faseKey];
     const ctx = calcularContexto(todasRespostas(f), todosItens(f));
-    const resultado = pontuarFase(f.respostas[f.faseKey], f.itens, campo, ctx);
-
-    // Desempate: uma unica rodada por fase, se ambiguo e houver itens apropriados.
-    if (resultado.ambiguo && !f.desempateAplicado[f.faseKey] && resultado.segundo) {
-      const par = [resultado.top.categoria, resultado.segundo.categoria];
-      const extras = itensDesempate(f.faseKey, f.triade, par, f.itens);
-      if (extras.length) {
-        f.desempateAplicado[f.faseKey] = true;
-        const novoIdx = f.itens.length;
-        f.itens = [...f.itens, ...extras];
-        f.itensApresentados[f.faseKey] = f.itens;
-        f.idx = novoIdx;
-        setItemAtual(f.itens[novoIdx]);
-        return;
-      }
-    }
-
-    avancarFase(resultado);
-  }
-
-  function avancarFase(resultado) {
-    const f = fluxo.current;
 
     if (f.faseKey === 'fase1') {
-      const triade = resultado.top.categoria;
-      f.triade = triade;
-      const itensFase2 = banco.fase2[triade] || [];
-      if (itensFase2.length) {
-        setTipoDisponivel(true);
-        f.faseKey = 'fase2';
-        f.itens = [...itensFase2];
-        f.itensApresentados.fase2 = f.itens;
-        f.idx = 0;
-        setItemAtual(f.itens[0]);
-      } else {
-        // Fatia vertical: triade sem Fase 2 construida -> pula para Fase 3.
-        setTipoDisponivel(false);
-        irParaFase3();
+      const res1 = resultadoFase1(f.respostas.fase1, f.itens.fase1, ctx);
+      if (res1.triade.ambiguo && !f.desempateAplicado.fase1 && res1.triade.segundo) {
+        f.desempateAplicado.fase1 = true;
+        const par = [res1.triade.top.categoria, res1.triade.segundo.categoria];
+        const extras = (banco.fase1_desempate || []).filter(
+          (it) => Array.isArray(it.separa) && it.separa.length === 2 && par.every((p) => it.separa.includes(p))
+        );
+        if (anexar(extras)) return;
       }
-      return;
+      const plano = planejarFase2(banco, res1);
+      plano.itensCruzados.forEach((it) => f.cruzadosIds.add(it.id));
+      return iniciarFase('fase2', plano.itens);
     }
 
     if (f.faseKey === 'fase2') {
-      irParaFase3();
-      return;
+      const prov = tipoProvisorio(
+        { respostas: f.respostas.fase1, itens: f.itens.fase1 },
+        { respostas: f.respostas.fase2, itens: f.itens.fase2 },
+        { respostas: f.respostas.fase2x, itens: f.itens.fase2x },
+        ctx,
+        PESOS
+      );
+      if (prov.ambiguo && prov.segundo && !f.desempateAplicado.fase2) {
+        f.desempateAplicado.fase2 = true;
+        const par = [prov.top.categoria, prov.segundo.categoria];
+        const extras = itensDesempateTipo(banco, par, todosItens(f));
+        const saoCruzados = extras.length > 0 && extras[0].id.startsWith('fx_');
+        if (anexar(extras, { cruzados: saoCruzados })) return;
+      }
+      f.tipoFinal = prov;
+      return iniciarFase('fase3', itensFase3(banco));
     }
 
-    // fase3 terminou -> analise final + relatorio.
-    concluir();
+    if (f.faseKey === 'fase3') {
+      const inst = pontuarPorTaxa(
+        [{ respostas: f.respostas.fase3, itens: f.itens.fase3, peso: 1 }],
+        'instinto',
+        ctx
+      );
+      if (inst.ambiguo && inst.segundo && !f.desempateAplicado.fase3) {
+        f.desempateAplicado.fase3 = true;
+        const par = [inst.top.categoria, inst.segundo.categoria];
+        const extras = (banco.fase3_desempate || []).filter(
+          (it) => Array.isArray(it.separa) && par.every((p) => it.separa.includes(p))
+        );
+        if (anexar(extras)) return;
+      }
+      const t = f.tipoFinal;
+      const tipos = t && t.top ? [t.top.categoria] : [];
+      if (t && t.ambiguo && t.segundo) tipos.push(t.segundo.categoria);
+      return iniciarFase('fase4', itensFase4(banco, tipos));
+    }
+
+    return avancar();
   }
 
-  function irParaFase3() {
+  function avancar() {
     const f = fluxo.current;
-    f.faseKey = 'fase3';
-    f.itens = [...banco.fase3];
-    f.itensApresentados.fase3 = f.itens;
-    f.idx = 0;
-    setItemAtual(f.itens[0]);
+    const i = FASES.indexOf(f.faseKey);
+    if (i >= 0 && i < FASES.length - 1 && f.faseKey !== 'fase4') {
+      // so chega aqui se uma fase ficou vazia
+      return iniciarFase(FASES[i + 1], FASES[i + 1] === 'fase3' ? itensFase3(banco) : []);
+    }
+    concluir();
   }
 
   function concluir() {
     const f = fluxo.current;
     const resultado = analisarFinal({
-      fase1: { respostas: f.respostas.fase1, itens: f.itensApresentados.fase1 },
-      fase2: { respostas: f.respostas.fase2, itens: f.itensApresentados.fase2, triade: f.triade },
-      fase3: { respostas: f.respostas.fase3, itens: f.itensApresentados.fase3 },
+      fase1: { respostas: f.respostas.fase1, itens: f.itens.fase1 },
+      fase2: { respostas: f.respostas.fase2, itens: f.itens.fase2 },
+      fase2x: { respostas: f.respostas.fase2x, itens: f.itens.fase2x },
+      fase3: { respostas: f.respostas.fase3, itens: f.itens.fase3 },
+      fase4: { respostas: f.respostas.fase4, itens: f.itens.fase4 },
     });
     setAnalise(resultado);
     setStage('report');
@@ -168,14 +218,11 @@ export default function App() {
           <div className="win-body">
             {stage === 'landing' && <Landing onStart={iniciar} />}
 
-            {stage === 'quiz' && itemAtual && (
-              <QuestionCard item={itemAtual} onAnswer={aoResponder} />
-            )}
+            {stage === 'quiz' && itemAtual && <QuestionCard item={itemAtual} onAnswer={aoResponder} />}
 
             {stage === 'report' && analise && (
               <Report
                 analise={analise}
-                tipoDisponivel={tipoDisponivel}
                 itensPorId={itensPorId}
                 onRestart={() => setStage('landing')}
               />
@@ -185,26 +232,4 @@ export default function App() {
       </div>
     </div>
   );
-}
-
-// ---------------------------------------------------------------------------
-// Selecao de itens de desempate para o par ambiguo
-// ---------------------------------------------------------------------------
-
-function itensDesempate(faseKey, triade, par, jaPresentes) {
-  let pool = [];
-  if (faseKey === 'fase1') pool = banco.fase1_desempate || [];
-  else if (faseKey === 'fase2') pool = (banco.fase2_desempate && banco.fase2_desempate[triade]) || [];
-  else if (faseKey === 'fase3') pool = banco.fase3_desempate || [];
-
-  const idsPresentes = new Set(jaPresentes.map((i) => i.id));
-  const parSet = new Set(par.map(String));
-  return pool.filter((it) => {
-    if (idsPresentes.has(it.id)) return false;
-    if (!Array.isArray(it.separa)) return false;
-    const s = new Set(it.separa.map(String));
-    if (s.size !== parSet.size) return false;
-    for (const v of s) if (!parSet.has(v)) return false;
-    return true;
-  });
 }
