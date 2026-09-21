@@ -6,8 +6,13 @@ que os testes de eneagrama comuns não têm: ele cruza a resposta consciente con
 a pessoa não está monitorando (itens gêmeos, desejabilidade social, tempo de resposta
 silencioso e consistência entre domínios).
 
-Base teórica: exclusivamente **Claudio Naranjo** (*Character and Neurosis* e a coleção
+Base teórica: exclusivamente **Claudio Naranjo** (*Caráter e neurose* e a coleção
 *Psicologia dos eneatipos*, um volume por paixão) e **Oscar Ichazo**.
+
+O banco é escrito a partir de duas coisas do livro: os **clusters de traços** que Naranjo
+lista para cada tipo (cada cluster precisa aparecer em pelo menos um item) e o **apêndice de
+diagnóstico diferencial**, que dá, par a par, o que separa dois tipos parecidos. Os 25 pares
+do apêndice estão cobertos por itens cruzados ou de desempate, e isso é verificado por teste.
 
 > **Nota de honestidade metodológica.** Os pesos e limiares (desejabilidade social,
 > imediatismo, ambiguidade) são **heurísticas transparentes e ajustáveis**, não valores
@@ -23,7 +28,7 @@ Cinco regras governam o banco inteiro. Três delas são verificadas por teste au
    ou "o que você sente quando está sozinho": isso exige um acesso ao próprio mundo interno
    que muita gente não tem, e que o eneatipo 9 tem menos que todos, porque a paixão dele é o
    auto-esquecimento. Os itens são cenas de infância ("quando você chorava, o que acontecia
-   na sua casa?") e cenas do presente ("o chefe chama você e não diz o assunto: o que passa na
+   na sua casa?") e cenas do presente ("o chefe te chama e não diz o assunto; o que passa na
    sua cabeça no caminho?"). Nenhuma alternativa pode ser respondida com "depende".
 2. **O enunciado fixa o comportamento e as alternativas variam a motivação.** Um 8, um 6
    sexual, um 4 sexual e um 1 sexual podem todos brigar na reunião; o que difere é o que
@@ -42,7 +47,7 @@ Cinco regras governam o banco inteiro. Três delas são verificadas por teste au
 | Fase | O que faz | Itens no banco | Itens aplicados |
 |---|---|---|---|
 | 1 | Triagem: pontua tríade **e** os nove tipos | 14 (6 de infância e crença, 8 do presente) + 3 desempates | 12 |
-| 2 | Tipo: itens da tríade vencedora, das tríades dos tipos fortes, e itens **cruzados** entre candidatos de tríades diferentes | 41 por tríade-conjunto + 9 desempates + 46 cruzados | ~19 |
+| 2 | Tipo: itens da tríade vencedora, das tríades dos tipos fortes, e itens **cruzados** entre candidatos de tríades diferentes | 50 de tríade + 9 desempates + 56 cruzados | ~19 |
 | 3 | Instinto dominante | 12 + 3 desempates | 6 |
 | 4 | Subtipo dentro do tipo encontrado (27 subtipos de Naranjo) | 27 | 3 |
 
@@ -77,18 +82,13 @@ src/
     scoring.js         # MOTOR DE PONTUACAO — puro, sem React/DOM
     fluxo.js           # FLUXO ADAPTATIVO — decide quais perguntas aparecem em cada fase
     scoring.test.js    # 11 testes do motor
-    exportar.js        # ARQUIVO DE RESPOSTAS — monta o registro anônimo e soma vários registros
-    fluxo.test.js      # 12 testes do fluxo, da integridade do banco e dos casos-limite
-    exportar.test.js   # 8 testes do arquivo de respostas e da soma
-    navegacao.js       # "Voltar" e "Avançar": cópia do estado, tempo de resposta, ordem das alternativas
-    navegacao.test.js  # 7 testes da navegação
+    fluxo.test.js      # 8 testes do fluxo e da integridade estrutural do banco
   components/
     Landing.jsx  QuestionCard.jsx  ProgressBar.jsx  Report.jsx
   App.jsx              # máquina de estados das 4 fases
 ferramentas/
   gerar_banco.py       # gera src/data/questions.json com as validações embutidas
   simular.mjs          # simulação com respondentes sintéticos (teste de viés estrutural)
-  agregar_respostas.mjs # soma os arquivos de respostas de pessoas reais
 ```
 
 ### Formato de um item (questions.json)
@@ -141,25 +141,14 @@ cruzados contam 1,5, porque comparam os dois finalistas cara a cara.
 - **Fixação > emoção**: alternativas de fixação têm peso maior (1.2–1.5 vs 1.0), pois a
   fixação é o elemento mais estável e menos disfarçável pela persona.
 - **Tempo de resposta**: capturado silenciosamente, normalizado pela mediana da própria
-  pessoa, do momento em que a pergunta aparece até o último clique numa alternativa. Como
-  todas as alternativas de um item compartilham o eixo, isso nunca favorece um tipo dentro do
-  item. Numa pergunta revisitada pelo "Voltar", a mesma resposta mantém o tempo original e uma
-  resposta trocada fica sem tempo (neutra), porque já não é uma reação espontânea.
+  pessoa. Como todas as alternativas de um item compartilham o eixo, isso nunca favorece um
+  tipo dentro do item.
 - **Itens gêmeos**: se divergem, **não são descartados**, viram dado sobre público × privado.
 - **"Nenhuma dessas"**: não pontua, e a taxa de uso entra no índice de confiabilidade. É
   também o melhor termômetro de qual item está mal escrito.
 
 Nenhuma pontuação numérica, tempo ou score de desejabilidade é mostrado durante o teste,
 apenas no relatório final, de forma qualitativa.
-
-### Navegação
-
-Clicar numa alternativa só a marca. A pessoa pode trocar a marcação e confirma com
-**Avançar**, que só fica ativo com uma alternativa marcada. **Voltar** leva à pergunta
-anterior, inclusive através das mudanças de fase: o App guarda uma cópia do estado antes de
-cada resposta e restaura essa cópia, então a resposta daquela pergunta sai do registro e, se
-uma resposta da Fase 1 mudar, a Fase 2 é replanejada ao avançar. As perguntas já respondidas
-aparecem com a resposta anterior marcada e com as alternativas na mesma ordem.
 
 ## Ferramentas
 
@@ -173,38 +162,16 @@ A simulação não é validação empírica: é um teste de **viés estrutural**
 modelo de respondente (que erra, e que confunde o próprio tipo com os tipos parecidos segundo
 Naranjo) contra o banco, e mede para onde o instrumento empurra quem erra.
 
-## Coletar respostas para validação
-
-O site é estático e não envia nada. No fim do relatório (seção 5, opcional) a pessoa pode
-indicar o tipo e o instinto que já conhece, e como sabe (entrevista, outro teste ou observação
-de si), e baixar um arquivo JSON com as próprias respostas. O arquivo não tem nome nem dados
-pessoais: só o item, a alternativa escolhida, se foi "nenhuma dessas", o tempo de resposta, o
-resultado e o dia da aplicação. Ele também leva uma assinatura do banco, para que respostas a
-versões diferentes das perguntas não sejam somadas como se fossem o mesmo item.
-
-Quem aplica o teste junta os arquivos numa pasta e roda:
-
-```bash
-node ferramentas/agregar_respostas.mjs respostas/                  # tabela no terminal
-node ferramentas/agregar_respostas.mjs respostas/ --csv itens.csv  # e uma planilha por item
-```
-
-A saída traz, por item, a **taxa de "nenhuma dessas"** (item com taxa alta provavelmente está
-mal escrito) e, entre quem informou o próprio tipo, **quanto o item acerta esse tipo** quando o
-oferece (item com taxa baixa não discrimina). No fim vêm o acerto geral de tipo e de subtipo e
-a matriz "tipo conhecido → tipo obtido".
-
 ## O que ainda falta
 
-1. **Aplicar em pessoas reais**, de preferência tipadas por entrevista, e recalibrar `LIMIARES`
-   e `PESOS` com os números de `agregar_respostas.mjs`. A coleta já está pronta.
-2. **Linhas de estresse e segurança** não são tratadas.
-
-Já feito nesta versão: o registro da taxa de "nenhuma dessas" por item (acima) e a revisão dos
-itens do eneatipo 8 na Fase 4 com o volume do E8 da coleção (*Luxúria: sádicos, possessivos e
-vigilantes*): autopreservação como "Satisfação" (território, sustento, autossuficiência),
-social como "Cumplicidade" (liderança e lealdade do grupo) e sexual como "Posse" (intensidade
-com vigilância).
+1. **Validação com pessoas reais**, já tipadas por entrevista, e recalibração dos pesos.
+2. **Registrar a taxa de "nenhuma dessas" por item** na primeira aplicação em campo.
+3. **Revisar os itens do eneatipo 8 na Fase 4** com o volume do E8 da coleção.
+4. **Asas e linhas de estresse e segurança** não são tratadas.
+5. **O teste não substitui o reconhecimento.** Para Naranjo, o instrumento de diagnóstico é a
+   leitura da descrição do caráter e o reconhecimento que ela provoca, seguido do trabalho
+   autobiográfico. O relatório diz isso e indica o segundo candidato com a diferença entre os
+   dois, em vez de entregar um veredito.
 
 ## O que este instrumento NÃO é
 

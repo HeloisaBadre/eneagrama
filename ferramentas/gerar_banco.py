@@ -124,7 +124,7 @@ F1.append(i9('f1_05', 'Pensando na sua família, qual papel acabou sobrando para
     9: 'O de boa, que não dava trabalho e concordava com tudo.',
 }, dominio='familia', eixo='fixacao', peso=1.2))
 
-F1.append(i9('f1_06', 'Qual destas conclusões você tirou cedo, sem que ninguém precisasse ensinar?', {
+F1.append(i9('f1_06', 'Qual destas conclusões você tirou cedo, sem ninguém ter te ensinado?', {
     8: '“Se eu não for forte, passam por cima de mim.”',
     9: '“Se eu não incomodar, fica tudo em paz.”',
     1: '“Se eu errar, vem crítica. Tem que ser do jeito certo.”',
@@ -137,7 +137,7 @@ F1.append(i9('f1_06', 'Qual destas conclusões você tirou cedo, sem que ningué
 }, eixo='fixacao', peso=1.2))
 
 # ---- cenas do presente ----------------------------------------------------
-F1.append(i9('f1_07', 'Seu chefe chama você para uma conversa e não diz o assunto. O que passa na sua cabeça no caminho até a sala?', {
+F1.append(i9('f1_07', 'Seu chefe te chama para uma conversa e não diz o assunto. O que passa na sua cabeça no caminho até a sala?', {
     6: '“O que será que aconteceu?” Já imagino três cenários, quase todos ruins.',
     1: 'Reviso o que pode ter saído errado e se a culpa é minha.',
     3: 'Penso em como me sair bem na conversa e reverter se for crítica.',
@@ -173,7 +173,7 @@ F1.append(i9('f1_09', 'Um amigo desmarca em cima da hora pela terceira vez segui
     7: 'Chamo outra pessoa ou invento outro programa.',
 }, dominio='amizade', eixo='paixao'))
 
-F1.append(i9('f1_10', 'É sábado à noite, você está em casa e não recebeu nenhum convite. Como é isso para você?', {
+F1.append(i9('f1_10', 'É sábado à noite, você está em casa e ninguém te chamou para nada. Como é isso para você?', {
     5: 'Ótimo. É quando eu recupero a energia.',
     9: 'Tranquilo. Ponho uma série, como alguma coisa e a noite passa.',
     7: 'Começo a procurar o que fazer. Ficar parado me incomoda.',
@@ -277,7 +277,7 @@ INST = [
         (1, 'Explico qual era o combinado e por que aquilo não está certo.',
             'Falo na hora, com dureza, porque aquilo é inaceitável.'),
     ], dominio='trabalho', **PAI),
-    f2('f2i_02', 'Alguém tratou você mal ontem. Hoje de manhã, qual pensamento aparece?', [
+    f2('f2i_02', 'Alguém te tratou mal ontem. Hoje de manhã, qual pensamento aparece?', [
         (8, '“Ele vai me pagar de algum jeito.”', '“Comigo não. Já sabe o que vai acontecer se repetir.”'),
         (9, '“Já passou, não vou remoer isso.”', '“Ele deve estar passando por alguma coisa.”'),
         (1, '“Eu jamais trataria alguém assim.”', '“Isso está errado e eu não vou deixar barato.”'),
@@ -320,7 +320,7 @@ INST = [
         (1, 'Mantenho a compostura e defendo o procedimento correto.',
             'Aponto o erro na frente de todos, porque aquilo não pode passar.'),
     ], dominio='trabalho', gemeo='gemeo_conflito_intensidade', **EMO),
-    f2('f2i_07', 'Alguém próximo comenta: “às vezes você é difícil.” Com o que você concorda?', [
+    f2('f2i_07', 'Alguém próximo te diz: “às vezes você é difícil.” Com o que você concorda?', [
         (8, 'Sou duro demais e magoo antes de perceber.', 'Não mostro fragilidade nem para quem eu amo.'),
         (9, 'Me acomodo e deixo de lado o que eu quero.', 'Sumo do que é chato até o prazo estourar.'),
         (1, 'Sou exigente demais, comigo e com os outros.', 'Fico intolerante quando as coisas não são feitas direito.'),
@@ -337,7 +337,7 @@ INST = [
         (1, 'Indignação. Aquilo foi errado e alguém precisa reconhecer.',
             'Um ressentimento calado, que eu nunca falei para ninguém.'),
     ], **FIX),
-    f2('f2i_09', 'Um amigo vai apresentar você a alguém que ainda não sabe nada a seu respeito. O que ele provavelmente diz?', [
+    f2('f2i_09', 'Um amigo seu vai te descrever para alguém que não te conhece. O que ele provavelmente diz?', [
         (8, 'Que sou intenso e bom de ter por perto na hora difícil.', 'Que sou direto e não aceito desrespeito.'),
         (9, 'Que sou tranquilo e fácil de conviver.', 'Que sou teimoso: concordo e faço do meu jeito.'),
         (1, 'Que sou confiável e faço as coisas direito.', 'Que sou exigente e brigo pelo que acredito.'),
@@ -358,6 +358,32 @@ INST = [
             'Adio o que eu quero, mas a minha rotina ninguém tira.'),
         (1, 'Só depois que tudo estiver feito, e mesmo assim me policio.', 'Exagerei uma vez e fiquei com a sensação de ter feito algo errado.'),
     ], **PAI),
+
+    # --- v4: clusters de Caráter e neurose que faltavam --------------------
+    f2('f2i_15', 'Um grupo precisa decidir algo e ninguém decide. O que você faz?', [
+        (8, 'Decido e toco. Depois a gente ajusta o que estiver errado.',
+            'Distribuo as tarefas e digo quem faz o quê.'),
+        (9, 'Espero alguém decidir e concordo com o que a maioria quiser.',
+            'Vou levando. Uma hora a decisão se resolve sozinha.'),
+        (1, 'Proponho o jeito certo de fazer e explico por que é o melhor.',
+            'Assumo, porque sei que faço melhor do que sairia de outro jeito.'),
+    ], dominio='trabalho', eixo='fixacao', peso=1.5),
+    f2('f2i_16', 'Alguém chora na sua frente, numa situação difícil. O que acontece com você?', [
+        (8, 'Fico incomodado com a fragilidade e quero que a pessoa reaja.',
+            'Vou direto para o que resolve. Chorar não muda o problema.'),
+        (9, 'Fico junto, sem saber bem o que dizer, esperando passar.',
+            'Sinto a dor dela como se fosse minha e esqueço a minha.'),
+        (1, 'Acolho, mas por dentro acho que ela precisa se recompor.',
+            'Penso no que ela poderia ter feito para não chegar até ali.'),
+    ], **EMO),
+    f2('f2i_17', 'Como costuma ser o seu sábado?', [
+        (8, 'Cada sábado é diferente, do jeito que der vontade. Odeio agenda no fim de semana.',
+            'Puxo alguém para alguma coisa, e costuma ir longe.'),
+        (9, 'Quase sempre igual, e eu gosto assim.',
+            'Começo várias coisas e termino no sofá.'),
+        (1, 'Tenho uma lista e cumpro.',
+            'Aproveito para arrumar o que ficou torto durante a semana.'),
+    ], **PAI),
 ]
 
 EMOC = [
@@ -376,7 +402,7 @@ EMOC = [
         (3, 'Digo que está tudo bem e sigo funcionando.', 'Desconverso e volto para o trabalho.'),
         (4, 'Falo e vai fundo. Choro, se for o caso.', 'Corto o assunto. Reclamar é fraqueza, eu aguento.'),
     ], **FIX),
-    f2('f2e_04', 'Você vai encontrar pessoas que ainda não conhecem você. O que você faz antes de sair de casa?', [
+    f2('f2e_04', 'Você vai encontrar pessoas que ainda não te conhecem. O que você faz antes de sair de casa?', [
         (2, 'Penso em como vou recebê-las, o que levar, como deixá-las à vontade.',
             'Escolho algo que me deixe encantador, do jeito que costuma funcionar.'),
         (3, 'Cuido para estar apresentável e penso no que vou dizer sobre o que eu faço.',
@@ -399,7 +425,7 @@ EMOC = [
         (3, 'O reconhecimento. É o que eu busco também.', 'Ver alguém menos competente sendo mais valorizado.'),
         (4, 'A pessoa parecer inteira e em paz, coisa que eu nunca senti.', 'Ela ter conseguido fácil o que a mim custou muito.'),
     ], indireto=True, **FIX),
-    f2('f2e_12', 'Qual gesto de alguém faz você se sentir realmente querido?', [
+    f2('f2e_12', 'O que alguém faz que te faz sentir realmente querido?', [
         (2, 'Me procurar quando precisa. Ver que faço falta.', 'Me tratar como a pessoa preferida, acima das outras.'),
         (3, 'Ter orgulho de mim na frente dos outros.', 'Reconhecer tudo o que eu faço e o quanto dá para contar comigo.'),
         (4, 'Me entender de um jeito que ninguém mais entende.', 'Cuidar de mim sem eu precisar pedir.'),
@@ -436,6 +462,32 @@ EMOC = [
         (3, 'Eu ir bem: nota, prêmio, resultado.', 'Eu resolver as coisas sozinho, sem dar trabalho.'),
         (4, 'Quase nada. Eu sentia que outro filho recebia esse olhar.', 'Eu aguentar firme e ajudar, mesmo criança.'),
     ], dominio='familia', eixo='fixacao', peso=1.5),
+
+    # --- v4 ----------------------------------------------------------------
+    f2('f2e_15', 'Numa conversa, alguém pergunta sobre um assunto que você domina pouco. O que você faz?', [
+        (2, 'Puxo para uma história minha e a mesa vai junto.',
+            'Digo que não sei, mas encanto de outro jeito.'),
+        (3, 'Falo com segurança mesmo assim. Depois eu corro atrás.',
+            'Desvio para a parte que eu domino, e ninguém percebe.'),
+        (4, 'Admito, mas me incomoda que os outros saibam mais do que eu.',
+            'Deixo claro que aquele assunto é raso e não me interessa.'),
+    ], **FIX),
+    f2('f2e_16', 'Alguém te pergunta como você está se sentindo de verdade. O que acontece?', [
+        (2, 'Falo do que eu sinto pelos outros antes de falar de mim.',
+            'Já me emociono, e a conversa toda vira isso.'),
+        (3, 'Respondo que estou bem quase no automático, e depois levo um tempo para saber o que eu sinto.',
+            'Falo do que estou fazendo, não do que estou sentindo.'),
+        (4, 'Falo, e vai fundo. Isso importa mais do que o resto.',
+            'Mudo de assunto. Falar disso me expõe demais.'),
+    ], **FIX),
+    f2('f2e_17', 'Você contou uma história para um grupo ontem. Como foi?', [
+        (2, 'Coloquei emoção e gesto, e a mesa acompanhou.',
+            'Exagerei um pouco para a história ficar melhor.'),
+        (3, 'Contei do jeito que funciona. Já sei o efeito que faz.',
+            'Fui direto ao ponto, sem floreio.'),
+        (4, 'Contei o que aquilo significou para mim.',
+            'Quase não falei. Achei que ninguém fosse se interessar.'),
+    ], dominio='amizade', **EMO),
 ]
 
 MENT = [
@@ -477,12 +529,12 @@ MENT = [
         (6, 'Já penso em todos os cenários e no que fazer em cada um.', 'Endureço, assumo o comando e não deixo ninguém ver que me abalou.'),
         (7, 'Puxo o lado bom, faço piada, mantenho o clima leve.', 'Me ocupo cuidando de todo mundo e não paro para sentir.'),
     ], dominio='familia', **FIX),
-    f2('f2m_12', 'Alguém conta a você uma versão de uma história que não fecha. O que você faz?', [
+    f2('f2m_12', 'Alguém te conta uma versão de uma história que não fecha. O que você faz?', [
         (5, 'Guardo a dúvida e vou juntando informação sozinho.', 'Estudo o assunto até entender melhor do que a maioria.'),
         (6, 'Procuro alguém confiável para saber em qual versão acreditar.', 'Confronto a pessoa até a explicação se sustentar.'),
         (7, 'Fico com a versão mais leve e sigo em frente.', 'Encaixo aquilo numa ideia maior que faça sentido.'),
     ], **FIX),
-    f2('f2m_08', 'Um amigo vai apresentar você a alguém que ainda não sabe nada a seu respeito. O que ele diz?', [
+    f2('f2m_08', 'Um amigo vai te descrever para alguém que não te conhece. O que ele diz?', [
         (5, 'Que sou reservado e difícil de conhecer por completo.', 'Que sou fechado, mas intenso com quem entra.'),
         (6, 'Que sou leal e levo tudo a sério.', 'Que sou firme e não baixo a guarda.'),
         (7, 'Que sou animado e cheio de ideias.', 'Que sou prestativo e idealista.'),
@@ -507,6 +559,32 @@ MENT = [
         (6, 'Já imagino o pior e checo porta, janela, tudo.', 'Pego algo na mão e vou olhar de frente.'),
         (7, 'Deve ser o vento. Volto para o que eu estava fazendo.', 'Racionalizo rápido e me convenço de que não é nada.'),
     ], **PAI),
+
+    # --- v4 ----------------------------------------------------------------
+    f2('f2m_14', 'Alguém te cobra uma coisa que você não entregou. O que acontece?', [
+        (5, 'Por fora concordo, por dentro resisto a estar sendo cobrado.',
+            'Fico com uma culpa que não mostro para ninguém.'),
+        (6, 'Me acuso primeiro, e logo depois acho que do outro lado também houve falha.',
+            'Explico os motivos ponto a ponto e me defendo.'),
+        (7, 'Prometo para já e dou um jeito de sair bem da situação.',
+            'Minimizo. No fundo não era tão importante assim.'),
+    ], dominio='trabalho', **FIX),
+    f2('f2m_15', 'Você ficou duas horas sozinho, sem obrigação nenhuma. Para onde foi a sua cabeça?', [
+        (5, 'Para um assunto que eu quero entender a fundo.',
+            'Para organizar o que eu já sei, sem precisar contar a ninguém.'),
+        (6, 'Para uma teoria sobre como as coisas realmente funcionam.',
+            'Para um problema que eu preciso resolver antes que vire problema.'),
+        (7, 'Para planos: viagem, projeto, possibilidades.',
+            'Para uma ideia nova que eu já quero contar para alguém.'),
+    ], **FIX),
+    f2('f2m_16', 'Um conhecido pede um favor grande, que vai tomar o seu fim de semana. O que você faz?', [
+        (5, 'Invento uma desculpa. O meu tempo é meu.',
+            'Faço, mas contando os minutos, e não me ofereço de novo.'),
+        (6, 'Faço, porque eu disse que faria e não volto atrás.',
+            'Faço, mas fico pensando no que ele vai querer depois.'),
+        (7, 'Faço se for divertido. Se não, empurro para outra pessoa.',
+            'Prometo na hora e depois vejo como sair disso.'),
+    ], **EMO),
 ]
 
 DES_INST = [
@@ -542,7 +620,7 @@ DES_MENT = [
         (5, 'Corto gastos e passo a precisar de menos.'),
         (6, 'Checo tudo, ligo, confirmo, procuro garantia.'),
     ], eixo='fixacao', peso=1.4, separa=[5, 6]),
-    item('f2md_67', 2, 'Você vai fazer algo de que tem medo (falar em público, uma consulta, uma conversa dura). O que faz?', [
+    item('f2md_67', 2, 'Você vai fazer algo que te dá medo (falar em público, uma consulta, uma conversa dura). O que faz?', [
         (6, 'Me preparo demais, checo tudo, ou parto para cima antes que o medo cresça.'),
         (7, 'Penso em outra coisa até a hora e levo na leveza.'),
     ], eixo='fixacao', peso=1.4, separa=[6, 7]),
@@ -567,7 +645,7 @@ CRUZ = [
     cz('fx_86b', 8, 6, 'Antes de encarar uma situação difícil, o que acontece no seu corpo?',
        'Nada de especial. Eu vou, porque quero e posso.',
        'Tem uma tensão antes, que eu não mostro para ninguém, e é contra ela que eu vou.'),
-    cz('fx_86c', 8, 6, 'Alguém prejudicou você de verdade. Seis meses depois, o que você fez a respeito?',
+    cz('fx_86c', 8, 6, 'Alguém te prejudicou de verdade. Seis meses depois, o que você fez a respeito?',
        'Devolvi de algum jeito. Não ficou só na vontade.',
        'Imaginei várias vezes como revidar, mas na prática ficou na cabeça.'),
     cz('fx_86d', 8, 6, 'Chega um chefe novo, com fama de durão. Como você age na primeira semana?',
@@ -594,7 +672,7 @@ CRUZ = [
     cz('fx_87a', 8, 7, 'Chegou uma notícia pesada. Qual é o seu primeiro movimento?',
        'Encaro de frente. Dor não me assusta.',
        'Encaro se precisar, mas meu impulso é aliviar o clima e pensar em outra coisa.'),
-    cz('fx_87b', 8, 7, 'Você está muito empolgado com um projeto. O que nele mais empolga você?',
+    cz('fx_87b', 8, 7, 'Você está muito empolgado com um projeto. O que te empolga nele?',
        'A intensidade e estar no comando.',
        'A novidade. Quando vira rotina, eu perco o interesse.'),
     cz('fx_83a', 8, 3, 'Você está competindo por uma vaga. O que está em jogo?',
@@ -654,7 +732,7 @@ CRUZ = [
     cz('fx_93a', 9, 3, 'Você trabalhou muito por um grupo e o resultado foi bom. O que você quer?',
        'Ver o grupo bem. Não faço questão de aparecer.',
        'Que saibam que boa parte daquilo foi minha.'),
-    cz('fx_93b', 9, 3, 'Alguém pergunta onde você quer estar daqui a cinco anos. O que você responde?',
+    cz('fx_93b', 9, 3, 'Alguém te pergunta onde você quer estar em cinco anos. O que você responde?',
        'Não sei bem. Vou levando.',
        'Tenho metas claras e fico inquieto se não avanço.'),
     cz('fx_27a', 2, 7, 'Numa mesa de dez pessoas, qual costuma ser o seu lugar?',
@@ -669,7 +747,7 @@ CRUZ = [
     cz('fx_24b', 2, 4, 'Em uma frase, como você se vê?',
        'Como alguém com muito a oferecer.',
        'Como alguém a quem falta algo que os outros têm.'),
-    cz('fx_26a', 2, 6, 'Você é muito carinhoso com uma pessoa específica. O que isso traz para você?',
+    cz('fx_26a', 2, 6, 'Você é muito carinhoso com uma pessoa específica. O que isso te dá?',
        'Um lugar especial na vida dela.',
        'Segurança. Com ela por perto eu fico mais protegido.'),
     cz('fx_26b', 2, 6, 'Uma relação sua esfriou. Qual é o primeiro sentimento?',
@@ -699,6 +777,39 @@ CRUZ = [
     cz('fx_15a', 1, 5, 'Você se afastou de um grupo recentemente. Por quê?',
        'Porque o jeito como as coisas eram feitas ali me incomodava.',
        'Porque estava consumindo a minha energia e o meu tempo.'),
+
+    # --- v4: pares do apêndice de diagnóstico diferencial que faltavam -----
+    cz('fx_35a', 3, 5, 'Um projeto prático precisa sair do papel esta semana. Como você se sai?',
+       'Eu resolvo: ligo, corro atrás, entrego.',
+       'Eu entendo o problema melhor que a maioria, mas colocar de pé é outra história.'),
+    cz('fx_35b', 3, 5, 'Você precisa falar de um trabalho seu na frente de gente que não conhece. E aí?',
+       'Eu me apresento bem. Sei como me vender.',
+       'Evito. Se der para mandar por escrito, melhor.'),
+    cz('fx_47a', 4, 7, 'O fim de semana foi ruim. Na segunda de manhã, como você está?',
+       'Ainda pesado. Carrego aquilo comigo por uns dias.',
+       'Já virei a página e estou pensando no que vem de bom.'),
+    cz('fx_47b', 4, 7, 'Você se irritou com alguém esta semana. O que aconteceu?',
+       'Falei, ou fechei a cara. Em mim a raiva aparece.',
+       'Engoli e continuei simpático. Quase nunca deixo a raiva aparecer.'),
+    cz('fx_79a', 7, 9, 'Você ficou uma hora sem nada para fazer. O que passou na sua cabeça?',
+       'Mil ideias e planos, um atrás do outro.',
+       'Quase nada. O tempo passou.'),
+    cz('fx_79b', 7, 9, 'Você quer muito uma coisa que não pode ter agora. O que acontece?',
+       'Dou um jeito, invento um caminho, consigo de outro modo.',
+       'Deixo para lá. Adiar o que eu quero é fácil para mim.'),
+    # --- v4: discriminadores do apêndice que o banco não usava -------------
+    cz('fx_16c', 1, 6, 'Você precisa tomar uma decisão que afeta outras pessoas. Como é?',
+       'Decido e assumo. Demorar demais também é erro.',
+       'Fico girando entre as opções, com medo de escolher errado.'),
+    cz('fx_36b', 3, 6, 'Quando bate ansiedade, em torno do que ela gira?',
+       'De me expor, de ser deixado de lado, de perder o que conquistei.',
+       'De errar, ou de não saber qual é o caminho certo.'),
+    cz('fx_92c', 9, 2, 'Alguém demora a fazer o que combinou com você. Como você fica?',
+       'Tenho paciência. Espero o tempo da pessoa.',
+       'Fico impaciente e acabo cobrando, nem que seja de forma indireta.'),
+    cz('fx_95c', 9, 5, 'Um amigo pede ajuda num domingo de manhã. O que você faz?',
+       'Vou. Nem penso muito, e acabo ficando o dia inteiro.',
+       'Ajudo no que der por mensagem. O meu domingo eu preservo.'),
 ]
 
 
@@ -734,7 +845,7 @@ F3 = [
        'Se a relação cabe na minha vida sem bagunçar minha rotina e meu bolso.',
        'Como essa pessoa se encaixa com meus amigos e minha família.',
        'Se tem química de verdade e se ela se entrega tanto quanto eu.', dominio='romance', opcional=True),
-    f3('f3_07', 'Você passou por semanas difíceis e finalmente tem um fim de semana. O que mais ajuda você a se recuperar?',
+    f3('f3_07', 'Você passou por semanas difíceis e finalmente tem um fim de semana. O que te recupera?',
        'Casa, comida boa, sono, corpo em ordem.',
        'Estar com o meu grupo, sentir que faço parte.',
        'Estar grudado em alguém, ou mergulhado em algo que me acende.', opcional=True),
@@ -787,7 +898,7 @@ F4 = {
         'Para mim. Eu me cobro, me preocupo e tento prevenir tudo.',
         'Para o mundo. Vejo o que está errado na sociedade e sinto que tenho o que ensinar.',
         'Para quem está perto. Quero que a pessoa melhore, e cobro com intensidade.'),
-     f4(1, 'b', 'Alguém vê você irritado. O que essa pessoa vê?',
+     f4(1, 'b', 'Alguém te vê irritado. O que essa pessoa vê?',
         'Quase nada. Vira preocupação, pressa e cara fechada.',
         'Frieza, distância e um comentário cortante.',
         'Voz alta e indignação aberta.'),
@@ -815,7 +926,7 @@ F4 = {
         'No trabalho e em deixar tudo garantido.',
         'Em crescer, aparecer e subir no meu meio.',
         'Na minha aparência e na minha relação.'),
-     f4(3, 'c', 'Alguém chama você de vaidoso. Qual é a sua reação?',
+     f4(3, 'c', 'Alguém te chama de vaidoso. Qual é a sua reação?',
         'Acho injusto. Eu nem ligo para aparecer.',
         'Acho natural. Eu gosto de mostrar o que conquistei.',
         'Me pega. Eu cuido muito da imagem, mas para ser amado, não para me exibir.')],
@@ -831,7 +942,7 @@ F4 = {
         'Eu cuidando de tudo e não deixando ninguém cuidar de mim.',
         'Eu com medo de não ser suficiente e me escondendo.',
         'Eu disputando o lugar de preferido, com ciúme e cobrança.')],
- 5: [f4(5, 'a', 'Você teve um dia muito exigente. O que faz você voltar ao normal?',
+ 5: [f4(5, 'a', 'Você teve um dia muito exigente. O que te devolve ao normal?',
         'Meu canto, minhas coisas, ninguém me pedindo nada.',
         'Ler, estudar, entender algo que me interessa.',
         'Conversar longamente com a única pessoa em quem confio.'),
@@ -851,7 +962,7 @@ F4 = {
         'Não falo nada. Preciso da boa relação com ele.',
         'Aponto o procedimento correto, sem atacar a pessoa.',
         'Falo na cara, mesmo sabendo que vai dar problema.'),
-     f4(6, 'c', 'Como as pessoas costumam ver você?',
+     f4(6, 'c', 'Como as pessoas costumam te ver?',
         'Como alguém doce, que evita briga.',
         'Como alguém sério, correto e às vezes rígido.',
         'Como alguém forte, que não se intimida.')],
@@ -859,26 +970,26 @@ F4 = {
         'Em algo concreto e bom para mim e para os meus: comida, casa, um agrado.',
         'Em algo que envolva um grupo, uma causa, gente junto.',
         'Em uma experiência nova que eu venho sonhando.'),
-     f4(7, 'b', 'Como as pessoas descreveriam você?',
+     f4(7, 'b', 'Como as pessoas te descreveriam?',
         'Esperto, prático, bom de se ter por perto.',
         'Generoso, idealista, preocupado com os outros.',
         'Sonhador, entusiasmado, cheio de planos.'),
-     f4(7, 'c', 'Alguma coisa frustrou você hoje. Para onde você vai?',
+     f4(7, 'c', 'Alguma coisa te frustrou hoje. Para onde você vai?',
         'Para um prazer concreto e para o meu círculo.',
         'Para o serviço aos outros. Adio o que eu queria.',
         'Para uma fantasia ou paixão nova.')],
- 8: [f4(8, 'a', 'Um problema sério cai no seu colo. Como você lida com ele?',
-        'Resolvo sozinho, do meu jeito, sem pedir ajuda e sem muita conversa.',
-        'Assumo o comando. As pessoas olham para mim, e eu protejo quem está do meu lado.',
-        'Quero a pessoa que é minha inteira do meu lado, e fico de olho em tudo.'),
-     f4(8, 'b', 'O que deixa você fora de si?',
-        'Mexerem no meu sustento, no meu espaço, nas minhas coisas.',
-        'Alguém do meu grupo ser desleal, ou alguém machucar um dos meus.',
-        'Tentarem tirar de mim quem é meu, ou a pessoa não se entregar por inteiro.'),
-     f4(8, 'c', 'Sexta à noite, depois de um dia difícil. O que é prazer para você?',
-        'Comida boa, a minha casa, as minhas coisas, ninguém me pedindo nada.',
-        'Reunir a minha turma, gente de confiança, e ser quem comanda a noite.',
-        'Intensidade com alguém, a noite inteira, sem limite.')],
+ 8: [f4(8, 'a', 'Em que situação a sua força mais aparece?',
+        'Garantindo o que é meu e não dependendo de ninguém.',
+        'Defendendo meus amigos e meu grupo.',
+        'Segurando a relação e a pessoa que eu quero por perto.'),
+     f4(8, 'b', 'O que te deixa fora de si?',
+        'Mexerem no meu sustento, no meu território, nas minhas coisas.',
+        'Traírem ou machucarem alguém dos meus.',
+        'Tentarem tirar de mim quem é meu, ou a pessoa não se entregar.'),
+     f4(8, 'c', 'Sexta à noite, dia difícil. O que é prazer?',
+        'Comida boa, minha casa, o que é meu.',
+        'A turma reunida, cumplicidade, bar cheio.',
+        'Intensidade com alguém, a noite inteira.')],
  9: [f4(9, 'a', 'Você tem duas horas livres e nada pendente. Como elas passam?',
         'Comida, sofá, série, celular. Passam rápido.',
         'Acabo resolvendo algo para alguém ou indo a algum encontro.',

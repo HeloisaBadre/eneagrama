@@ -702,7 +702,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Qual destas conclusões você tirou cedo, sem que ninguém precisasse ensinar?",
+      "cenario": "Qual destas conclusões você tirou cedo, sem ninguém ter te ensinado?",
       "alternativas": [
         {
           "id": "a",
@@ -834,7 +834,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Seu chefe chama você para uma conversa e não diz o assunto. O que passa na sua cabeça no caminho até a sala?",
+      "cenario": "Seu chefe te chama para uma conversa e não diz o assunto. O que passa na sua cabeça no caminho até a sala?",
       "alternativas": [
         {
           "id": "a",
@@ -1230,7 +1230,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "É sábado à noite, você está em casa e não recebeu nenhum convite. Como é isso para você?",
+      "cenario": "É sábado à noite, você está em casa e ninguém te chamou para nada. Como é isso para você?",
       "alternativas": [
         {
           "id": "a",
@@ -2153,7 +2153,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém tratou você mal ontem. Hoje de manhã, qual pensamento aparece?",
+        "cenario": "Alguém te tratou mal ontem. Hoje de manhã, qual pensamento aparece?",
         "alternativas": [
           {
             "id": "a",
@@ -2765,7 +2765,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": true,
-        "cenario": "Alguém próximo comenta: “às vezes você é difícil.” Com o que você concorda?",
+        "cenario": "Alguém próximo te diz: “às vezes você é difícil.” Com o que você concorda?",
         "alternativas": [
           {
             "id": "a",
@@ -3071,7 +3071,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Um amigo vai apresentar você a alguém que ainda não sabe nada a seu respeito. O que ele provavelmente diz?",
+        "cenario": "Um amigo seu vai te descrever para alguém que não te conhece. O que ele provavelmente diz?",
         "alternativas": [
           {
             "id": "a",
@@ -3472,6 +3472,312 @@
             "desejavel": false
           }
         ]
+      },
+      {
+        "id": "f2i_15",
+        "fase": 2,
+        "dominio": "trabalho",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Um grupo precisa decidir algo e ninguém decide. O que você faz?",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Decido e toco. Depois a gente ajusta o que estiver errado.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "b",
+            "texto": "Distribuo as tarefas e digo quem faz o quê.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "c",
+            "texto": "Espero alguém decidir e concordo com o que a maioria quiser.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "d",
+            "texto": "Vou levando. Uma hora a decisão se resolve sozinha.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "e",
+            "texto": "Proponho o jeito certo de fazer e explico por que é o melhor.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "f",
+            "texto": "Assumo, porque sei que faço melhor do que sairia de outro jeito.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "z",
+            "texto": "Nenhuma dessas se parece comigo.",
+            "nula": true,
+            "mapa": {
+              "triade": null,
+              "tipo": null,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 0,
+            "desejavel": false
+          }
+        ]
+      },
+      {
+        "id": "f2i_16",
+        "fase": 2,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Alguém chora na sua frente, numa situação difícil. O que acontece com você?",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Fico incomodado com a fragilidade e quero que a pessoa reaja.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "b",
+            "texto": "Vou direto para o que resolve. Chorar não muda o problema.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "c",
+            "texto": "Fico junto, sem saber bem o que dizer, esperando passar.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "d",
+            "texto": "Sinto a dor dela como se fosse minha e esqueço a minha.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "e",
+            "texto": "Acolho, mas por dentro acho que ela precisa se recompor.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "f",
+            "texto": "Penso no que ela poderia ter feito para não chegar até ali.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "z",
+            "texto": "Nenhuma dessas se parece comigo.",
+            "nula": true,
+            "mapa": {
+              "triade": null,
+              "tipo": null,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 0,
+            "desejavel": false
+          }
+        ]
+      },
+      {
+        "id": "f2i_17",
+        "fase": 2,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Como costuma ser o seu sábado?",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Cada sábado é diferente, do jeito que der vontade. Odeio agenda no fim de semana.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "paixao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "b",
+            "texto": "Puxo alguém para alguma coisa, e costuma ir longe.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "paixao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "c",
+            "texto": "Quase sempre igual, e eu gosto assim.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "paixao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "d",
+            "texto": "Começo várias coisas e termino no sofá.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "paixao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "e",
+            "texto": "Tenho uma lista e cumpro.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "paixao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "f",
+            "texto": "Aproveito para arrumar o que ficou torto durante a semana.",
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "paixao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "z",
+            "texto": "Nenhuma dessas se parece comigo.",
+            "nula": true,
+            "mapa": {
+              "triade": null,
+              "tipo": null,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 0,
+            "desejavel": false
+          }
+        ]
       }
     ],
     "emocional": [
@@ -3789,7 +4095,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Você vai encontrar pessoas que ainda não conhecem você. O que você faz antes de sair de casa?",
+        "cenario": "Você vai encontrar pessoas que ainda não te conhecem. O que você faz antes de sair de casa?",
         "alternativas": [
           {
             "id": "a",
@@ -4197,7 +4503,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Qual gesto de alguém faz você se sentir realmente querido?",
+        "cenario": "O que alguém faz que te faz sentir realmente querido?",
         "alternativas": [
           {
             "id": "a",
@@ -4887,6 +5193,312 @@
             },
             "eixo": "fixacao",
             "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "z",
+            "texto": "Nenhuma dessas se parece comigo.",
+            "nula": true,
+            "mapa": {
+              "triade": null,
+              "tipo": null,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 0,
+            "desejavel": false
+          }
+        ]
+      },
+      {
+        "id": "f2e_15",
+        "fase": 2,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Numa conversa, alguém pergunta sobre um assunto que você domina pouco. O que você faz?",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Puxo para uma história minha e a mesa vai junto.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "b",
+            "texto": "Digo que não sei, mas encanto de outro jeito.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "c",
+            "texto": "Falo com segurança mesmo assim. Depois eu corro atrás.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "d",
+            "texto": "Desvio para a parte que eu domino, e ninguém percebe.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "e",
+            "texto": "Admito, mas me incomoda que os outros saibam mais do que eu.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "f",
+            "texto": "Deixo claro que aquele assunto é raso e não me interessa.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "z",
+            "texto": "Nenhuma dessas se parece comigo.",
+            "nula": true,
+            "mapa": {
+              "triade": null,
+              "tipo": null,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 0,
+            "desejavel": false
+          }
+        ]
+      },
+      {
+        "id": "f2e_16",
+        "fase": 2,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Alguém te pergunta como você está se sentindo de verdade. O que acontece?",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Falo do que eu sinto pelos outros antes de falar de mim.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "b",
+            "texto": "Já me emociono, e a conversa toda vira isso.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "c",
+            "texto": "Respondo que estou bem quase no automático, e depois levo um tempo para saber o que eu sinto.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "d",
+            "texto": "Falo do que estou fazendo, não do que estou sentindo.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "e",
+            "texto": "Falo, e vai fundo. Isso importa mais do que o resto.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "f",
+            "texto": "Mudo de assunto. Falar disso me expõe demais.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "z",
+            "texto": "Nenhuma dessas se parece comigo.",
+            "nula": true,
+            "mapa": {
+              "triade": null,
+              "tipo": null,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 0,
+            "desejavel": false
+          }
+        ]
+      },
+      {
+        "id": "f2e_17",
+        "fase": 2,
+        "dominio": "amizade",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Você contou uma história para um grupo ontem. Como foi?",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Coloquei emoção e gesto, e a mesa acompanhou.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "b",
+            "texto": "Exagerei um pouco para a história ficar melhor.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "c",
+            "texto": "Contei do jeito que funciona. Já sei o efeito que faz.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "d",
+            "texto": "Fui direto ao ponto, sem floreio.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "e",
+            "texto": "Contei o que aquilo significou para mim.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "f",
+            "texto": "Quase não falei. Achei que ninguém fosse se interessar.",
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
             "desejavel": false,
             "subtipo_alvo": "c"
           },
@@ -5629,7 +6241,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém conta a você uma versão de uma história que não fecha. O que você faz?",
+        "cenario": "Alguém te conta uma versão de uma história que não fecha. O que você faz?",
         "alternativas": [
           {
             "id": "a",
@@ -5731,7 +6343,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Um amigo vai apresentar você a alguém que ainda não sabe nada a seu respeito. O que ele diz?",
+        "cenario": "Um amigo vai te descrever para alguém que não te conhece. O que ele diz?",
         "alternativas": [
           {
             "id": "a",
@@ -6236,6 +6848,312 @@
             "desejavel": false
           }
         ]
+      },
+      {
+        "id": "f2m_14",
+        "fase": 2,
+        "dominio": "trabalho",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Alguém te cobra uma coisa que você não entregou. O que acontece?",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Por fora concordo, por dentro resisto a estar sendo cobrado.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "b",
+            "texto": "Fico com uma culpa que não mostro para ninguém.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "c",
+            "texto": "Me acuso primeiro, e logo depois acho que do outro lado também houve falha.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "d",
+            "texto": "Explico os motivos ponto a ponto e me defendo.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "e",
+            "texto": "Prometo para já e dou um jeito de sair bem da situação.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "f",
+            "texto": "Minimizo. No fundo não era tão importante assim.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "z",
+            "texto": "Nenhuma dessas se parece comigo.",
+            "nula": true,
+            "mapa": {
+              "triade": null,
+              "tipo": null,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 0,
+            "desejavel": false
+          }
+        ]
+      },
+      {
+        "id": "f2m_15",
+        "fase": 2,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Você ficou duas horas sozinho, sem obrigação nenhuma. Para onde foi a sua cabeça?",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Para um assunto que eu quero entender a fundo.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "b",
+            "texto": "Para organizar o que eu já sei, sem precisar contar a ninguém.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "c",
+            "texto": "Para uma teoria sobre como as coisas realmente funcionam.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "d",
+            "texto": "Para um problema que eu preciso resolver antes que vire problema.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "e",
+            "texto": "Para planos: viagem, projeto, possibilidades.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "f",
+            "texto": "Para uma ideia nova que eu já quero contar para alguém.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.5,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "z",
+            "texto": "Nenhuma dessas se parece comigo.",
+            "nula": true,
+            "mapa": {
+              "triade": null,
+              "tipo": null,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 0,
+            "desejavel": false
+          }
+        ]
+      },
+      {
+        "id": "f2m_16",
+        "fase": 2,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Um conhecido pede um favor grande, que vai tomar o seu fim de semana. O que você faz?",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Invento uma desculpa. O meu tempo é meu.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "b",
+            "texto": "Faço, mas contando os minutos, e não me ofereço de novo.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "c",
+            "texto": "Faço, porque eu disse que faria e não volto atrás.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "d",
+            "texto": "Faço, mas fico pensando no que ele vai querer depois.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "e",
+            "texto": "Faço se for divertido. Se não, empurro para outra pessoa.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "p"
+          },
+          {
+            "id": "f",
+            "texto": "Prometo na hora e depois vejo como sair disso.",
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 1.0,
+            "desejavel": false,
+            "subtipo_alvo": "c"
+          },
+          {
+            "id": "z",
+            "texto": "Nenhuma dessas se parece comigo.",
+            "nula": true,
+            "mapa": {
+              "triade": null,
+              "tipo": null,
+              "instinto": null
+            },
+            "eixo": "emocao",
+            "peso": 0,
+            "desejavel": false
+          }
+        ]
       }
     ]
   },
@@ -6616,7 +7534,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Você vai fazer algo de que tem medo (falar em público, uma consulta, uma conversa dura). O que faz?",
+        "cenario": "Você vai fazer algo que te dá medo (falar em público, uma consulta, uma conversa dura). O que faz?",
         "alternativas": [
           {
             "id": "a",
@@ -6827,7 +7745,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Alguém prejudicou você de verdade. Seis meses depois, o que você fez a respeito?",
+      "cenario": "Alguém te prejudicou de verdade. Seis meses depois, o que você fez a respeito?",
       "alternativas": [
         {
           "id": "a",
@@ -7295,7 +8213,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você está muito empolgado com um projeto. O que nele mais empolga você?",
+      "cenario": "Você está muito empolgado com um projeto. O que te empolga nele?",
       "alternativas": [
         {
           "id": "a",
@@ -8335,7 +9253,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Alguém pergunta onde você quer estar daqui a cinco anos. O que você responde?",
+      "cenario": "Alguém te pergunta onde você quer estar em cinco anos. O que você responde?",
       "alternativas": [
         {
           "id": "a",
@@ -8595,7 +9513,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você é muito carinhoso com uma pessoa específica. O que isso traz para você?",
+      "cenario": "Você é muito carinhoso com uma pessoa específica. O que isso te dá?",
       "alternativas": [
         {
           "id": "a",
@@ -9107,6 +10025,526 @@
         1,
         5
       ]
+    },
+    {
+      "id": "fx_35a",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Um projeto prático precisa sair do papel esta semana. Como você se sai?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Eu resolvo: ligo, corro atrás, entrego.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 3,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Eu entendo o problema melhor que a maioria, mas colocar de pé é outra história.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 5,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        3,
+        5
+      ]
+    },
+    {
+      "id": "fx_35b",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Você precisa falar de um trabalho seu na frente de gente que não conhece. E aí?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Eu me apresento bem. Sei como me vender.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 3,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Evito. Se der para mandar por escrito, melhor.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 5,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        3,
+        5
+      ]
+    },
+    {
+      "id": "fx_47a",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "O fim de semana foi ruim. Na segunda de manhã, como você está?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Ainda pesado. Carrego aquilo comigo por uns dias.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 4,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Já virei a página e estou pensando no que vem de bom.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 7,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        4,
+        7
+      ]
+    },
+    {
+      "id": "fx_47b",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Você se irritou com alguém esta semana. O que aconteceu?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Falei, ou fechei a cara. Em mim a raiva aparece.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 4,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Engoli e continuei simpático. Quase nunca deixo a raiva aparecer.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 7,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        4,
+        7
+      ]
+    },
+    {
+      "id": "fx_79a",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Você ficou uma hora sem nada para fazer. O que passou na sua cabeça?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Mil ideias e planos, um atrás do outro.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 7,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Quase nada. O tempo passou.",
+          "mapa": {
+            "triade": "instintiva",
+            "tipo": 9,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        7,
+        9
+      ]
+    },
+    {
+      "id": "fx_79b",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Você quer muito uma coisa que não pode ter agora. O que acontece?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Dou um jeito, invento um caminho, consigo de outro modo.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 7,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Deixo para lá. Adiar o que eu quero é fácil para mim.",
+          "mapa": {
+            "triade": "instintiva",
+            "tipo": 9,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        7,
+        9
+      ]
+    },
+    {
+      "id": "fx_16c",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Você precisa tomar uma decisão que afeta outras pessoas. Como é?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Decido e assumo. Demorar demais também é erro.",
+          "mapa": {
+            "triade": "instintiva",
+            "tipo": 1,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Fico girando entre as opções, com medo de escolher errado.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 6,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        1,
+        6
+      ]
+    },
+    {
+      "id": "fx_36b",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Quando bate ansiedade, em torno do que ela gira?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "De me expor, de ser deixado de lado, de perder o que conquistei.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 3,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "De errar, ou de não saber qual é o caminho certo.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 6,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        3,
+        6
+      ]
+    },
+    {
+      "id": "fx_92c",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Alguém demora a fazer o que combinou com você. Como você fica?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Tenho paciência. Espero o tempo da pessoa.",
+          "mapa": {
+            "triade": "instintiva",
+            "tipo": 9,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Fico impaciente e acabo cobrando, nem que seja de forma indireta.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 2,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        9,
+        2
+      ]
+    },
+    {
+      "id": "fx_95c",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Um amigo pede ajuda num domingo de manhã. O que você faz?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Vou. Nem penso muito, e acabo ficando o dia inteiro.",
+          "mapa": {
+            "triade": "instintiva",
+            "tipo": 9,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Ajudo no que der por mensagem. O meu domingo eu preservo.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 5,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        9,
+        5
+      ]
     }
   ],
   "fase3": [
@@ -9479,7 +10917,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você passou por semanas difíceis e finalmente tem um fim de semana. O que mais ajuda você a se recuperar?",
+      "cenario": "Você passou por semanas difíceis e finalmente tem um fim de semana. O que te recupera?",
       "alternativas": [
         {
           "id": "a",
@@ -10065,7 +11503,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém vê você irritado. O que essa pessoa vê?",
+        "cenario": "Alguém te vê irritado. O que essa pessoa vê?",
         "alternativas": [
           {
             "id": "a",
@@ -10496,7 +11934,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém chama você de vaidoso. Qual é a sua reação?",
+        "cenario": "Alguém te chama de vaidoso. Qual é a sua reação?",
         "alternativas": [
           {
             "id": "a",
@@ -10744,7 +12182,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Você teve um dia muito exigente. O que faz você voltar ao normal?",
+        "cenario": "Você teve um dia muito exigente. O que te devolve ao normal?",
         "alternativas": [
           {
             "id": "a",
@@ -11051,7 +12489,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Como as pessoas costumam ver você?",
+        "cenario": "Como as pessoas costumam te ver?",
         "alternativas": [
           {
             "id": "a",
@@ -11175,7 +12613,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Como as pessoas descreveriam você?",
+        "cenario": "Como as pessoas te descreveriam?",
         "alternativas": [
           {
             "id": "a",
@@ -11236,7 +12674,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguma coisa frustrou você hoje. Para onde você vai?",
+        "cenario": "Alguma coisa te frustrou hoje. Para onde você vai?",
         "alternativas": [
           {
             "id": "a",
@@ -11299,11 +12737,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Um problema sério cai no seu colo. Como você lida com ele?",
+        "cenario": "Em que situação a sua força mais aparece?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Resolvo sozinho, do meu jeito, sem pedir ajuda e sem muita conversa.",
+            "texto": "Garantindo o que é meu e não dependendo de ninguém.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -11315,7 +12753,7 @@
           },
           {
             "id": "b",
-            "texto": "Assumo o comando. As pessoas olham para mim, e eu protejo quem está do meu lado.",
+            "texto": "Defendendo meus amigos e meu grupo.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -11327,7 +12765,7 @@
           },
           {
             "id": "c",
-            "texto": "Quero a pessoa que é minha inteira do meu lado, e fico de olho em tudo.",
+            "texto": "Segurando a relação e a pessoa que eu quero por perto.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -11360,11 +12798,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "O que deixa você fora de si?",
+        "cenario": "O que te deixa fora de si?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Mexerem no meu sustento, no meu espaço, nas minhas coisas.",
+            "texto": "Mexerem no meu sustento, no meu território, nas minhas coisas.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -11376,7 +12814,7 @@
           },
           {
             "id": "b",
-            "texto": "Alguém do meu grupo ser desleal, ou alguém machucar um dos meus.",
+            "texto": "Traírem ou machucarem alguém dos meus.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -11388,7 +12826,7 @@
           },
           {
             "id": "c",
-            "texto": "Tentarem tirar de mim quem é meu, ou a pessoa não se entregar por inteiro.",
+            "texto": "Tentarem tirar de mim quem é meu, ou a pessoa não se entregar.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -11421,11 +12859,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Sexta à noite, depois de um dia difícil. O que é prazer para você?",
+        "cenario": "Sexta à noite, dia difícil. O que é prazer?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Comida boa, a minha casa, as minhas coisas, ninguém me pedindo nada.",
+            "texto": "Comida boa, minha casa, o que é meu.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -11437,7 +12875,7 @@
           },
           {
             "id": "b",
-            "texto": "Reunir a minha turma, gente de confiança, e ser quem comanda a noite.",
+            "texto": "A turma reunida, cumplicidade, bar cheio.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -11449,7 +12887,7 @@
           },
           {
             "id": "c",
-            "texto": "Intensidade com alguém, a noite inteira, sem limite.",
+            "texto": "Intensidade com alguém, a noite inteira.",
             "mapa": {
               "triade": null,
               "tipo": null,
