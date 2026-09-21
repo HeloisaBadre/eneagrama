@@ -1,50 +1,70 @@
 # Instrumento adaptativo de eneatipo (Naranjo / Ichazo)
 
-Instrumento psicológico adaptativo para detectar **centro dominante (tríade)**, **paixão**,
-**fixação** e **instinto dominante**, com uma **camada anti-distorção** que os testes de
-eneagrama comuns não têm: ele cruza a resposta consciente contra padrões que a pessoa não
-está monitorando (itens gêmeos, desejabilidade social, tempo de resposta silencioso e
-consistência entre domínios).
+Instrumento psicológico adaptativo para detectar **centro dominante (tríade)**, **tipo**,
+**paixão**, **fixação** e **subtipo (instinto dominante)**, com uma **camada anti-distorção**
+que os testes de eneagrama comuns não têm: ele cruza a resposta consciente contra padrões que
+a pessoa não está monitorando (itens gêmeos, desejabilidade social, tempo de resposta
+silencioso e consistência entre domínios).
 
-Base teórica: exclusivamente **Claudio Naranjo** (*Character and Neurosis*) e **Oscar Ichazo**.
+Base teórica: exclusivamente **Claudio Naranjo** (*Character and Neurosis* e a coleção
+*Psicologia dos eneatipos*, um volume por paixão) e **Oscar Ichazo**.
 
 > **Nota de honestidade metodológica.** Os pesos e limiares (desejabilidade social,
 > imediatismo, ambiguidade) são **heurísticas transparentes e ajustáveis**, não valores
-> validados por amostra empírica. A "distribuição esperada de respostas" é um alvo fixo
-> configurável, não uma estatística de população. O instrumento sinaliza isso ao usuário no
-> relatório final, em vez de fingir precisão que ainda não tem. Para validar de verdade seria
-> preciso coletar respostas de uma amostra grande e recalibrar `LIMIARES` em `scoring.js`.
+> validados por amostra empírica. O instrumento sinaliza isso ao usuário no relatório final,
+> em vez de fingir precisão que ainda não tem. Para validar de verdade seria preciso coletar
+> respostas de pessoas já tipadas e recalibrar `LIMIARES` e `PESOS` em `scoring.js`.
 
-## Status desta versão (v2)
+## Como as perguntas são escritas
 
-Funciona ponta a ponta para os nove tipos e os 27 subtipos. O fluxo tem quatro fases:
+Cinco regras governam o banco inteiro. Três delas são verificadas por teste automático.
 
-| Fase | O que faz | No banco | Por aplicação |
+1. **Toda pergunta é uma situação, não uma auto-avaliação.** Nada de "que imagem você passa"
+   ou "o que você sente quando está sozinho": isso exige um acesso ao próprio mundo interno
+   que muita gente não tem, e que o eneatipo 9 tem menos que todos, porque a paixão dele é o
+   auto-esquecimento. Os itens são cenas de infância ("quando você chorava, o que acontecia
+   na sua casa?") e cenas do presente ("o chefe te chama e não diz o assunto; o que passa na
+   sua cabeça no caminho?"). Nenhuma alternativa pode ser respondida com "depende".
+2. **O enunciado fixa o comportamento e as alternativas variam a motivação.** Um 8, um 6
+   sexual, um 4 sexual e um 1 sexual podem todos brigar na reunião; o que difere é o que
+   aconteceu por dentro um segundo antes.
+3. **Equilíbrio estrutural.** Na Fase 1, cada item tem exatamente uma alternativa por tipo,
+   todas com o mesmo eixo e o mesmo peso. Na Fase 2, cada tipo tem o mesmo número de
+   alternativas por item. Nenhum tipo acumula vantagem por aparecer mais vezes.
+4. **Cada tipo aparece em mais de um subtipo.** Das duas alternativas de cada tipo na Fase 2,
+   uma é a expressão prototípica e a outra é a do subtipo que menos parece com o estereótipo
+   (o 6 contrafóbico, o 4 tenaz da autopreservação, o 3 antivaidoso, o 7 antissete social).
+5. **Ninguém é obrigado a mentir.** Toda pergunta oferece "Nenhuma dessas se parece comigo".
+   Ela não pontua, não conta como exposição do tipo, e entra no índice de confiabilidade.
+
+## As quatro fases
+
+| Fase | O que faz | Itens no banco | Itens aplicados |
 |---|---|---|---|
-| 1. Triagem | Estima a tríade e já pontua os nove tipos. Cada item tem exatamente uma alternativa por tipo, com o mesmo eixo e peso | 14 itens + 3 de desempate | 12 |
-| 2. Tipo | Itens da tríade vencedora, da segunda tríade (se a margem for pequena) e da tríade de qualquer tipo forte da Fase 1. Cada tipo tem duas alternativas por item: a prototípica e a de um subtipo menos estereotipado | 40 itens + 9 de desempate | 10 + 5 por tríade extra |
-| 2x. Cruzada | Perguntas de duas alternativas que comparam, pela motivação, dois candidatos de tríades diferentes (ex.: 8 x 6, 8 x 4) | 46 itens, 22 pares | até 4 |
-| 3. Instinto | Uma alternativa por instinto, mesmo peso | 12 itens + 3 de desempate | 6 |
-| 4. Subtipo | Confirma o instinto dentro do tipo encontrado, com as paixões de subtipo de Naranjo | 27 itens (3 por tipo) | 3 (ou 6 se o tipo ficou ambíguo) |
+| 1 | Triagem: pontua tríade **e** os nove tipos | 14 (6 de infância e crença, 8 do presente) + 3 desempates | 12 |
+| 2 | Tipo: itens da tríade vencedora, das tríades dos tipos fortes, e itens **cruzados** entre candidatos de tríades diferentes | 41 por tríade-conjunto + 9 desempates + 46 cruzados | ~19 |
+| 3 | Instinto dominante | 12 + 3 desempates | 6 |
+| 4 | Subtipo dentro do tipo encontrado (27 subtipos de Naranjo) | 27 | 3 |
 
-Toda pergunta tem a opção **"Nenhuma dessas se parece comigo"**. Ela não pontua, não conta
-como exposição do tipo e entra no índice de confiabilidade do relatório.
+Total: cerca de **41 perguntas** por aplicação.
 
-O tipo final é decidido por **taxa de escolha** (`pontuarPorTaxa`), e não por soma bruta: cada
-tipo recebe o que foi escolhido dividido pelo que poderia ter sido escolhido nos itens em que
-ele era opção. Assim, um tipo que aparece em mais itens não leva vantagem. A Fase 1 tem peso 1,
-a Fase 2 da tríade tem peso 1 e os itens cruzados têm peso 1,5 (`PESOS` em `scoring.js`).
-O instinto combina a Fase 3 (peso 1) com a Fase 4 (peso 1,5).
+A Fase 1 **não é um portão**. Ela produz candidatos; se o tipo mais forte for de outra tríade,
+a Fase 2 testa as duas e aplica perguntas cruzadas (8 x 6, 8 x 4, 1 x 3, 9 x 5...) que
+comparam os dois finalistas pela motivação. Foi isso que corrigiu o caso em que um 6 sexual
+ou um 4 sexual saía como 8.
 
 ## Rodar
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm test           # motor de pontuação, fluxo e equilíbrio do banco (Vitest)
+npm test           # motor de pontuação e integridade do banco (Vitest)
 npm run build      # build estático em dist/  (base relativa: hospedável em qualquer lugar)
 npm run preview
 ```
+
+Cada push na `main` publica em https://heloisabadre.github.io/eneagrama/ (ver
+`.github/workflows/deploy.yml`, que roda `npm test` antes do build).
 
 ## Arquitetura
 
@@ -54,115 +74,95 @@ src/
     questions.json     # BANCO DE PERGUNTAS — toda a lógica de conteúdo, sem hardcode na UI
     results.js         # textos de resultado (tom de insight de neurose, não horóscopo)
   engine/
-    scoring.js         # MOTOR DE PONTUAÇÃO — puro, sem React/DOM, testável isolado
+    scoring.js         # MOTOR DE PONTUACAO — puro, sem React/DOM
     fluxo.js           # FLUXO ADAPTATIVO — decide quais perguntas aparecem em cada fase
-    scoring.test.js    # testes do motor
-    fluxo.test.js      # testes do fluxo e do equilíbrio estrutural do banco
+    scoring.test.js    # 11 testes do motor
+    fluxo.test.js      # 12 testes do fluxo, da integridade do banco e dos casos-limite
   components/
     Landing.jsx  QuestionCard.jsx  ProgressBar.jsx  Report.jsx
-  App.jsx              # máquina de estados das 4 fases, usando fluxo.js
+  App.jsx              # máquina de estados das 4 fases
 ferramentas/
-  gerar_banco.py       # gerador do questions.json, com as validações de equilíbrio
-  simular.mjs          # simulação de viés estrutural (versão anterior x atual)
+  gerar_banco.py       # gera src/data/questions.json com as validações embutidas
+  simular.mjs          # simulação com respondentes sintéticos (teste de viés estrutural)
 ```
-
-O motor (`engine/`) é uma **camada separada da UI** e recebe apenas estruturas de dados
-(`respostas`, `itens`), o que o torna testável de forma independente.
 
 ### Formato de um item (questions.json)
 
 ```jsonc
 {
-  "id": "f2i_02",
-  "fase": 2,
-  "dominio": "geral",              // trabalho | familia | amizade | romance | geral
-  "cenario": "…",
+  "id": "f1_01",
+  "fase": 1,
+  "dominio": "familia",            // trabalho | familia | amizade | romance | geral
+  "cenario": "Quando você era criança e chorava…",
   "par_gemeo_id": null,            // id compartilhado com o item gêmeo (ou null)
-  "indireto": false,              // item projetivo (ganha peso quando a desejabilidade é alta)
+  "indireto": false,               // item projetivo (ganha peso quando a desejabilidade é alta)
   "flag_desejabilidade_social": false,
+  "opcional": false,               // itens opcionais saem primeiro no modo curto
   "alternativas": [
     {
       "id": "a",
       "texto": "…",
       "mapa": { "triade": "instintiva", "tipo": 8, "instinto": null },
-      "eixo": "fixacao",          // fixacao (peso maior) | paixao (sensível ao tempo) | emocao
-      "peso": 1.5,
-      "desejavel": false          // true = a opção "elogiável" (só em itens de desejabilidade)
+      "eixo": "fixacao",           // fixacao | paixao | emocao (igual para todo o item)
+      "peso": 1.2,                 // igual para todo o item
+      "desejavel": false
     }
+    // … uma por tipo, mais { "id": "z", "nula": true }
   ]
 }
 ```
 
-Itens de desempate têm `"separa": ["instintiva","mental"]` (ou `[8,9]`, etc.) — o motor injeta
-2–3 deles quando o par ambíguo bate com o `separa`.
+Itens de desempate têm `"separa": ["instintiva","mental"]` ou `[8, 6]`. Itens da Fase 4 têm
+`"tipo_alvo": 4`.
 
-### Fórmula de score composto (`engine/scoring.js`)
+### Como o tipo é decidido (`engine/scoring.js`)
 
-Não é soma linear. Cada resposta contribui para sua categoria mapeada com:
+Não é soma linear, e não é soma bruta. Cada resposta contribui com:
 
 ```
 contribuição = peso_base
              × fator_gêmeo          (1.1 consistente · 0.9 divergente · 1.0 sem gêmeo)
-             × fator_imediatismo    (resposta rápida numa alt. de paixão pesa mais;
-                                      deliberar num item visceral pesa menos)
+             × fator_imediatismo    (resposta rápida numa alt. de paixão pesa mais)
              × fator_confiabilidade (autorrelato direto perde peso e itens indiretos ganham
                                       peso quando a desejabilidade social é alta)
 ```
 
-- **Fixação > emoção**: alternativas de fixação têm `peso` maior (1.3–1.5 vs 1.0), pois a
+E o score de cada tipo é uma **taxa de escolha**: o que foi escolhido dividido pelo que
+poderia ter sido escolhido nos itens em que aquele tipo era opção (`pontuarPorTaxa`). Sem
+isso, um tipo testado em 14 itens vence um testado em 4 mesmo com a mesma adesão. As
+componentes entram com pesos diferentes (`PESOS`): Fase 1 conta 1, Fase 2 conta 1, itens
+cruzados contam 1,5, porque comparam os dois finalistas cara a cara.
+
+- **Fixação > emoção**: alternativas de fixação têm peso maior (1.2–1.5 vs 1.0), pois a
   fixação é o elemento mais estável e menos disfarçável pela persona.
-- **Tempo de resposta**: capturado silenciosamente (`QuestionCard`), normalizado pela mediana
-  da própria pessoa. Rápido em cenário carregado ⇒ reação passional (peso ↑). Muito deliberado
-  em item visceral ⇒ racionalização (peso ↓, e o padrão recorrente vira dado sobre tríade
-  mental / fixação de tipo 1/3).
-- **Itens gêmeos**: se divergem, **não são descartados** — viram dado sobre público×privado /
-  hierarquia×intimidade.
-- **Desejabilidade social**: contador ao longo do teste reponderа a confiança de todo o
-  autorrelato.
-- **Ambiguidade**: se `(1º − 2º) / 1º < 0.15`, aplica desempate projetivo antes de avançar.
+- **Tempo de resposta**: capturado silenciosamente, normalizado pela mediana da própria
+  pessoa. Como todas as alternativas de um item compartilham o eixo, isso nunca favorece um
+  tipo dentro do item.
+- **Itens gêmeos**: se divergem, **não são descartados**, viram dado sobre público × privado.
+- **"Nenhuma dessas"**: não pontua, e a taxa de uso entra no índice de confiabilidade. É
+  também o melhor termômetro de qual item está mal escrito.
 
-Nenhuma pontuação numérica, tempo ou score de desejabilidade é mostrado durante o teste —
+Nenhuma pontuação numérica, tempo ou score de desejabilidade é mostrado durante o teste,
 apenas no relatório final, de forma qualitativa.
-
-### Tamanho do teste
-
-O banco tem mais itens do que a pessoa responde (cerca de 41 por aplicação). Os limites
-ficam em `FLUXO`, em `src/engine/fluxo.js`. Quando o limite aperta, saem primeiro os itens
-marcados `"opcional": true` no banco (os mais redundantes), nunca a cobertura de um tipo.
-Afrouxar os limites deixa o teste mais longo.
 
 ## Ferramentas
 
-**Gerar o banco.** `ferramentas/gerar_banco.py` produz o `questions.json` inteiro e valida o
-equilíbrio (uma alternativa por tipo na Fase 1, duas por tipo na Fase 2, mesmo eixo e peso).
-Para mexer em muitas perguntas de uma vez, edite o gerador e rode:
-
 ```bash
-python ferramentas/gerar_banco.py src/data/questions.json
-npm test
+python3 ferramentas/gerar_banco.py src/data/questions.json   # regenera o banco
+node ferramentas/simular.mjs                                 # simula 27 respondentes sintéticos
+N=200 node ferramentas/simular.mjs
 ```
 
-**Simular.** `ferramentas/simular.mjs` roda 27 respondentes sintéticos (9 tipos x 3 instintos)
-na versão anterior e na atual, e compara o acerto de tipo, tríade e subtipo. Não é validação
-empírica: mede viés estrutural, com o mesmo respondente imperfeito nos dois instrumentos.
+A simulação não é validação empírica: é um teste de **viés estrutural**. Ela roda o mesmo
+modelo de respondente (que erra, e que confunde o próprio tipo com os tipos parecidos segundo
+Naranjo) contra o banco, e mede para onde o instrumento empurra quem erra.
 
-```bash
-mkdir -p /tmp/orig && git archive 4e400da src package.json | tar -x -C /tmp/orig
-ORIG=/tmp/orig node ferramentas/simular.mjs      # N=200, PSELF=0.7, LONGO=1 são opcionais
-```
+## O que ainda falta
 
-Resultado com N=150: acerto de tipo de 73% (versão anterior) para 86%, de tríade de 76% para
-100% (artefato do modelo) e de subtipo de 67% para 80%, com cerca de 41 perguntas.
-
-## O que continua em aberto
-
-1. **Validação com pessoas reais.** Aplicar em pessoas já tipadas por alguém que conhece o
-   modelo e recalibrar `LIMIARES` e `PESOS`. Registrar a taxa de "nenhuma dessas" por item
-   é o sinal mais barato de item mal escrito.
-2. **Textos do 8 na Fase 4** (`f4_8a`, `f4_8b`, `f4_8c`) foram escritos sem o livro de subtipos
-   do E8 e merecem revisão com ele.
-3. **Asas e linhas de estresse e segurança** não são tratadas. Parte das confusões residuais
-   (4 com 1, 9 com 3) pode vir daí.
+1. **Validação com pessoas reais**, já tipadas por entrevista, e recalibração dos pesos.
+2. **Registrar a taxa de "nenhuma dessas" por item** na primeira aplicação em campo.
+3. **Revisar os itens do eneatipo 8 na Fase 4** com o volume do E8 da coleção.
+4. **Asas e linhas de estresse e segurança** não são tratadas.
 
 ## O que este instrumento NÃO é
 

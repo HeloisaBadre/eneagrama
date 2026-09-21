@@ -10,27 +10,22 @@
  * de respondente roda nos dois bancos; o que muda e so o instrumento.
  */
 import { readFileSync } from 'node:fs';
+
+// NOVO  = raiz do projeto (padrao: o diretorio de onde o script e chamado)
+// ORIG   = opcional, uma copia de uma versao anterior do projeto para comparar
+//          (ex.: ORIG=../eneagrama-antigo node ferramentas/simular.mjs)
+import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
 
-// NOVO: este projeto (a pasta acima de ferramentas/). ORIG: uma copia da versao
-// anterior do instrumento, com src/ dentro. Para extrair a v1 do git:
-//   mkdir -p /tmp/orig && git archive 4e400da src package.json | tar -x -C /tmp/orig
-//   ORIG=/tmp/orig node ferramentas/simular.mjs
-const NOVO = process.env.NOVO || fileURLToPath(new URL('..', import.meta.url));
-const ORIG = process.env.ORIG;
-if (!ORIG) {
-  console.error('Defina ORIG com a pasta da versao anterior (veja o comentario no topo do arquivo).');
-  process.exit(1);
-}
-const modulo = (raiz, rel) => import(pathToFileURL(resolve(raiz, rel)).href);
-const json = (raiz) => JSON.parse(readFileSync(resolve(raiz, 'src/data/questions.json'), 'utf8'));
+const NOVO = resolve(process.env.NOVO || process.cwd());
+const ORIG = process.env.ORIG ? resolve(process.env.ORIG) : null;
+const url = (p) => pathToFileURL(p).href;
 
-const antigo = await modulo(ORIG, 'src/engine/scoring.js');
-const novoEng = await modulo(NOVO, 'src/engine/scoring.js');
-const fluxo = await modulo(NOVO, 'src/engine/fluxo.js');
-const bancoA = json(ORIG);
-const bancoN = json(NOVO);
+const novoEng = await import(url(`${NOVO}/src/engine/scoring.js`));
+const fluxo = await import(url(`${NOVO}/src/engine/fluxo.js`));
+const bancoN = JSON.parse(readFileSync(`${NOVO}/src/data/questions.json`, 'utf8'));
+const antigo = ORIG ? await import(url(`${ORIG}/src/engine/scoring.js`)) : null;
+const bancoA = ORIG ? JSON.parse(readFileSync(`${ORIG}/src/data/questions.json`, 'utf8')) : null;
 
 // LONGO=1 roda o fluxo sem os cortes do modo curto (para comparar tamanho x acerto)
 if (process.env.LONGO) {
@@ -323,7 +318,7 @@ for (const p of personas) {
       pNula: 0.5,
     };
     const optsN = { pSelf: PSELF, pInstinto: 0.7, pNula: 0.5 };
-    const ra = rodarAntigo(p, rng(seed), optsA);
+    const ra = ORIG ? rodarAntigo(p, rng(seed), optsA) : { tipo: null, triade: null, instinto: null, perguntas: 0 };
     const rn = rodarNovo(p, rng(seed), optsN);
     if (ra.tipo === p.tipo) a++;
     else (confusaoA[p.chave] ||= {})[ra.tipo] = ((confusaoA[p.chave] || {})[ra.tipo] || 0) + 1;
@@ -340,6 +335,7 @@ for (const p of personas) {
   accA += a; accN += n; triA += ta; triN += tn; subA += sa; subN += sn; qA += pa; qN += pn;
 }
 const tot = personas.length * N;
+if (!ORIG) console.log('(sem ORIG definido: as colunas "atual" ficam vazias e so o banco deste projeto e medido)\n');
 console.log(`N=${N} por persona, pSelf=${PSELF}${PSELF_CONTRA !== PSELF ? ` (contratipos no banco atual: ${PSELF_CONTRA})` : ''}\n`);
 console.log('subtipo               tipo(atual)  tipo(novo)   triade(atual) triade(novo) subtipo(atual) subtipo(novo)');
 for (const l of linhas) {

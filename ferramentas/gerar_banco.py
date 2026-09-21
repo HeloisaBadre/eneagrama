@@ -1,7 +1,19 @@
 # -*- coding: utf-8 -*-
-"""Gera o banco de perguntas proposto (questions.json) no mesmo esquema do original,
-com as secoes novas fase2_cruzada e fase4."""
+"""Banco v3: cenas concretas em vez de perguntas introspectivas.
+
+Regras de escrita (alem das de equilibrio da v2):
+  - Todo item e uma SITUACAO, nao uma auto-avaliacao. Nada de "como voce e",
+    "qual imagem voce passa", "o que voce sente quando esta sozinho".
+  - A pessoa responde com uma lembranca ou uma reacao, nao com uma teoria
+    sobre si mesma. Isso importa para quem tem pouco acesso ao proprio mundo
+    interno (E9 acima de tudo, mas tambem E3 e E7).
+  - Itens de infancia e de crenca formada, na linha de Caracter e neurose:
+    a cena familiar concreta e a conclusao que a crianca tirou dela.
+  - Nada de alternativa que comece com "depende": cada opcao e uma resposta
+    inteira para aquela situacao.
+"""
 import json, sys
+from collections import Counter
 
 TRIADE = {8: 'instintiva', 9: 'instintiva', 1: 'instintiva',
           2: 'emocional', 3: 'emocional', 4: 'emocional',
@@ -10,31 +22,24 @@ LETRAS = 'abcdefghijklmnop'
 NULA = {"id": "z", "texto": "Nenhuma dessas se parece comigo.", "nula": True,
         "mapa": {"triade": None, "tipo": None, "instinto": None},
         "eixo": "emocao", "peso": 0, "desejavel": False}
-
-
-def alt(i, texto, tipo=None, instinto=None, eixo='emocao', peso=1.0, desejavel=False, nota=None):
-    a = {"id": LETRAS[i], "texto": texto,
-         "mapa": {"triade": TRIADE.get(tipo) if tipo else None, "tipo": tipo, "instinto": instinto},
-         "eixo": eixo, "peso": peso, "desejavel": desejavel}
-    if nota:
-        a["subtipo_alvo"] = nota
-    return a
+SP, SO, SX = 'autopreservacao', 'social', 'sexual'
 
 
 def item(id_, fase, cenario, alts, dominio='geral', eixo='emocao', peso=1.0, gemeo=None,
-         indireto=False, desej=False, separa=None, nula=True, tipo_alvo=None, desejavel_tipo=None,
-         opcional=False):
-    """alts: lista de (tipo|instinto, texto[, nota_subtipo]). Todas as alternativas do item
-    recebem o MESMO eixo e o MESMO peso (nenhum tipo leva vantagem estrutural)."""
+         indireto=False, desej=False, separa=None, nula=True, tipo_alvo=None,
+         desejavel_tipo=None, opcional=False):
     out = []
     for i, a in enumerate(alts):
         chave, texto = a[0], a[1]
         nota = a[2] if len(a) > 2 else None
-        if isinstance(chave, int):
-            out.append(alt(i, texto, tipo=chave, eixo=eixo, peso=peso,
-                           desejavel=(desejavel_tipo == chave and nota in (None, 'p')), nota=nota))
-        else:
-            out.append(alt(i, texto, instinto=chave, eixo=eixo, peso=peso, nota=nota))
+        mapa = {"triade": TRIADE.get(chave) if isinstance(chave, int) else None,
+                "tipo": chave if isinstance(chave, int) else None,
+                "instinto": chave if isinstance(chave, str) else None}
+        alt = {"id": LETRAS[i], "texto": texto, "mapa": mapa, "eixo": eixo, "peso": peso,
+               "desejavel": bool(desejavel_tipo == chave and nota in (None, 'p'))}
+        if nota:
+            alt["subtipo_alvo"] = nota
+        out.append(alt)
     if nula:
         out.append(dict(NULA))
     it = {"id": id_, "fase": fase, "dominio": dominio, "par_gemeo_id": gemeo,
@@ -48,922 +53,857 @@ def item(id_, fase, cenario, alts, dominio='geral', eixo='emocao', peso=1.0, gem
         it["opcional"] = True
     return it
 
+
+def i9(id_, cenario, mapa_textos, **kw):
+    """Item de Fase 1: exatamente uma alternativa por tipo, na ordem dada."""
+    return item(id_, 1, cenario, [(t, mapa_textos[t]) for t in mapa_textos], **kw)
+
+
 # ===========================================================================
-# FASE 1: triagem. 9 alternativas por item, UMA por tipo, mesmo eixo e peso.
-# O enunciado fixa o COMPORTAMENTO; as alternativas variam a MOTIVACAO.
+# FASE 1 — infancia (6 itens) + cenas do presente (8 itens)
 # ===========================================================================
 F1 = []
-F1.append(item('f1_01', 1, 'Quando você enfrenta alguém de frente, o que costuma estar por baixo dessa reação?', [
-    (8, 'Fui contrariado e reagi na hora. Não preciso pensar muito antes, e depois não fico me culpando.'),
-    (9, 'Quase nunca chego a isso. Quando acontece, é porque aguentei demais e a paciência estourou de uma vez.'),
-    (1, 'A certeza de que aquilo estava errado e de que alguém precisava corrigir.'),
-    (2, 'Mágoa. Depois de tudo o que fiz por aquela pessoa, não aceito ser tratado com descaso.'),
-    (3, 'Não posso sair daquela situação por baixo, parecendo fraco ou incompetente.'),
-    (4, 'A sensação de estar sendo tratado como menos do que eu mereço. Dói antes de virar raiva.'),
-    (5, 'Raramente enfrento. Quando faço, é porque estão invadindo o meu espaço ou exigindo demais de mim.'),
-    (6, 'Uma tensão que eu prefiro enfrentar a sentir. Não posso deixar que percebam fraqueza, nem baixar a guarda.'),
-    (7, 'Alguém está atrapalhando algo que eu quero ou tentando me prender. Resolvo rápido e volto ao que me interessa.'),
-], eixo='paixao'))
-F1.append(item('f1_02', 1, 'Quando você se afasta de alguém ou de uma situação, qual costuma ser o motivo real?', [
-    (5, 'Preciso recuperar energia e espaço. Estar com gente por muito tempo me esgota.'),
-    (9, 'Para não criar conflito. Prefiro sumir um pouco a ter que brigar ou tomar partido.'),
-    (4, 'Sinto que não me compreendem ou que não pertenço ali, e fico com aquilo por dentro.'),
-    (6, 'Algo me deixou desconfiado. Prefiro manter distância até entender se posso confiar.'),
-    (1, 'Para não perder o controle e acabar dizendo algo de que eu me arrependa.'),
-    (2, 'Senti que não me valorizaram. Me afasto esperando que percebam a minha falta.'),
-    (3, 'Para me recompor longe dos olhos dos outros e voltar bem.'),
-    (7, 'A situação ficou pesada ou chata demais. Vou atrás de algo mais leve e interessante.'),
-    (8, 'Quem me decepciona ou me trai perde o acesso a mim. Corto e sigo.'),
-], eixo='paixao'))
-F1.append(item('f1_03', 1, 'Algo importante que você vinha construindo começa a dar errado. O que acontece primeiro dentro de você?', [
-    (8, 'Raiva e impulso de agir. Vou para cima do problema, ou de quem o causou, na hora.'),
-    (9, 'Uma espécie de desligamento. Digo a mim mesmo que não é tão grave e sigo no automático.'),
-    (1, 'Uma cobrança dura: onde foi que eu, ou alguém, deixou de fazer o que devia?'),
-    (2, 'Digo que está tudo bem e continuo disponível para os outros, mas por dentro espero que alguém perceba e cuide de mim sem eu pedir.'),
-    (3, 'Penso em como isso vai me fazer parecer e já começo a planejar como virar o jogo.'),
-    (4, 'Uma dor funda, como se aquilo confirmasse que comigo as coisas nunca dão tão certo quanto dão para os outros.'),
-    (5, 'Recuo para pensar sozinho e entender o que aconteceu antes de gastar energia com qualquer coisa.'),
-    (6, 'Um alarme: o que mais pode dar errado, em quem posso confiar e como me proteger ou me antecipar.'),
-    (7, 'Procuro rápido o lado bom e um plano B. Não gosto de ficar parado no que dói.'),
-], eixo='paixao'))
-F1.append(item('f1_04', 1, 'O que você sente que precisa proteger acima de tudo, mesmo sem dizer?', [
-    (8, 'A minha força e a minha liberdade. Não posso ficar nas mãos de ninguém.'),
-    (9, 'A minha tranquilidade. Não quero que nada me tire do meu lugar de paz.'),
-    (1, 'A minha integridade. Preciso estar do lado do que é certo.'),
-    (2, 'O lugar especial que tenho na vida das pessoas importantes para mim.'),
-    (3, 'A imagem de alguém capaz, que funciona e dá resultado.'),
-    (4, 'Aquilo que tenho de mais verdadeiro, mesmo que ninguém entenda ou valorize.'),
-    (5, 'O meu espaço, o meu tempo e a minha energia, que se esgotam fácil.'),
-    (6, 'A minha segurança e a certeza de com quem posso contar.'),
-    (7, 'A minha liberdade de escolher e de ter coisas boas pela frente.'),
-], eixo='fixacao', peso=1.2))
-F1.append(item('f1_05', 1, 'Sendo muito honesto, qual destas sensações mais acompanha você no dia a dia?', [
-    (8, 'Impaciência. Quero as coisas com intensidade, e quero agora.'),
-    (9, 'Uma calma meio adormecida. Muitas vezes nem sei direito o que eu quero.'),
-    (1, 'Uma tensão interna, um incômodo com o que não está como deveria.'),
-    (2, 'Vontade de estar perto das pessoas e de ser importante para elas.'),
-    (3, 'Pressa. Sempre há algo para fazer, alcançar ou mostrar.'),
-    (4, 'A sensação de que me falta algo que os outros parecem ter. Às vezes vira tristeza, às vezes vira garra ou revolta.'),
-    (5, 'Um certo cansaço do mundo e vontade de ter mais tempo só meu.'),
-    (6, 'Um alerta de fundo. Mesmo quando pareço seguro, estou atento a riscos e a quem pode falhar comigo.'),
-    (7, 'Uma inquietação boa. A minha cabeça está sempre em planos e possibilidades.'),
-]))
-F1.append(item('f1_06', 1, 'Quando alguém tenta mandar em você ou controlar o que você faz, o que pesa mais por dentro?', [
-    (8, 'Simplesmente não aceito. Ninguém manda em mim, e deixo isso claro.'),
-    (9, 'Por fora costumo concordar, mas vou fazendo do meu jeito e no meu ritmo, sem alarde.'),
-    (1, 'Depende: se a pessoa estiver certa, aceito. Se estiver errada, não consigo engolir.'),
-    (2, 'Fico ofendido por não reconhecerem o quanto eu já sei e faço.'),
-    (3, 'Aceito se isso me ajudar a chegar onde quero. Se não, dou um jeito de contornar.'),
-    (4, 'Sinto que não enxergam quem eu sou, e isso me machuca ou me revolta.'),
-    (5, 'Me fecho e passo a entregar só o mínimo. A minha vida interna ninguém controla.'),
-    (6, 'Fico dividido: uma parte quer obedecer para ficar seguro, outra quer desafiar para provar que não tenho medo.'),
-    (7, 'Concordo na frente e sigo fazendo o que quero por trás, sem drama.'),
-], eixo='fixacao', peso=1.2))
-F1.append(item('f1_07', 1, 'Qual destas frases mais parece uma regra interna sua, mesmo que você nunca a tenha dito?', [
-    (8, '“A vida é para ser vivida com intensidade, e eu vou atrás do que é meu.”'),
-    (9, '“Não vale a pena se desgastar. No fim, tudo se ajeita.”'),
-    (1, '“Se é para fazer, tem que ser do jeito certo.”'),
-    (2, '“Se precisarem de mim, vão me amar.”'),
-    (3, '“Eu sou o que eu consigo realizar.”'),
-    (4, '“Nunca é suficiente. Sempre falta alguma coisa, em mim ou na minha vida.”'),
-    (5, '“Quanto menos eu precisar dos outros, melhor.”'),
-    (6, '“Não posso baixar a guarda. Nunca se sabe em quem dá para confiar.”'),
-    (7, '“A vida é curta demais para ficar no que é pesado.”'),
-], eixo='fixacao', peso=1.2))
-F1.append(item('f1_08', 1, 'Em qual destas situações você se sentiria mais exposto ou ameaçado?', [
-    (8, 'Ficar sem poder de reação, à mercê da vontade de outra pessoa.'),
-    (9, 'Ser pressionado a tomar partido num conflito sério.'),
-    (1, 'Ser pego fazendo algo errado ou malfeito.'),
-    (2, 'Mostrar que eu preciso de alguém e não ser correspondido.'),
-    (3, 'Fracassar publicamente e ver a minha imagem desmoronar.'),
-    (4, 'Ser rejeitado justamente naquilo que sinto que sou de verdade.'),
-    (5, 'Ser invadido, sem ter como me retirar, com pessoas exigindo de mim o tempo todo.'),
-    (6, 'Confiar em alguém e ser traído, ou ficar sem apoio na hora que importa.'),
-    (7, 'Ficar preso numa situação dolorosa ou limitada, sem saída.'),
-], eixo='fixacao', peso=1.2))
-F1.append(item('f1_09', 1, 'Em uma relação próxima, o que seria mais difícil de suportar com o tempo?', [
-    (8, 'Ter que me conter o tempo todo e ceder à vontade do outro.'),
-    (9, 'Brigas constantes, sem paz em casa.'),
-    (1, 'Conviver com alguém que não se esforça para fazer as coisas direito.'),
-    (2, 'Sentir que não faço falta e que a pessoa não precisa de mim.'),
-    (3, 'Sentir que a pessoa não admira quem eu sou e o que eu faço.'),
-    (4, 'Não ser compreendido de verdade, ou sentir que o outro tem com alguém uma ligação que não tem comigo.'),
-    (5, 'Ter o meu espaço invadido e ser cobrado por mais presença do que consigo dar.'),
-    (6, 'Não saber se posso contar com a pessoa e sentir que ela pode me faltar.'),
-    (7, 'Uma rotina previsível, sem novidade e sem planos.'),
-], dominio='romance'))
-F1.append(item('f1_10', 1, 'Quando algo dá errado e você volta a pensar no assunto depois, o que acontece?', [
-    (1, 'Me cobro com dureza: eu deveria ter feito melhor.'),
-    (9, 'Prefiro nem voltar ao assunto. Remoer tira a minha paz.'),
-    (3, 'Penso no impacto na minha imagem e em como me recuperar.'),
-    (6, 'Repasso o que deixei de prever e fico tentando entender em quem ou em que eu errei ao confiar.'),
-    (7, 'Viro a página rápido e foco no que ainda vem de bom.'),
-    (8, 'Não fico remoendo. Se alguém me prejudicou, a conta fica guardada.'),
-    (2, 'Fico pensando se as pessoas ainda gostam de mim e se reconhecem o quanto me dediquei.'),
-    (4, 'Revivo a cena por dentro, e ela reforça a sensação de que comigo é sempre mais difícil, mesmo que por fora eu siga em frente.'),
-    (5, 'Analiso tudo sozinho, com distância, até entender a lógica do que aconteceu.'),
-], eixo='fixacao', peso=1.2))
-F1.append(item('f1_11', 1, 'Um amigo procura você para desabafar sobre um problema pessoal. Qual é o seu impulso real?', [
-    (2, 'Acolher e cuidar. Gosto de ser a pessoa a quem ele recorre.'),
-    (8, 'Resolver na prática e, se for o caso, enfrentar quem o prejudicou.'),
-    (5, 'Escuto, mas com certa distância. Me cansa ser absorvido pelas emoções dos outros.'),
-    (4, 'Me identifico com a dor dele. Sei bem o que é sentir isso.'),
-    (6, 'Penso nos riscos e no que ele deveria fazer para se proteger daqui para frente.'),
-    (1, 'Ajudar a ver o que ele pode fazer de certo a partir de agora.'),
-    (3, 'Dar uma solução eficiente e ajudar a pessoa a se reerguer logo.'),
-    (7, 'Animar, mostrar o lado bom e tirar ele um pouco daquele peso.'),
-    (9, 'Escutar com paciência, sem julgar, pelo tempo que ele precisar.'),
-], dominio='amizade', desej=True, desejavel_tipo=2))
-F1.append(item('f1_12', 1, 'O que faz você sentir que a sua vida está em paz e em ordem?', [
-    (9, 'Ter harmonia ao redor, sem nada me puxando para lados diferentes.'),
-    (8, 'Estar no comando da minha vida, com força e intensidade.'),
-    (2, 'Estar cercado de pessoas que gostam de mim e contam comigo.'),
-    (3, 'Estar avançando e vendo o resultado do meu esforço.'),
-    (5, 'Ter um tempo só meu, sem cobranças, para pensar e recuperar energia.'),
-    (1, 'Sentir que fiz o que devia e que as coisas estão no lugar certo.'),
-    (4, 'Sentir que vivo algo verdadeiro e significativo, e não uma vida qualquer.'),
-    (6, 'Saber com quem posso contar e ter o futuro minimamente garantido.'),
-    (7, 'Ter várias coisas boas acontecendo e outras tantas pela frente.'),
-]))
-F1.append(item('f1_13', 1, 'Todo mundo tem algum comportamento alheio que acha difícil de aguentar. Qual destes mais irrita você?', [
-    (1, 'Gente relapsa, que faz as coisas de qualquer jeito.'),
-    (8, 'Gente que se faz de coitada ou que não fala as coisas na cara.'),
-    (9, 'Gente que cria tensão e briga por qualquer coisa.'),
-    (2, 'Gente ingrata, que recebe muito e nem percebe.'),
-    (3, 'Gente lenta e ineficiente, que atrasa os resultados.'),
-    (4, 'Gente superficial, que finge sentimentos que não tem.'),
-    (5, 'Gente invasiva, que exige atenção e intimidade o tempo todo.'),
-    (6, 'Gente desleal, ou que usa uma posição de poder para abusar dos outros.'),
-    (7, 'Gente pessimista e pesada, que derruba o clima.'),
-], eixo='fixacao', peso=1.2, indireto=True))
-F1.append(item('f1_14', 1, 'Quando você pensa na sua infância, qual destas sensações parece mais familiar?', [
-    (8, 'Aprendi cedo a me defender sozinho. Ser ingênuo ou frágil era perigoso.'),
-    (9, 'Ninguém percebia muito o que eu queria, então me adaptei e procurei não dar trabalho.'),
-    (1, 'Havia muita exigência. Eu precisava ser correto e responsável antes do tempo.'),
-    (2, 'Eu era querido por ajudar, agradar ou alegrar os adultos.'),
-    (3, 'Eu era valorizado pelo que conseguia fazer e mostrar.'),
-    (4, 'Eu sentia que os outros recebiam algo, como atenção, carinho ou reconhecimento, que eu não recebia.'),
-    (5, 'Eu me sentia invadido ou esquecido e me refugiava no meu próprio mundo.'),
-    (6, 'Havia um clima de insegurança. Eu vivia atento às reações dos adultos, com medo de punição, e às vezes enfrentava para não mostrar medo.'),
-    (7, 'Quando algo doía, eu logo encontrava um jeito de me distrair e me divertir.'),
-], dominio='familia'))
+
+F1.append(i9('f1_01', 'Quando você era criança e chorava ou ficava com medo, o que mais acontecia na sua casa?', {
+    8: 'Aprendi rápido que chorar não resolvia e podia até piorar. Fui ficando duro.',
+    9: 'Não era um problema para ninguém. Eu me acalmava sozinho, no meu canto.',
+    1: 'Me mandavam parar, dizendo que era manha ou que eu tinha que dar exemplo.',
+    2: 'Me davam colo e carinho, e eu aprendi que sendo dócil e gracinha eu conseguia isso.',
+    3: 'Não tinha muito espaço para isso. O que contava era eu estar bem e dar conta.',
+    4: 'Eu tinha a impressão de que com meus irmãos era diferente, que eles recebiam mais.',
+    5: 'Eu ia para o meu quarto e resolvia por dentro. Ninguém ia perguntar mesmo.',
+    6: 'Dependia do humor do adulto naquele dia, e isso me deixava ainda mais assustado.',
+    7: 'Alguém me distraía, ou eu mesmo achava um jeito de virar a página rápido.',
+}, dominio='familia', eixo='fixacao', peso=1.2))
+
+F1.append(i9('f1_02', 'Quando criança, como você conseguia que prestassem atenção em você?', {
+    2: 'Sendo carinhoso, engraçadinho e prestativo com os adultos.',
+    3: 'Indo bem: notas, esportes, prêmios, sendo motivo de orgulho.',
+    4: 'Eu não conseguia. A atenção parecia ir sempre para outra pessoa.',
+    1: 'Sendo o responsável, o certinho, o que fazia tudo direito.',
+    8: 'Fazendo bagunça, batendo de frente, não levando desaforo para casa.',
+    9: 'Eu nem tentava. Era a criança que não dava trabalho.',
+    5: 'Eu me afastava. Preferia meu canto e meus assuntos a disputar espaço.',
+    6: 'Ficando perto de quem me protegia e sendo útil para essa pessoa.',
+    7: 'Fazendo graça e animando o ambiente. Eu era a diversão da casa.',
+}, dominio='familia', eixo='fixacao', peso=1.2))
+
+F1.append(i9('f1_03', 'Quando você pedia alguma coisa em casa (um brinquedo, ir a um lugar), o que geralmente acontecia?', {
+    2: 'Eu conseguia quase sempre, principalmente com quem gostava mais de mim.',
+    7: 'Se diziam não, eu dava um jeito de conseguir por outro caminho.',
+    8: 'Eu insistia até conseguir, ou simplesmente pegava e depois eu via.',
+    1: 'Eu nem pedia muito. Tinha que ser merecido e na hora certa.',
+    4: 'Vinha uma explicação de que não dava, e eu ficava com a sensação de que para outros dava.',
+    5: 'Eu quase não pedia. Pedir já me parecia um incômodo.',
+    6: 'Eu ficava medindo o clima para pedir na hora certa e não levar não.',
+    9: 'Eu deixava para lá antes mesmo de pedir. Não valia o desgaste.',
+    3: 'Eu mostrava que merecia: boas notas, tarefas feitas, algo em troca.',
+}, dominio='familia', eixo='fixacao', peso=1.2))
+
+F1.append(i9('f1_04', 'Quando os adultos da casa discutiam, ou o clima pesava, o que você costumava fazer?', {
+    9: 'Eu sumia e esperava passar. Fazia de conta que não estava acontecendo.',
+    6: 'Eu ficava atento a cada barulho, tentando prever o que ia acontecer.',
+    2: 'Eu tentava consolar alguém, geralmente o que estava pior.',
+    1: 'Eu ficava com raiva de quem estava errado e queria pôr ordem naquilo.',
+    8: 'Eu me metia no meio, principalmente se alguém estivesse sendo injustiçado.',
+    4: 'Eu sentia tudo muito fundo e me trancava com aquilo.',
+    5: 'Eu ia para o meu quarto e me desligava com um livro, um jogo, qualquer coisa.',
+    3: 'Eu tocava a minha vida e cuidava do que era prático: lição, comida, o que precisasse.',
+    7: 'Eu ia brincar, sair, inventar alguma coisa. Não ficava ali.',
+}, dominio='familia'))
+
+F1.append(i9('f1_05', 'Pensando na sua família, qual papel acabou sobrando para você?', {
+    1: 'O responsável, o que tinha que ser exemplo e não dar motivo de crítica.',
+    2: 'O querido, aquele que alegrava e cuidava dos outros.',
+    3: 'O que dava certo, o orgulho da família.',
+    4: 'O diferente, aquele que não se encaixava bem ali.',
+    5: 'O quietinho, que ficava no canto dele.',
+    6: 'O leal, que segurava as pontas e não podia decepcionar.',
+    7: 'O animado, que aliviava o clima.',
+    8: 'O forte, que resolvia e protegia os outros.',
+    9: 'O de boa, que não dava trabalho e concordava com tudo.',
+}, dominio='familia', eixo='fixacao', peso=1.2))
+
+F1.append(i9('f1_06', 'Qual destas conclusões você tirou cedo, sem ninguém ter te ensinado?', {
+    8: '“Se eu não for forte, passam por cima de mim.”',
+    9: '“Se eu não incomodar, fica tudo em paz.”',
+    1: '“Se eu errar, vem crítica. Tem que ser do jeito certo.”',
+    2: '“Se eu for útil e querido, não me deixam de lado.”',
+    3: '“Se eu não me destacar, não valho grande coisa.”',
+    4: '“Tem alguma coisa em mim que faltou, e nos outros não faltou.”',
+    5: '“Se eu depender de alguém, me invadem ou me decepcionam.”',
+    6: '“Não dá para baixar a guarda. A qualquer hora vem problema.”',
+    7: '“Se eu não me virar para ficar bem, ninguém vai fazer isso por mim.”',
+}, eixo='fixacao', peso=1.2))
+
+# ---- cenas do presente ----------------------------------------------------
+F1.append(i9('f1_07', 'Seu chefe te chama para uma conversa e não diz o assunto. O que passa na sua cabeça no caminho até a sala?', {
+    6: '“O que será que aconteceu?” Já imagino três cenários, quase todos ruins.',
+    1: 'Reviso o que pode ter saído errado e se a culpa é minha.',
+    3: 'Penso em como me sair bem na conversa e reverter se for crítica.',
+    8: 'Se for encrenca, eu encaro. Já entro pronto para não levar desaforo.',
+    9: 'Procuro não pensar até chegar lá. Depois eu vejo.',
+    4: 'Já sinto que é comigo, que vão apontar algo em mim.',
+    2: 'Penso em tudo o que já fiz por essa equipe. Seria injusto reclamarem de mim.',
+    5: 'Me incomoda ser pego de surpresa, sem tempo de me preparar.',
+    7: 'Provavelmente não é nada. Já estou pensando no que faço depois do expediente.',
+}, dominio='trabalho', eixo='paixao'))
+
+F1.append(i9('f1_08', 'Você está em uma fila e alguém passa na sua frente, de propósito, e olha para você. O que você faz?', {
+    8: 'Falo na hora. Não vou fingir que não vi.',
+    1: 'Falo, ou fico indignado por dentro, porque aquilo é falta de educação.',
+    9: 'Deixo passar. Não vale a briga.',
+    6: 'Fico tenso avaliando se vale a pena e se a pessoa vai reagir mal.',
+    3: 'Deixo quieto para não fazer cena, mas fico irritado.',
+    2: 'Fico indignado que façam isso comigo, logo eu, que sempre sou educado.',
+    4: 'Sinto como desfeita pessoal, como se eu não valesse o suficiente para ser respeitado.',
+    5: 'Não falo nada. Me desligo e volto para o meu celular.',
+    7: 'Faço um comentário irônico ou levo na brincadeira e sigo.',
+}, eixo='paixao'))
+
+F1.append(i9('f1_09', 'Um amigo desmarca em cima da hora pela terceira vez seguida. O que acontece?', {
+    2: 'Fico magoado. Eu sempre estou lá quando ele precisa.',
+    8: 'Falo na cara dele, ou simplesmente paro de chamar.',
+    1: 'Acho um desrespeito com o tempo dos outros, mesmo que eu não diga.',
+    9: 'Fico chateado um pouco e deixo passar. Ele deve ter os motivos dele.',
+    4: 'Penso que talvez ele prefira a companhia de outras pessoas.',
+    6: 'Fico pensando se ele está me evitando, ou se aconteceu alguma coisa.',
+    5: 'Sinceramente, dá até um alívio. Ganhei a noite de volta.',
+    3: 'Já preencho o horário com outra coisa útil.',
+    7: 'Chamo outra pessoa ou invento outro programa.',
+}, dominio='amizade', eixo='paixao'))
+
+F1.append(i9('f1_10', 'É sábado à noite, você está em casa e ninguém te chamou para nada. Como é isso para você?', {
+    5: 'Ótimo. É quando eu recupero a energia.',
+    9: 'Tranquilo. Ponho uma série, como alguma coisa e a noite passa.',
+    7: 'Começo a procurar o que fazer. Ficar parado me incomoda.',
+    2: 'Me pego olhando o celular, esperando alguém lembrar de mim.',
+    4: 'Bate aquela sensação de que a vida acontece mais para os outros.',
+    6: 'Fico bem, mas se ninguém chamou, começo a me perguntar por quê.',
+    3: 'Aproveito para adiantar alguma coisa. Sábado à toa é tempo perdido.',
+    1: 'Uso para organizar o que está pendente em casa.',
+    8: 'Se eu quiser companhia, eu chamo. Não fico esperando.',
+}, eixo='paixao'))
+
+F1.append(i9('f1_11', 'Numa reunião, alguém critica seu trabalho na frente dos outros. O que acontece primeiro dentro de você?', {
+    3: 'Penso em como recuperar a imagem ali mesmo.',
+    8: 'Sobe uma quentura e vontade de responder na hora.',
+    1: 'Checo se a crítica é justa, e se não for, me indigno.',
+    4: 'Sinto vergonha e aquilo dói mais do que deveria.',
+    6: 'Desconfio da intenção da pessoa e de quem mais está do lado dela.',
+    2: 'Me magoo por não reconhecerem tudo o que eu faço.',
+    9: 'Fico meio anestesiado. Só percebo depois o quanto me incomodou.',
+    5: 'Me fecho e respondo o mínimo. Depois penso sozinho.',
+    7: 'Levo na leveza, faço uma piada e sigo.',
+}, dominio='trabalho', eixo='paixao'))
+
+F1.append(i9('f1_12', 'Você chega a uma festa onde conhece pouca gente. O que você faz nos primeiros vinte minutos?', {
+    7: 'Circulo, converso com todo mundo e já estou animando alguém.',
+    2: 'Procuro alguém para conversar e logo estou cuidando de alguma pessoa.',
+    5: 'Fico em um canto, observando, com bebida na mão.',
+    9: 'Acompanho quem me levou e vou no ritmo do grupo.',
+    3: 'Procuro as pessoas que valem a pena conhecer e me apresento bem.',
+    6: 'Demoro a relaxar, leio o ambiente antes de me soltar.',
+    8: 'Chego junto, puxo assunto e o clima me segue.',
+    4: 'Fico meio à margem, com a sensação de não pertencer àquilo.',
+    1: 'Reparo em como as coisas estão organizadas e demoro a entrar no clima.',
+}, dominio='amizade'))
+
+F1.append(i9('f1_13', 'Alguém importante para você some por uma semana, sem explicação. O que se passa?', {
+    4: 'Já penso que fiz algo errado ou que a pessoa se cansou de mim.',
+    6: 'Fico remoendo o que pode ter acontecido e se ainda posso confiar.',
+    2: 'Fico magoado e espero que a pessoa perceba a falta que eu faço.',
+    8: 'Cobro direto quando aparecer. Ou corto, se me sentir desrespeitado.',
+    9: 'Levo numa boa. Cada um tem o seu tempo.',
+    1: 'Acho falta de consideração, mesmo entendendo que pode ter motivo.',
+    5: 'Não estranho. Eu mesmo sumo às vezes.',
+    3: 'Me ocupo e sigo. Quando voltar, a gente resolve.',
+    7: 'Sigo minha vida, que está cheia de coisas boas.',
+}, dominio='romance', eixo='paixao'))
+
+F1.append(i9('f1_14', 'Você recebe um dinheiro inesperado, o suficiente para um mês de despesas. O que você faz com ele?', {
+    5: 'Guardo quase tudo. Dinheiro parado é liberdade.',
+    6: 'Coloco na reserva de emergência. É para isso que serve.',
+    7: 'Já penso numa viagem ou em algo que eu queria há tempos.',
+    2: 'Uso boa parte com as pessoas de quem gosto, dando presentes ou pagando algo.',
+    3: 'Invisto em algo que me faça crescer: curso, aparência, equipamento.',
+    1: 'Pago o que está pendente e faço o mais correto com o resto.',
+    8: 'Gasto com o que eu quero, e quero agora.',
+    9: 'Deixo na conta e vou usando no conforto do dia a dia, sem plano.',
+    4: 'Compro algo bonito e com significado, que tenha a minha cara.',
+}))
 
 F1_DES = [
-    item('f1d_ie', 1, 'Quando você fica com raiva de alguém, o que costuma vir antes?', [
-        ('I', 'Um incômodo no corpo, como tensão, calor ou peso, antes de eu pensar em como estou sendo visto. Às vezes solto, às vezes engulo.'),
-        ('E', 'Uma dor ligada a como fui visto: me senti desvalorizado, rejeitado ou diminuído.'),
+    item('f1d_ie', 1, 'Você acabou de brigar com alguém. Vinte minutos depois, o que ainda está vivo em você?', [
+        ('I', 'O corpo: tensão, calor, vontade de resolver ou de sair andando.'),
+        ('E', 'A cena: o que a pessoa pensou de mim, como eu apareci ali.'),
     ], eixo='fixacao', peso=1.3, separa=['instintiva', 'emocional']),
-    item('f1d_im', 1, 'Diante de uma incerteza real, o que acontece dentro de você?', [
-        ('I', 'Sigo o impulso ou o meu jeito de sempre. A incerteza não ocupa muito a minha cabeça.'),
-        ('M', 'A cabeça acelera: analiso, antecipo cenários, e mesmo quando ajo rápido é para me livrar da tensão de não saber.'),
+    item('f1d_im', 1, 'Você precisa decidir hoje algo importante e não tem toda a informação. O que você faz?', [
+        ('I', 'Decido com o que tenho e lido com as consequências depois.'),
+        ('M', 'Adio o quanto der, procurando mais informação ou alguém que confirme.'),
     ], eixo='fixacao', peso=1.3, separa=['instintiva', 'mental']),
-    item('f1d_em', 1, 'Quando você sofre, com o que esse sofrimento mais se parece?', [
-        ('E', 'Uma ferida no meu valor, ligada a ser ou não amado, visto e reconhecido.'),
-        ('M', 'Uma inquietação com a falta de garantias, de espaço ou de saídas.'),
+    item('f1d_em', 1, 'Numa noite ruim, o que costuma tirar seu sono?', [
+        ('E', 'Uma conversa, um olhar, alguém que me magoou ou me desvalorizou.'),
+        ('M', 'Uma pendência, um risco, algo que pode dar errado amanhã.'),
     ], eixo='fixacao', peso=1.3, separa=['emocional', 'mental']),
 ]
-# desempate de triade mapeia so a triade
 _TRI = {'I': 'instintiva', 'E': 'emocional', 'M': 'mental'}
 for it, pares in zip(F1_DES, [['I', 'E'], ['I', 'M'], ['E', 'M']]):
     for a, k in zip([x for x in it['alternativas'] if not x.get('nula')], pares):
         a['mapa'] = {"triade": _TRI[k], "tipo": None, "instinto": None}
 
-# ===========================================================================
-# FASE 2 por triade: 2 alternativas por tipo (expressao prototipica + expressao
-# de outro subtipo, em especial o contratipo), mesmo eixo e peso.
-# ===========================================================================
 
+# ===========================================================================
+# FASE 2 — cenas dentro da triade, 2 alternativas por tipo
+# ===========================================================================
 def f2(id_, cen, pares, **kw):
-    """pares: lista de (tipo, texto_prototipico, texto_outro_subtipo)"""
     alts = []
     for t, p, c in pares:
         alts.append((t, p, 'p'))
         alts.append((t, c, 'c'))
     return item(id_, 2, cen, alts, **kw)
 
+
 FIX = dict(eixo='fixacao', peso=1.5)
 EMO = dict(eixo='emocao', peso=1.0)
 PAI = dict(eixo='paixao', peso=1.0)
 
 INST = [
-    f2('f2i_01', 'Alguém passa dos seus limites repetidas vezes. O que costuma acontecer?', [
-        (8, 'Você confronta a pessoa na hora e deixa claro que não vai aceitar aquilo.',
-            'Você avisa uma vez só. Na segunda, a pessoa perde o acesso a você e sente o peso disso.'),
-        (9, 'Você evita o confronto, mas acumula uma irritação que acaba escapando mais tarde, quase sem querer.',
-            'Você resmunga, fica teimoso e emburrado, mas não chega a ter a conversa de verdade.'),
-        (1, 'Você pensa em qual seria a forma certa e justa de lidar com aquilo e só age quando tem certeza do que é correto.',
-            'Você corrige a pessoa com firmeza e indignação, porque aquilo é inaceitável e alguém precisa dizer.'),
-    ], **PAI),
-    f2('f2i_02', 'Quando você fica irritado com alguém, qual destes pensamentos é mais parecido com o seu?', [
-        (8, '“Fizeram isso comigo, então é justo que sintam as consequências.”', '“Mexeu com os meus, mexeu comigo.”'),
-        (9, '“Não vale o desgaste. É melhor deixar para lá do que criar um problema entre nós.”', '“Provavelmente não foi por mal. Logo passa.”'),
-        (1, '“Eu nunca faria isso. Existe um jeito certo de agir, e essa pessoa não seguiu.”', '“Isso está errado, e eu não vou fingir que está tudo bem.”'),
+    f2('f2i_01', 'Um colega passa por cima de uma combinação sua pela segunda vez. O que você faz?', [
+        (8, 'Falo na hora e deixo claro que não vai ter uma terceira.',
+            'Não discuto mais. A pessoa perde o acesso a mim e sente isso.'),
+        (9, 'Deixo passar de novo, mas vai ficando um incômodo que uma hora escapa.',
+            'Não falo nada e passo a fazer do meu jeito, sem avisar.'),
+        (1, 'Explico qual era o combinado e por que aquilo não está certo.',
+            'Falo na hora, com dureza, porque aquilo é inaceitável.'),
+    ], dominio='trabalho', **PAI),
+    f2('f2i_02', 'Alguém te tratou mal ontem. Hoje de manhã, qual pensamento aparece?', [
+        (8, '“Ele vai me pagar de algum jeito.”', '“Comigo não. Já sabe o que vai acontecer se repetir.”'),
+        (9, '“Já passou, não vou remoer isso.”', '“Ele deve estar passando por alguma coisa.”'),
+        (1, '“Eu jamais trataria alguém assim.”', '“Isso está errado e eu não vou deixar barato.”'),
     ], **FIX),
-    f2('f2i_03', 'Um projeto seu esbarra em uma regra ou em uma autoridade que você considera injusta. Como você reage?', [
-        (8, 'Você passa por cima da regra e arca com as consequências. Se ela atrapalha o que você quer, não tem poder sobre você.',
-            'Você enfrenta a autoridade diretamente, sobretudo se ela estiver prejudicando alguém do seu lado.'),
-        (9, 'Você se incomoda, mas acaba se acomodando para não criar atrito. Manter a paz pesa mais.',
-            'Você não discute, mas também não cumpre direito. Vai fazendo do seu jeito, devagar, até a regra ser esquecida.'),
-        (1, 'Você contesta pelos canais adequados, com base nos seus princípios, e luta por uma forma mais justa.',
-            'Você denuncia a injustiça com veemência, porque se sente no dever de corrigir aquilo.'),
+    f2('f2i_03', 'Uma regra no trabalho está atrapalhando algo que você precisa entregar. O que você faz?', [
+        (8, 'Passo por cima e assumo as consequências.',
+            'Enfrento quem criou a regra, principalmente se ela estiver prejudicando a minha equipe.'),
+        (9, 'Me acomodo e dou um jeito de conviver com ela.',
+            'Não discuto, mas vou empurrando com a barriga até ninguém cobrar.'),
+        (1, 'Contesto pelos canais certos e proponho uma regra melhor.',
+            'Reclamo alto, porque uma regra injusta não deveria existir.'),
     ], dominio='trabalho', **FIX),
-    f2('f2i_04', 'Como é a sua relação com a própria raiva?', [
-        (8, 'Ela vem e passa rápido. Você põe para fora, resolve na hora e não fica remoendo.',
-            'Ela é combustível. Você gosta de sentir a própria força e não vê motivo para escondê-la.'),
-        (9, 'Ela quase não aparece. Muitas vezes você nem percebe que estava com raiva.',
-            'Ela fica guardada por muito tempo e, quando sai, sai de repente, teimosa ou explosiva, e depois some.'),
-        (1, 'Ela vira tensão e cobrança, e você não se permite colocá-la para fora.',
-            'Ela aparece em ironias e críticas afiadas, ou numa indignação aberta quando você tem certeza de que tem razão.'),
+    f2('f2i_04', 'Você ficou muito bravo esta semana. Como foi?', [
+        (8, 'Explodi, resolvi na hora e depois já tinha passado.',
+            'Não explodi, mas deixei claríssimo quem mandava ali.'),
+        (9, 'Nem lembro de ter ficado bravo. Deve ter passado sozinho.',
+            'Engoli na hora e depois saiu de uma vez, meio desproporcional.'),
+        (1, 'Segurei, fiquei tenso e virou crítica, ironia ou dor de cabeça.',
+            'Falei o que tinha que falar, com indignação, porque eu tinha razão.'),
     ], **PAI),
-    f2('f2i_05', 'Qual destas frases poderia ser um lema seu, mesmo que você nunca a tenha dito em voz alta?', [
-        (8, '“A vida é uma disputa. Quem não vai atrás do que é seu fica sem nada.”', '“Quem está comigo está protegido. Quem está contra, que se cuide.”'),
-        (9, '“Não vale a pena bater de frente. É melhor não mexer no que está quieto.”', '“Cada um na sua. Eu não me meto, e não gosto que se metam comigo.”'),
-        (1, '“Existe um jeito certo de fazer as coisas, e cabe a mim chegar até ele.”', '“Se ninguém corrige o que está errado, eu corrijo.”'),
-    ], **FIX),
-    f2('f2i_06', 'Em uma discussão familiar acalorada, o que você costuma fazer?', [
-        (8, 'Aumentar o tom e tomar a frente da discussão, porque quem é mais firme conduz.',
-            'Defender com força quem está sendo atacado, mesmo que isso piore o clima.'),
-        (9, 'Recuar, concordar com todos e me desligar da discussão para o clima não piorar.',
-            'Tentar mediar, acalmar os ânimos e reconciliar as pessoas.'),
-        (1, 'Manter o controle e apontar, com certa frieza, quem tem razão e quem está errado.',
-            'Me exaltar para defender o que é certo, mesmo que depois me culpe por ter perdido a compostura.'),
+    f2('f2i_05', 'Na sua casa, quando você era criança, como funcionava a autoridade?', [
+        (8, 'Era dura, e cedo aprendi a revidar ou a me virar sozinho.',
+            'Alguém precisava proteger os mais fracos da casa, e sobrou para mim.'),
+        (9, 'Decidiam por mim, e era mais fácil concordar do que discutir.',
+            'Cada um na sua. Eu fazia o meu e não me metia.'),
+        (1, 'Muita exigência e crítica. Eu tinha que ser o certinho.',
+            'Tinha regra para tudo, e eu era o primeiro a cobrar que cumprissem.'),
+    ], dominio='familia', eixo='fixacao', peso=1.5),
+    f2('f2i_06', 'Em uma discussão de família que esquenta, o que você faz?', [
+        (8, 'Aumento o tom e tomo a frente.', 'Entro na frente de quem está sendo atacado.'),
+        (9, 'Concordo com todos e me desligo até passar.', 'Tento acalmar e reconciliar os lados.'),
+        (1, 'Mantenho a compostura e aponto quem está certo e quem está errado.',
+            'Me exalto defendendo o que é certo, e depois me culpo por ter perdido a linha.'),
     ], dominio='familia', gemeo='gemeo_conflito_intensidade', **EMO),
-    f2('f2i_12', 'Em um conflito tenso no trabalho, com outras pessoas observando, o que você costuma fazer?', [
-        (8, 'Tomar a frente e enfrentar diretamente, impondo a minha posição diante de todos.',
-            'Proteger a minha equipe e deixar claro que quem mexer com ela vai ter que lidar comigo.'),
-        (9, 'Amenizar, ceder e buscar um consenso para desfazer o atrito, sem me posicionar muito.',
-            'Ficar quieto na hora e seguir fazendo do meu jeito depois, sem abrir mão de verdade.'),
-        (1, 'Manter a compostura e defender, com rigor, o procedimento correto.',
-            'Segurar a irritação na hora e só deixá-la aparecer depois, em particular.'),
+    f2('f2i_12', 'Em um conflito no trabalho, com gente olhando, o que você faz?', [
+        (8, 'Enfrento na frente de todos e imponho a minha posição.',
+            'Defendo a minha equipe e deixo claro que quem mexer com ela lida comigo.'),
+        (9, 'Cedo e busco um consenso para desfazer o atrito.',
+            'Fico quieto ali e continuo fazendo do meu jeito depois.'),
+        (1, 'Mantenho a compostura e defendo o procedimento correto.',
+            'Aponto o erro na frente de todos, porque aquilo não pode passar.'),
     ], dominio='trabalho', gemeo='gemeo_conflito_intensidade', **EMO),
-    f2('f2i_07', 'Sendo honesto consigo mesmo, o que mais desagrada você na sua forma de ser?', [
-        (8, 'Às vezes sou duro ou exagerado e magoo as pessoas antes de perceber.',
-            'Tenho dificuldade de mostrar fragilidade, mesmo para quem eu amo.'),
-        (9, 'Eu me acomodo, adio as coisas e deixo de lado o que eu quero para não incomodar ninguém.',
-            'Eu me perco no que os outros querem e acabo me esquecendo de mim.'),
-        (1, 'Sou crítico e exigente demais, comigo e com os outros, e raramente acho algo bom o suficiente.',
-            'Às vezes me exalto e fico intolerante quando as pessoas não fazem o que é certo.'),
+    f2('f2i_07', 'Alguém próximo te diz: “às vezes você é difícil.” Com o que você concorda?', [
+        (8, 'Sou duro demais e magoo antes de perceber.', 'Não mostro fragilidade nem para quem eu amo.'),
+        (9, 'Me acomodo e deixo de lado o que eu quero.', 'Sumo do que é chato até o prazo estourar.'),
+        (1, 'Sou exigente demais, comigo e com os outros.', 'Fico intolerante quando as coisas não são feitas direito.'),
     ], desej=True, desejavel_tipo=1, eixo='fixacao', peso=1.3),
-    f2('f2i_13', 'Depois de tratar alguém mal, o que você costuma sentir?', [
-        (8, 'Viro a página rápido. Não fico me culpando por isso.',
-            'Se a pessoa mereceu, não sinto muita coisa. Foi ela quem provocou.'),
-        (9, 'Fico incomodado por ter criado um mal-estar e quero que a paz volte logo.',
-            'Faço de conta que não aconteceu e sigo como se nada fosse.'),
-        (1, 'Sinto uma culpa pesada, porque deveria ter agido melhor.',
-            'Digo a mim mesmo que eu tinha razão, mas por dentro me cobro por ter perdido o controle.'),
+    f2('f2i_13', 'Você falou uma grosseria com alguém que não merecia. O que acontece depois?', [
+        (8, 'Viro a página. Não fico me culpando.', 'Se a pessoa provocou, não sinto muita coisa.'),
+        (9, 'Fico incomodado com o clima ruim e quero a paz de volta.', 'Ajo como se não tivesse acontecido.'),
+        (1, 'Sinto culpa pesada, porque eu deveria ter me controlado.',
+            'Acho que eu tinha razão, mas me cobro por ter perdido a linha.'),
     ], **FIX),
-    f2('f2i_08', 'Quando você se lembra de uma injustiça que sofreu no passado, o que sente?', [
-        (8, 'Uma conta a acertar. De algum modo, você quer dar o troco.',
-            'Uma lição: aquilo te ensinou a nunca mais ficar vulnerável daquele jeito.'),
-        (9, 'Certa indiferença. Já faz tempo, e você prefere não mexer nisso.',
-            'Resignação. Você diz a si mesmo que, no fim das contas, não foi tão grave assim.'),
-        (1, 'Indignação. Aquilo foi errado, e você precisa que isso seja reconhecido.',
-            'Um ressentimento silencioso que você nunca expressou, porque não seria correto.'),
+    f2('f2i_08', 'Uma injustiça que você sofreu há anos volta à sua cabeça. O que vem junto?', [
+        (8, 'Vontade de acertar essa conta um dia.', 'A lição de nunca mais ficar vulnerável assim.'),
+        (9, 'Quase nada. Já faz tempo e não quero mexer nisso.', 'Penso que, no fundo, não foi tão grave.'),
+        (1, 'Indignação. Aquilo foi errado e alguém precisa reconhecer.',
+            'Um ressentimento calado, que eu nunca falei para ninguém.'),
     ], **FIX),
-    f2('f2i_09', 'Como as pessoas próximas costumam descrever você?', [
-        (8, 'Intenso e protetor, alguém bom de ter por perto nas horas difíceis.',
-            'Direto e sem filtro, alguém que não aceita ser desrespeitado.'),
-        (9, 'Tranquilo e de fácil convivência, sem grandes exigências.',
-            'Teimoso, do tipo que concorda, mas faz do próprio jeito.'),
-        (1, 'Confiável e correto, alguém que faz as coisas direito.',
-            'Exigente e intenso, alguém que briga pelo que acredita ser o certo.'),
-    ], dominio='amizade', **EMO),
-    f2('f2i_10', 'Quando algo mexe muito com você, qual costuma ser a sua tendência?', [
-        (8, 'Reagir com ainda mais intensidade, agir e causar impacto.',
-            'Buscar mais estímulo, como sair, comer, beber, trabalhar ou brigar mais, porque o excesso me faz sentir vivo.'),
-        (9, 'Amortecer, buscar conforto e distração e diminuir a intensidade até quase não sentir.',
-            'Manter a rotina de sempre, como se nada tivesse acontecido.'),
-        (1, 'Conter o impulso e transformá-lo em algo produtivo e correto.',
-            'Canalizar aquilo para uma causa ou para corrigir algo que está errado.'),
+    f2('f2i_09', 'Um amigo seu vai te descrever para alguém que não te conhece. O que ele provavelmente diz?', [
+        (8, 'Que sou intenso e bom de ter por perto na hora difícil.', 'Que sou direto e não aceito desrespeito.'),
+        (9, 'Que sou tranquilo e fácil de conviver.', 'Que sou teimoso: concordo e faço do meu jeito.'),
+        (1, 'Que sou confiável e faço as coisas direito.', 'Que sou exigente e brigo pelo que acredito.'),
+    ], dominio='amizade', **EMO, opcional=True),
+    f2('f2i_10', 'Você acabou de receber uma notícia que mexeu muito com você. O que você faz na hora seguinte?', [
+        (8, 'Ajo. Ligo, resolvo, mexo em alguma coisa.', 'Saio, bebo, treino, trabalho dobrado. Preciso descarregar.'),
+        (9, 'Como alguma coisa, ligo a TV, deixo o tempo passar.', 'Sigo a rotina como se nada tivesse acontecido.'),
+        (1, 'Transformo em tarefa: organizo, resolvo o que dá.', 'Canalizo para algo útil ou para uma causa.'),
     ], **PAI),
-    f2('f2i_11', 'Nos relacionamentos amorosos, qual costuma ser o seu ponto cego?', [
-        (8, 'Confundir controle com cuidado. Para você, proteger e mandar parecem a mesma coisa.',
-            'Querer a pessoa inteira para mim e ter dificuldade de me entregar de verdade.'),
-        (9, 'Adaptar-me tanto à vontade do outro a ponto de perder de vista o que eu quero.',
-            'Evitar as conversas difíceis e deixar as coisas se arrastarem para não brigar.'),
-        (1, 'Querer melhorar o outro e transformar a relação em um projeto de aperfeiçoamento.',
-            'Cobrar do outro, com intensidade, uma conduta à altura do que eu acho certo.'),
+    f2('f2i_11', 'Alguém que você ama diz que você o sufoca. Qual crítica chega mais perto?', [
+        (8, 'Eu confundo proteger com mandar.', 'Eu quero a pessoa só para mim e me entrego pouco.'),
+        (9, 'Eu me adapto tanto que some o que eu queria.', 'Eu fujo da conversa difícil e deixo arrastar.'),
+        (1, 'Eu fico querendo melhorar o outro.', 'Eu cobro demais como a pessoa deveria se comportar.'),
     ], dominio='romance', **FIX),
-    f2('f2i_14', 'Qual é a sua relação com prazer e excesso?', [
-        (8, 'Gosto de viver no máximo. Limite é para quem não aguenta.',
-            'Quero o que é bom, e quero já. Esperar me irrita.'),
-        (9, 'Me acomodo em pequenos confortos, como comer, ver séries ou dormir, que me anestesiam sem eu perceber.',
-            'Deixo para depois o que eu mesmo quero, mas não abro mão da minha rotina confortável.'),
-        (1, 'Me controlo. Prazer só depois de cumprir o dever, e às vezes nem assim.',
-            'Sinto que prazer demais é meio errado e fico desconfortável quando exagero.'),
+    f2('f2i_14', 'Sobre prazer e exagero: qual cena é mais a sua?', [
+        (8, 'Quando eu quero, eu vou com tudo, e não gosto que me segurem.', 'Odeio esperar pelo que eu quero.'),
+        (9, 'Conforto pequeno todo dia: comida, sofá, série, e o tempo passa.',
+            'Adio o que eu quero, mas a minha rotina ninguém tira.'),
+        (1, 'Só depois que tudo estiver feito, e mesmo assim me policio.', 'Exagerei uma vez e fiquei com a sensação de ter feito algo errado.'),
     ], **PAI),
 ]
 
 EMOC = [
-    f2('f2e_01', 'Quando você quer se sentir valioso, o que costuma buscar?', [
-        (2, 'Ser necessário para alguém, a ponto de a pessoa não conseguir abrir mão de mim.',
-            'Ser tratado como alguém especial e mimado por quem gosta de mim.'),
-        (3, 'Conquistar coisas, apresentar resultados e me sair bem no que os outros valorizam.',
-            'Ser a pessoa eficiente e confiável que resolve tudo, sem precisar me exibir.'),
-        (4, 'Ser fiel ao que me diferencia e não me confundir com a maioria.',
-            'Aguentar o que for preciso e dar conta sozinho, para provar que mereço ter valor.'),
+    f2('f2e_01', 'Um dia você se sente bem consigo mesmo. O que costuma ter acontecido?', [
+        (2, 'Alguém me procurou porque precisava de mim.', 'Alguém me tratou como especial, me paparicou.'),
+        (3, 'Entreguei algo bem feito e reconheceram.', 'Resolvi tudo sozinho, sem precisar de ninguém.'),
+        (4, 'Vivi algo verdadeiro, meu, que ninguém mais viveria igual.', 'Aguentei um dia pesado sem reclamar e dei conta.'),
     ], **FIX),
-    f2('f2e_02', 'Qual destas frases doeria mais ouvir de alguém importante para você?', [
+    f2('f2e_02', 'Qual destas frases, dita por alguém importante, mais estragaria o seu dia?', [
         (2, '“Eu não preciso de você.”', '“Você não é tão importante para mim quanto pensa.”'),
         (3, '“Você fracassou e decepcionou todo mundo.”', '“Não dá para contar com você.”'),
-        (4, '“Você é comum, igual a qualquer um.”', '“Eu prefiro outra pessoa a você.”'),
-    ], **EMO),
-    f2('f2e_03', 'O que você costuma fazer com as suas emoções mais difíceis?', [
-        (2, 'Deixo as minhas de lado e cuido das emoções dos outros. As minhas necessidades quase não aparecem.',
-            'Faço charme ou birra para que alguém perceba e cuide de mim, sem eu precisar pedir.'),
-        (3, 'Deixo para depois. Não posso permitir que atrapalhem o que preciso entregar.',
-            'Mantenho tudo sob controle e sigo funcionando, como se nada estivesse acontecendo.'),
-        (4, 'Eu me aprofundo nelas, às vezes demais, porque sinto que dizem muito sobre quem eu sou.',
-            'Engulo e aguento firme. Reclamar seria fraqueza, e eu dou conta sozinho.'),
+        (4, '“Você é comum, igual a todo mundo.”', '“Eu prefiro outra pessoa a você.”'),
+    ], **EMO, opcional=True),
+    f2('f2e_03', 'Você está muito triste e alguém toca no assunto. O que você faz?', [
+        (2, 'Viro a conversa para a pessoa e acabo cuidando dela.', 'Deixo escapar um pouco, esperando que insistam e cuidem de mim.'),
+        (3, 'Digo que está tudo bem e sigo funcionando.', 'Desconverso e volto para o trabalho.'),
+        (4, 'Falo e vai fundo. Choro, se for o caso.', 'Corto o assunto. Reclamar é fraqueza, eu aguento.'),
     ], **FIX),
-    f2('f2e_04', 'Qual destas imagens você mais faz questão de passar?', [
-        (2, 'A de alguém generoso e caloroso, de quem as pessoas gostam de se aproximar.',
-            'A de alguém encantador, difícil de esquecer.'),
-        (3, 'A de alguém bem-sucedido e competente no que faz.',
-            'A de alguém responsável e sem vaidade, que simplesmente resolve.'),
-        (4, 'A de alguém profundo e sensível, que não é raso como a maioria.',
-            'A de alguém forte e digno, que aguenta o que vier sem se queixar.'),
+    f2('f2e_04', 'Você vai encontrar pessoas que ainda não te conhecem. O que você faz antes de sair de casa?', [
+        (2, 'Penso em como vou recebê-las, o que levar, como deixá-las à vontade.',
+            'Escolho algo que me deixe encantador, do jeito que costuma funcionar.'),
+        (3, 'Cuido para estar apresentável e penso no que vou dizer sobre o que eu faço.',
+            'Não me produzo muito. Prefiro que notem que sou competente, não que sou vaidoso.'),
+        (4, 'Escolho algo com a minha cara, mesmo que destoe dos outros.',
+            'Não penso muito nisso, e ainda acho meio fútil quem pensa.'),
     ], **EMO),
-    f2('f2e_05', 'Quando você não corresponde ao que esperavam, o que sente primeiro?', [
-        (2, 'Medo de que deixem de gostar de você e de que você deixe de fazer falta.',
-            'Indignação: depois de tudo o que você faz, ainda cobram mais?'),
-        (3, 'Urgência em recuperar a imagem e mostrar que ainda dá conta.',
-            'Vontade de trabalhar o dobro, em silêncio, para que ninguém possa dizer nada.'),
-        (4, 'Uma confirmação amarga de que você nunca foi bom o bastante.',
-            'Revolta: sente que foi julgado injustamente e que ninguém reconhece o que você passou.'),
+    f2('f2e_05', 'Você entregou um trabalho e não era o que esperavam. O que vem primeiro?', [
+        (2, 'Medo de que gostem menos de mim.', 'Indignação: depois de tudo que eu faço, ainda cobram?'),
+        (3, 'Pressa de consertar e mostrar que dou conta.', 'Vontade de trabalhar o dobro, calado, até ninguém ter o que dizer.'),
+        (4, 'A confirmação amarga de que eu nunca sou suficiente.', 'Revolta: ninguém viu o quanto aquilo me custou.'),
     ], dominio='trabalho', **EMO),
-    f2('f2e_06', 'Qual destas frases você teria menos vergonha de assinar em público?', [
-        (2, '“Eu me realizo cuidando dos outros.”', '“Eu mereço ser bem tratado, porque dou muito de mim.”'),
-        (3, '“Eu me realizo vencendo e sendo reconhecido.”', '“Eu me realizo sendo útil e fazendo tudo bem feito.”'),
-        (4, '“Eu me realizo sendo fiel à minha diferença, mesmo que doa.”', '“Eu me realizo superando o que a vida me negou.”'),
-    ], desej=True, desejavel_tipo=2, eixo='fixacao', peso=1.3),
-    f2('f2e_07', 'Ao observar outras pessoas, o que mais mexe com você?', [
-        (2, 'Ver alguém recebendo cuidado e apoio de um jeito que você também gostaria de receber, mas não pede.',
-            'Ver alguém ocupando um lugar especial na vida de quem você quer conquistar.'),
-        (3, 'Ver alguém conquistando o reconhecimento e o sucesso que você busca.',
-            'Ver alguém menos competente sendo mais valorizado do que você.'),
-        (4, 'Ver alguém que parece inteiro e em paz consigo, algo que você sente que sempre lhe faltou.',
-            'Ver alguém recebendo com facilidade aquilo pelo qual você teve que lutar muito.'),
+    f2('f2e_06', 'Você passou a noite ajudando um amigo com um problema. Ele agradece de leve e muda de assunto. O que fica?', [
+        (2, 'Uma mágoa. Eu teria feito muito mais por ele.', 'Fico esperando a retribuição, sem nunca cobrar em voz alta.'),
+        (3, 'Nada demais. Eu resolvi, e isso já vale.', 'Fico satisfeito por ter sido útil, mesmo sem aplauso.'),
+        (4, 'Uma sensação de que com os outros ele seria mais caloroso.', 'Nada. Eu não ajudo esperando retorno, e me orgulho disso.'),
+    ], dominio='amizade', desej=True, desejavel_tipo=3, eixo='fixacao', peso=1.3),
+    f2('f2e_07', 'Você está numa roda e alguém conta uma conquista grande. O que mexe com você?', [
+        (2, 'O carinho que a pessoa recebe, que eu também queria e não peço.', 'Ela ocupar o lugar de destaque que costuma ser meu.'),
+        (3, 'O reconhecimento. É o que eu busco também.', 'Ver alguém menos competente sendo mais valorizado.'),
+        (4, 'A pessoa parecer inteira e em paz, coisa que eu nunca senti.', 'Ela ter conseguido fácil o que a mim custou muito.'),
     ], indireto=True, **FIX),
-    f2('f2e_12', 'O que faz você se sentir realmente querido por alguém?', [
-        (2, 'Perceber que faço falta, que a pessoa precisa de mim e me procura.',
-            'Sentir que sou a pessoa preferida, acima de todas as outras.'),
-        (3, 'Ser admirado, sentir que a pessoa se orgulha de estar comigo.',
-            'Ver que a pessoa reconhece tudo o que eu faço e o quanto sou confiável.'),
-        (4, 'Ser escolhido pelo que tenho de único e compreendido como ninguém mais me compreende.',
-            'Ser cuidado sem precisar pedir, algo que quase nunca aconteceu comigo.'),
+    f2('f2e_12', 'O que alguém faz que te faz sentir realmente querido?', [
+        (2, 'Me procurar quando precisa. Ver que faço falta.', 'Me tratar como a pessoa preferida, acima das outras.'),
+        (3, 'Ter orgulho de mim na frente dos outros.', 'Reconhecer tudo o que eu faço e o quanto dá para contar comigo.'),
+        (4, 'Me entender de um jeito que ninguém mais entende.', 'Cuidar de mim sem eu precisar pedir.'),
     ], dominio='romance', **FIX),
-    f2('f2e_08', 'Sendo sincero, qual é a sua maior necessidade no amor?', [
-        (2, 'Ser insubstituível, o grande amor sem o qual a outra pessoa não ficaria bem.',
-            'Ser paparicado e protegido, como alguém precioso.'),
-        (3, 'Ser admirado e formar um casal que os outros vejam com aprovação.',
-            'Ser o parceiro ideal, atraente e à altura do que o outro deseja.'),
-        (4, 'Ser compreendido no que tenho de mais profundo e único.',
-            'Viver uma intensidade que confirme que a relação é rara, e não perder esse lugar para ninguém.'),
+    f2('f2e_08', 'Em um relacionamento, o que você mais tem medo que aconteça?', [
+        (2, 'A pessoa descobrir que consegue viver bem sem mim.', 'Deixar de ser a prioridade dela.'),
+        (3, 'A pessoa deixar de me admirar.', 'A pessoa ver que eu não sou tão seguro quanto pareço.'),
+        (4, 'A pessoa nunca chegar a me conhecer de verdade.', 'Ela se interessar por outra pessoa mais do que por mim.'),
     ], dominio='romance', **EMO),
-    f2('f2e_09', 'Nos relacionamentos próximos, qual costuma ser o seu ponto cego?', [
-        (2, 'Dar muito e esperar, em silêncio, ser retribuído na mesma medida, e ficar magoado quando isso não acontece.',
-            'Seduzir e conquistar, e depois cobrar do outro uma dedicação total.'),
-        (3, 'Sacrificar a intimidade real pela imagem do relacionamento perfeito.',
-            'Virar o que o outro deseja, a ponto de não saber mais o que eu mesmo sinto.'),
-        (4, 'Desvalorizar o que está perto e disponível e sempre desejar o que falta.',
-            'Transformar a relação numa disputa, oscilando entre amor e raiva.'),
+    f2('f2e_09', 'Uma relação sua acabou mal. Olhando para trás, qual foi a sua parte?', [
+        (2, 'Dei demais e esperei retribuição sem nunca pedir.', 'Conquistei e depois exigi dedicação total.'),
+        (3, 'Cuidei mais da imagem do casal do que da relação.', 'Virei o que o outro queria e me perdi no caminho.'),
+        (4, 'Desvalorizei o que estava ali e quis o que faltava.', 'Transformei a relação em disputa, entre amor e raiva.'),
     ], dominio='romance', **FIX),
-    f2('f2e_10', 'Quando você está sozinho, qual sentimento costuma estar presente?', [
-        (2, 'Uma agitação carinhosa, sempre voltada para alguém ou para algum vínculo.',
-            'A sensação de que ninguém lembrou de mim, mesmo depois de tudo o que eu faço.'),
-        (3, 'Uma inquietação produtiva, pensando em tudo o que ainda falta fazer e conquistar.',
-            'Um vazio que eu preencho arrumando, resolvendo e planejando.'),
-        (4, 'Uma melancolia constante, uma saudade de algo que você nem sabe nomear.',
-            'O cansaço de quem carrega muita coisa sozinho, mas segue em frente.'),
+    f2('f2e_10', 'Você acorda no domingo sem nada marcado e sem ninguém por perto. Como é a primeira hora?', [
+        (2, 'Já estou mandando mensagem para alguém.', 'Me incomoda que ninguém tenha lembrado de mim.'),
+        (3, 'Faço uma lista e começo a adiantar coisas.', 'Arrumo a casa, resolvo pendências, não consigo ficar parado.'),
+        (4, 'Bate uma melancolia e fico nela um tempo.', 'Levanto e vou trabalhar em algo, porque parar dói mais.'),
     ], **EMO),
-    f2('f2e_11', 'Qual destes elogios mais emocionaria você?', [
+    f2('f2e_11', 'Qual destes elogios você lembraria anos depois?', [
         (2, '“Não sei o que seria de mim sem você.”', '“Você é a pessoa mais encantadora que eu conheço.”'),
-        (3, '“Você é impressionante no que faz.”', '“Com você, tudo funciona.”'),
-        (4, '“Nunca conheci ninguém como você.”', '“Admiro a sua força por ter passado por tudo o que passou.”'),
-    ], **FIX),
-    f2('f2e_13', 'Quando alguém próximo conquista algo que você também queria, o que acontece por dentro?', [
-        (2, 'Fico feliz por fora e, por dentro, torço para que a pessoa continue precisando de mim.',
-            'Sinto que eu também merecia aquilo, e espero que alguém perceba.'),
-        (3, 'Isso me motiva a acelerar e mostrar que também consigo.',
-            'Minimizo e sigo focado no meu trabalho, sem deixar transparecer nada.'),
-        (4, 'Dói. Aquilo reforça a sensação de que, para os outros, as coisas são mais fáceis.',
-            'Vira combustível para eu me esforçar muito mais, ou vontade de diminuir o valor daquilo.'),
+        (3, '“Você é impressionante no que faz.”', '“Com você tudo funciona.”'),
+        (4, '“Nunca conheci ninguém como você.”', '“Admiro sua força por tudo o que você passou.”'),
+    ], **FIX, opcional=True),
+    f2('f2e_13', 'Uma pessoa próxima conseguiu exatamente o que você queria. O que acontece por dentro?', [
+        (2, 'Fico feliz e, no fundo, torço para que ela continue precisando de mim.',
+            'Sinto que eu também merecia, e espero que alguém note.'),
+        (3, 'Acelero para mostrar que eu também consigo.', 'Minimizo e sigo no meu trabalho, sem deixar transparecer.'),
+        (4, 'Dói, porque parece que para os outros é mais fácil.',
+            'Vira gás para eu me esforçar mais, ou vontade de diminuir a conquista dela.'),
     ], **PAI),
+    f2('f2e_14', 'Na sua casa, quando criança, o que fazia um adulto olhar para você com orgulho?', [
+        (2, 'Eu ser carinhoso, prestativo, o queridinho.', 'Eu ser encantador com as visitas.'),
+        (3, 'Eu ir bem: nota, prêmio, resultado.', 'Eu resolver as coisas sozinho, sem dar trabalho.'),
+        (4, 'Quase nada. Eu sentia que outro filho recebia esse olhar.', 'Eu aguentar firme e ajudar, mesmo criança.'),
+    ], dominio='familia', eixo='fixacao', peso=1.5),
 ]
 
 MENT = [
-    f2('f2m_01', 'Diante de uma insegurança que não passa, o que você costuma fazer?', [
-        (5, 'Fico recolhido, preciso de menos e poupo energia. Sozinho, eu me protejo melhor.',
-            'Guardo para mim. Só com aquela pessoa rara em quem confio totalmente eu me abro.'),
-        (6, 'Procuro uma referência confiável e busco garantias, mas continuo em dúvida mesmo assim.',
-            'Enfrento de frente o que me ameaça, até para provar a mim mesmo que não me intimida.'),
-        (7, 'Mantenho várias opções abertas e me concentro no que parece mais leve e promissor.',
-            'Me ocupo ajudando os outros ou uma causa, e deixo a minha própria insegurança para depois.'),
+    f2('f2m_01', 'Você está inseguro com uma decisão importante e ela não sai da sua cabeça. O que você faz?', [
+        (5, 'Me recolho e resolvo sozinho, no meu tempo.', 'Falo com aquela única pessoa em quem confio de verdade.'),
+        (6, 'Peço opinião de alguém confiável e mesmo assim continuo em dúvida.',
+            'Tomo a decisão na marra, para não ficar refém da dúvida.'),
+        (7, 'Deixo as opções em aberto e vou tocando o que é mais leve.',
+            'Me ocupo ajudando outra pessoa e adio a minha decisão.'),
     ], **FIX),
-    f2('f2m_02', 'O que mais cansa você em um relacionamento ou em um compromisso?', [
-        (5, 'Sentir que o meu espaço e a minha energia estão sendo consumidos, a ponto de precisar me afastar.',
-            'Descobrir que a pessoa não é tão confiável e transparente quanto eu imaginava.'),
-        (6, 'Não saber se posso mesmo contar com a outra pessoa e ter que pôr a confiança à prova o tempo todo.',
-            'Sentir que estão tentando me controlar ou me deixar numa posição fraca.'),
-        (7, 'A sensação de estar preso, sem liberdade, vendo as outras possibilidades se fecharem.',
-            'Perceber que estou me doando muito, sem ninguém notar, e continuar sorrindo.'),
-    ], **EMO),
-    f2('f2m_03', 'Qual destas frases descreve melhor a sua relação com os próprios desejos?', [
-        (5, 'Prefiro querer pouco. Assim não fico dependente nem à mercê de ninguém.',
-            'Os meus desejos são intensos, mas ficam guardados. Poucos sabem o que eu realmente quero.'),
-        (6, 'Desconfio dos meus próprios impulsos. Antes de ir em frente, pergunto a mim mesmo se é seguro.',
-            'Às vezes vou com tudo, justamente para não deixar a dúvida me paralisar.'),
-        (7, 'Quero experimentar tudo. Adiar o prazer me parece desperdício.',
-            'Seguro os meus desejos em nome de algo maior, mas sinto que deveria estar aproveitando mais.'),
+    f2('f2m_02', 'O que faz você querer cancelar um compromisso que já assumiu?', [
+        (5, 'Saber que vai consumir a minha energia e o meu tempo.', 'Sentir que vão exigir uma intimidade que eu não quero dar.'),
+        (6, 'Não saber direito com quem estarei nem o que vai acontecer.', 'Sentir que alguém ali quer me testar ou me controlar.'),
+        (7, 'Aparecer algo mais interessante.', 'Perceber que era eu me doando de novo e ninguém notando.'),
+    ], **EMO, opcional=True),
+    f2('f2m_03', 'Você quer muito uma coisa (viajar, mudar de emprego, se declarar). O que acontece?', [
+        (5, 'Convenço-me de que posso viver sem.', 'Fico desejando em silêncio, e quase ninguém fica sabendo.'),
+        (6, 'Fico pesando riscos e adiando.', 'Às vezes vou com tudo de uma vez, para não me deixar paralisar.'),
+        (7, 'Vou atrás. Adiar prazer é desperdício.', 'Seguro em nome de algo maior e fico com a sensação de estar perdendo a vida.'),
     ], **FIX),
-    f2('f2m_04', 'Como costuma ser a sua relação com quem tem autoridade sobre você?', [
-        (5, 'Mantenho distância, faço o necessário e preservo o meu espaço.',
-            'Respeito quem realmente sabe. O resto, ignoro em silêncio.'),
-        (6, 'Oscilo entre confiar e desconfiar, entre obedecer e me rebelar.',
-            'Testo e desafio. Se a autoridade não for coerente, eu enfrento.'),
-        (7, 'Não levo essa pessoa muito a sério. Uso o meu charme e continuo fazendo o que quero.',
-            'Sou prestativo e agradável, mas por dentro não aceito que ninguém esteja acima de mim.'),
+    f2('f2m_04', 'Seu chefe novo ainda não é alguém que você conhece. Como você age nos primeiros meses?', [
+        (5, 'Mantenho distância, entrego o combinado e preservo o meu espaço.', 'Só respeito de verdade se ele souber mais do que eu.'),
+        (6, 'Fico oscilando entre confiar e desconfiar dele.', 'Testo os limites dele desde cedo.'),
+        (7, 'Não levo tão a sério e sigo fazendo do meu jeito.', 'Sou prestativo e agradável, mas não aceito ninguém acima de mim.'),
     ], dominio='trabalho', **EMO),
-    f2('f2m_05', 'Qual destas frases poderia ser um lema seu, mesmo que você nunca a tenha dito em voz alta?', [
-        (5, '“Quanto menos eu precisar, mais livre eu sou.”', '“É melhor entender tudo antes de me envolver.”'),
-        (6, '“É melhor prevenir. Nunca se sabe em quem dá para confiar.”', '“Não posso baixar a guarda nem mostrar medo.”'),
-        (7, '“Sempre há um jeito e uma saída melhor.”', '“Se cada um fizer a sua parte, o mundo pode ser muito melhor.”'),
-    ], **FIX),
-    f2('f2m_06', 'Qual destas frases você assinaria com mais orgulho em público?', [
-        (5, '“Eu me basto e quase nunca peço nada a ninguém.”', '“Eu penso por conta própria e não sigo a manada.”'),
-        (6, '“Eu sou leal e responsável, e cumpro o que prometo.”', '“Eu não me intimido com ninguém.”'),
-        (7, '“Eu aproveito a vida e vejo o lado bom de tudo.”', '“Eu me dedico a causas e a pessoas sem esperar nada em troca.”'),
+    f2('f2m_05', 'Na sua casa, quando criança, o que dava segurança (ou o que faltava)?', [
+        (5, 'Eu tinha pouco espaço só meu, e sumir era a minha saída.', 'Eu preferia entender as pessoas de longe a lidar com elas.'),
+        (6, 'O clima mudava conforme o humor de alguém, e eu vivia atento.', 'Eu sentia que precisava ser forte, porque não dava para contar com ninguém.'),
+        (7, 'Faltou coisa, e eu aprendi cedo a me virar e a me divertir com pouco.',
+            'Eu era o que animava todo mundo quando a coisa apertava.'),
+    ], dominio='familia', eixo='fixacao', peso=1.5),
+    f2('f2m_06', 'Do que você tem orgulho, mesmo que nunca tenha falado em voz alta?', [
+        (5, 'De precisar de pouquíssimo e não pedir nada a ninguém.', 'De pensar por conta própria e não seguir a manada.'),
+        (6, 'De ser leal e cumprir o que prometo.', 'De não me intimidar com ninguém.'),
+        (7, 'De aproveitar a vida e ver o lado bom de tudo.', 'De me dedicar aos outros sem esperar nada.'),
     ], desej=True, desejavel_tipo=6, eixo='fixacao', peso=1.3),
-    f2('f2m_07', 'Quando você sente dor ou angústia, o que costuma fazer?', [
-        (5, 'Guardo para mim e tento entender o que sinto com certo distanciamento.',
-            'Me retiro e só volto quando já processei tudo sozinho.'),
-        (6, 'Fico pensando nos perigos e no que fazer para não ser pego desprevenido.',
-            'Endureço e sigo em frente, sem deixar ninguém ver que fui afetado.'),
-        (7, 'Mudo logo o foco para algo mais agradável. Não gosto de me demorar no que dói.',
-            'Me ocupo cuidando dos outros para não pensar na minha dor.'),
+    f2('f2m_07', 'Você recebeu uma notícia ruim de saúde na família. Como fica a sua semana?', [
+        (5, 'Fico quieto, resolvo o prático e processo sozinho.', 'Me afasto um pouco de todo mundo até dar conta daquilo.'),
+        (6, 'Já penso em todos os cenários e no que fazer em cada um.', 'Endureço, assumo o comando e não deixo ninguém ver que me abalou.'),
+        (7, 'Puxo o lado bom, faço piada, mantenho o clima leve.', 'Me ocupo cuidando de todo mundo e não paro para sentir.'),
+    ], dominio='familia', **FIX),
+    f2('f2m_12', 'Alguém te conta uma versão de uma história que não fecha. O que você faz?', [
+        (5, 'Guardo a dúvida e vou juntando informação sozinho.', 'Estudo o assunto até entender melhor do que a maioria.'),
+        (6, 'Procuro alguém confiável para saber em qual versão acreditar.', 'Confronto a pessoa até a explicação se sustentar.'),
+        (7, 'Fico com a versão mais leve e sigo em frente.', 'Encaixo aquilo numa ideia maior que faça sentido.'),
     ], **FIX),
-    f2('f2m_12', 'Quando algo não faz sentido para você, o que você faz?', [
-        (5, 'Eu me recolho para entender sozinho, no meu tempo, até tudo se encaixar.',
-            'Estudo a fundo até dominar o assunto melhor do que a maioria.'),
-        (6, 'Procuro uma fonte confiável que me ajude a saber em qual versão acreditar.',
-            'Questiono e confronto até alguém me dar uma explicação que se sustente.'),
-        (7, 'Encontro rapidamente uma explicação que me deixe otimista e livre para seguir em frente.',
-            'Ligo aquilo a uma ideia maior e mais bonita, que dê sentido ao que aconteceu.'),
-    ], **FIX),
-    f2('f2m_08', 'Como as pessoas próximas costumam descrever você?', [
-        (5, 'Reservado e independente, difícil de conhecer por completo.',
-            'Discreto, mas intenso com as pouquíssimas pessoas em quem confia.'),
-        (6, 'Leal e atento, alguém que se preocupa e leva as coisas a sério.',
-            'Firme e desafiador, alguém que não baixa a guarda.'),
-        (7, 'Animado e cheio de ideias, alguém que deixa o ambiente mais leve.',
-            'Prestativo e idealista, sempre disposto a ajudar em alguma causa.'),
-    ], dominio='amizade', **EMO),
-    f2('f2m_09', 'Nos relacionamentos amorosos, qual costuma ser o seu ponto cego?', [
-        (5, 'Recuar quando o outro se aproxima demais e manter um espaço onde ninguém entra.',
-            'Exigir uma confiança total e me fechar de vez quando ela é quebrada.'),
-        (6, 'Testar a lealdade da pessoa e procurar sinais de que não posso confiar nela.',
-            'Não baixar a guarda nem com quem eu amo, e separar desejo de entrega.'),
-        (7, 'Fugir para uma novidade quando a relação pede mais profundidade e constância.',
-            'Me encantar com a ideia do que a relação pode ser e me frustrar com o dia a dia.'),
+    f2('f2m_08', 'Um amigo vai te descrever para alguém que não te conhece. O que ele diz?', [
+        (5, 'Que sou reservado e difícil de conhecer por completo.', 'Que sou fechado, mas intenso com quem entra.'),
+        (6, 'Que sou leal e levo tudo a sério.', 'Que sou firme e não baixo a guarda.'),
+        (7, 'Que sou animado e cheio de ideias.', 'Que sou prestativo e idealista.'),
+    ], dominio='amizade', **EMO, opcional=True),
+    f2('f2m_09', 'A pessoa com quem você está quer mais proximidade do que você. O que você faz?', [
+        (5, 'Recuo e guardo um espaço onde ninguém entra.', 'Exijo transparência total e me fecho se ela quebrar isso.'),
+        (6, 'Testo a lealdade dela e procuro sinais de que vou me machucar.', 'Mantenho a guarda alta mesmo gostando muito.'),
+        (7, 'Busco novidade quando a coisa fica pesada.', 'Me apaixono pela ideia da relação e me frustro com o dia a dia.'),
     ], dominio='romance', **FIX),
-    f2('f2m_10', 'O que mais traz paz para você?', [
-        (5, 'Ter um tempo só meu, sem cobranças e sem ninguém me solicitando.',
-            'Ter poucos compromissos e ninguém dependendo de mim.'),
-        (6, 'Saber exatamente onde estou pisando, com quem posso contar e o que esperar.',
-            'Sentir que sou forte o bastante para enfrentar o que vier.'),
-        (7, 'Ter opções em aberto e alguma coisa boa pela frente.',
-            'Sentir que estou fazendo o bem e que as pessoas ao meu redor estão bem.'),
-    ], **EMO),
-    f2('f2m_11', 'Qual destes elogios mais emocionaria você?', [
-        (5, '“Você enxerga coisas que ninguém mais enxerga.”', '“Você tem uma mente brilhante.”'),
+    f2('f2m_10', 'Qual cena descreve melhor um dia tranquilo para você?', [
+        (5, 'Ninguém me cobrando nada e tempo de sobra.', 'Poucos compromissos e ninguém dependendo de mim.'),
+        (6, 'Tudo previsto, contas em dia, nada pendente.', 'Sentir que estou preparado para o que vier.'),
+        (7, 'Coisas boas marcadas para a semana.', 'Ver que as pessoas ao meu redor estão bem por algo que eu fiz.'),
+    ], **EMO, opcional=True),
+    f2('f2m_11', 'Qual destes elogios você lembraria anos depois?', [
+        (5, '“Você enxerga o que ninguém enxerga.”', '“Você tem uma mente brilhante.”'),
         (6, '“Você é a pessoa mais confiável que eu conheço.”', '“Você é corajoso, não tem medo de nada.”'),
-        (7, '“Do seu lado a vida fica mais leve e divertida.”', '“Você é uma pessoa boa, que pensa no coletivo.”'),
-    ], **FIX),
-    f2('f2m_13', 'Quando você sente medo de verdade, o que costuma fazer com ele?', [
-        (5, 'Me afasto e observo de longe até entender.',
-            'Diminuo as minhas necessidades para ficar menos exposto.'),
-        (6, 'Fico em alerta, confiro tudo e procuro apoio ou garantias.',
-            'Vou para cima do que me assusta. Prefiro atacar a ficar à mercê.'),
-        (7, 'Mudo de assunto por dentro e penso em algo empolgante.',
-            'Racionalizo e me convenço de que, no fim, tudo vai dar certo.'),
+        (7, '“Do seu lado a vida fica mais leve.”', '“Você é uma pessoa boa, que pensa no coletivo.”'),
+    ], **FIX, opcional=True),
+    f2('f2m_13', 'Você está sozinho em casa à noite e ouve um barulho estranho. O que faz?', [
+        (5, 'Fico parado, escutando, avaliando antes de qualquer coisa.', 'Tranco tudo e volto para o meu canto.'),
+        (6, 'Já imagino o pior e checo porta, janela, tudo.', 'Pego algo na mão e vou olhar de frente.'),
+        (7, 'Deve ser o vento. Volto para o que eu estava fazendo.', 'Racionalizo rápido e me convenço de que não é nada.'),
     ], **PAI),
 ]
 
-# Desempates intra-triade (mantidos, com ajustes de texto)
 DES_INST = [
-    item('f2id_89', 2, 'Um conhecido diz sobre outra pessoa: “Ela nunca se posiciona e desaparece quando a conversa fica tensa.” O que você sente ao ouvir isso?', [
-        (8, 'Um certo desprezo. Isso parece fraqueza, e você encararia a situação de frente.'),
-        (9, 'Compreensão. Muitas vezes, se afastar e evitar o atrito é a atitude mais sensata.'),
+    item('f2id_89', 2, 'Um conhecido diz de outra pessoa: “ela some quando a conversa fica tensa”. O que você pensa?', [
+        (8, 'Que é fraqueza. Eu encararia.'),
+        (9, 'Que às vezes sair de perto é o mais sensato.'),
     ], eixo='fixacao', peso=1.4, separa=[8, 9], indireto=True),
-    item('f2id_91', 2, 'Quando você vê algo malfeito ao seu redor, o que costuma fazer?', [
-        (9, 'Deixo para lá. Não é problema meu, e não vale a pena me desgastar.'),
-        (1, 'Aquilo me incomoda até ser corrigido, porque existe um jeito certo e aquilo está fora do lugar.'),
+    item('f2id_91', 2, 'Você vê um serviço malfeito na sua rua (um buraco, uma pintura torta). O que acontece?', [
+        (9, 'Reparo e sigo. Não é problema meu.'),
+        (1, 'Fico incomodado até alguém consertar. Aquilo está errado.'),
     ], eixo='fixacao', peso=1.4, separa=[9, 1]),
-    item('f2id_81', 2, 'Qual destas frases descreve melhor a sua relação com as regras?', [
-        (8, 'Se uma regra atrapalha o que eu quero, passo por cima dela sem culpa.'),
-        (1, 'Uma regra justa existe por um motivo. Quebrá-la me deixa desconfortável, mesmo quando ninguém vê.'),
+    item('f2id_81', 2, 'Você está com pressa e a placa diz para não estacionar ali. O que você faz?', [
+        (8, 'Estaciono. Se der multa, eu pago.'),
+        (1, 'Não estaciono, mesmo sem ninguém vendo. Ficaria mal comigo.'),
     ], eixo='fixacao', peso=1.4, separa=[8, 1]),
 ]
 DES_EMOC = [
-    item('f2ed_23', 2, 'Qual destas frases descreve você melhor?', [
-        (2, 'Eu me sinto valioso quando sou necessário ou especial para alguém.'),
-        (3, 'Eu me sinto valioso quando sou bem-sucedido ou eficiente aos olhos dos outros.'),
+    item('f2ed_23', 2, 'Você fez algo muito bem feito e ninguém percebeu. O que incomoda mais?', [
+        (2, 'Ninguém ter visto o quanto eu me dediquei àquelas pessoas.'),
+        (3, 'O resultado não ter sido reconhecido como meu.'),
     ], eixo='fixacao', peso=1.4, separa=[2, 3]),
-    item('f2ed_34', 2, 'Qual frase descreve melhor a relação que você tem com a sua própria imagem?', [
-        (3, 'Eu me identifico com a minha melhor versão e me esforço para mantê-la. No geral, me sinto bem comigo.'),
-        (4, 'Eu me identifico mais com o que me falta. Sinto que preciso lutar ou sofrer muito para ter o valor que os outros parecem ter naturalmente.'),
+    item('f2ed_34', 2, 'Você se olha no espelho num dia comum. O que costuma vir?', [
+        (3, 'Em geral, gosto do que vejo, e o que não está bom eu ajeito.'),
+        (4, 'Vejo primeiro o que falta, e isso parece mais fundo do que aparência.'),
     ], eixo='fixacao', peso=1.4, separa=[3, 4]),
-    item('f2ed_24', 2, 'Quando você sente carência afetiva, o que costuma fazer?', [
-        (2, 'Escondo o que sinto e me ocupo de cuidar dos outros, ou de encantá-los, para não parecer carente.'),
-        (4, 'A carência fica muito presente dentro de mim, seja como tristeza, seja como uma dureza para não depender de ninguém.'),
+    item('f2ed_24', 2, 'Você está carente e alguém pergunta se está tudo bem. O que você faz?', [
+        (2, 'Digo que sim e desvio cuidando da pessoa.'),
+        (4, 'Ou falo e vai fundo, ou endureço e digo que não preciso de nada.'),
     ], eixo='fixacao', peso=1.4, separa=[2, 4]),
 ]
 DES_MENT = [
-    item('f2md_56', 2, 'Qual destes impulsos é mais forte em você?', [
-        (5, 'O de me recolher e preservar o que é meu.'),
-        (6, 'O de buscar garantias, verificar se é seguro ou me antecipar ao perigo.'),
+    item('f2md_56', 2, 'Chegou uma conta alta e inesperada. Qual é o seu primeiro movimento?', [
+        (5, 'Corto gastos e passo a precisar de menos.'),
+        (6, 'Checo tudo, ligo, confirmo, procuro garantia.'),
     ], eixo='fixacao', peso=1.4, separa=[5, 6]),
-    item('f2md_67', 2, 'Quando sente medo, o que você tende a fazer?', [
-        (6, 'Encaro o medo: verifico tudo, tomo precauções ou, às vezes, parto para o ataque.'),
-        (7, 'Contorno o medo e desvio a atenção para algo mais leve e cheio de possibilidades.'),
+    item('f2md_67', 2, 'Você vai fazer algo que te dá medo (falar em público, uma consulta, uma conversa dura). O que faz?', [
+        (6, 'Me preparo demais, checo tudo, ou parto para cima antes que o medo cresça.'),
+        (7, 'Penso em outra coisa até a hora e levo na leveza.'),
     ], eixo='fixacao', peso=1.4, separa=[6, 7]),
-    item('f2md_57', 2, 'Quando se trata de precisar dos outros, o que é mais parecido com você?', [
-        (5, 'Reduzo as minhas necessidades ao mínimo para não depender de ninguém.'),
-        (7, 'Busco várias fontes de prazer e de contato para nunca ficar sem.'),
+    item('f2md_57', 2, 'Você está mal e precisaria de companhia. O que acontece?', [
+        (5, 'Não chamo ninguém. Resolvo sozinho.'),
+        (7, 'Chamo várias pessoas, ou saio, para não ficar naquilo.'),
     ], eixo='fixacao', peso=1.4, separa=[5, 7]),
 ]
 
-# ===========================================================================
-# FASE 2 CRUZADA: pares de tipos de triades diferentes que se confundem por
-# comportamento. Cada alternativa descreve a MOTIVACAO comum aos 3 subtipos.
-# ===========================================================================
 
-def cz(id_, a, b, cen, ta, tb):
-    return item(id_, 2, cen, [(a, ta), (b, tb)], eixo='fixacao', peso=1.4, separa=[a, b])
+# ===========================================================================
+# FASE 2 CRUZADA — pares de tipos de triades diferentes
+# ===========================================================================
+def cz(id_, a, b, cen, ta, tb, **kw):
+    return item(id_, 2, cen, [(a, ta), (b, tb)], eixo='fixacao', peso=1.4, separa=[a, b], **kw)
+
 
 CRUZ = [
-    # 8 x 6 (6 sexual / contrafobico)
-    cz('fx_86a', 8, 6, 'Depois de enfrentar alguém de forma dura, o que costuma acontecer dentro de você?',
-       'Pouca coisa. Fiz o que tinha que fazer e sigo em frente, sem culpa e sem dúvida.',
-       'Fico repassando a cena: se exagerei, se vão revidar, se eu tinha mesmo razão.'),
-    cz('fx_86b', 8, 6, 'O que está mais perto da sua experiência de coragem?',
-       'Não sinto que preciso ser corajoso. Simplesmente vou, porque quero e posso.',
-       'Coragem, para mim, é enfrentar uma tensão que existe por dentro, mesmo quando ninguém percebe.'),
-    cz('fx_86c', 8, 6, 'Quando alguém prejudica você de verdade, o que costuma acontecer?',
-       'Eu devolvo, de verdade. Não fica só na vontade.',
-       'Imagino muitas vezes como eu revidaria, mas na maioria das vezes isso fica na cabeça ou vira estratégia.'),
-    cz('fx_86d', 8, 6, 'Diante de uma autoridade nova, qual é a sua atitude interna?',
-       'Ela só tem valor para mim se eu a respeitar. Se não, ignoro ou enfrento.',
-       'Eu a testo: observo se é coerente e confiável antes de decidir se obedeço ou me rebelo.'),
-    # 8 x 4 (4 sexual e 4 autopreservacao)
-    cz('fx_84a', 8, 4, 'Quando você briga por algo que sente que é seu, o que mais move você?',
-       'Querer e poder. Se eu quero, vou buscar, e não fico me comparando com ninguém.',
-       'A sensação de injustiça por ter recebido menos do que mereço, e a dor de não ser reconhecido.'),
-    cz('fx_84b', 8, 4, 'Depois de uma explosão sua com alguém próximo, o que costuma vir?',
-       'Considero que a pessoa provocou e não fico me torturando.',
-       'Oscilo entre a raiva e o arrependimento, e muitas vezes termino me sentindo o monstro da história.'),
-    cz('fx_84c', 8, 4, 'Quando a vida aperta, você costuma aguentar firme sem pedir ajuda. Por quê?',
-       'Porque sou forte e não gosto de depender de ninguém.',
-       'Porque aprendi que ninguém ia me dar mesmo, e aguentar sem reclamar é o meu jeito de provar que tenho valor.'),
-    cz('fx_84d', 8, 4, 'Quando você vê alguém que tem algo que você queria, o que acontece?',
-       'Se eu quiser, vou atrás. Não gasto energia olhando para o outro.',
-       'Aquilo mexe comigo por dentro, como tristeza, como vontade de superar ou como vontade de desvalorizar a pessoa.'),
-    # 8 x 2 (2 sexual)
-    cz('fx_82a', 8, 2, 'Quando você protege ou ajuda alguém, o que está por trás?',
-       'Proteger os meus faz parte de ser forte. Não espero agradecimento.',
-       'Gosto de ser a pessoa indispensável, e me magoa quando isso não é reconhecido.'),
-    cz('fx_82b', 8, 2, 'Quando você quer muito uma pessoa, como costuma agir?',
-       'Vou direto, tomo a iniciativa e não faço rodeios.',
-       'Encanto, me faço especial e presente até a pessoa não conseguir ficar sem mim.'),
-    # 8 x 7 (7 autopreservacao)
-    cz('fx_87a', 8, 7, 'Qual é a sua relação com o que é pesado e doloroso?',
-       'Encaro de frente. A dor não me assusta, a fraqueza sim.',
-       'Encaro se precisar, mas o meu impulso natural é buscar algo prazeroso e manter o bom humor.'),
-    cz('fx_87b', 8, 7, 'Quando você vai com tudo em alguma coisa, o que move você?',
-       'A intensidade e o controle da situação.',
-       'A novidade e as possibilidades. Quando fica repetitivo, perco o interesse.'),
-    # 8 x 3 (3 social)
-    cz('fx_83a', 8, 3, 'Quando você compete, o que está em jogo para você?',
-       'O poder e não perder o que é meu. Pouco me importa o que vão pensar.',
-       'Ser visto como o melhor. O reconhecimento é parte essencial da vitória.'),
-    cz('fx_83b', 8, 3, 'Se tivesse que escolher, o que você preferiria?',
-       'Ser respeitado, mesmo que não gostem de mim.',
-       'Ser admirado e bem visto, ajustando a minha postura para isso.'),
-    # 1 x 3 (3 autopreservacao)
-    cz('fx_13a', 1, 3, 'Quando você faz algo com todo o cuidado, por que faz?',
-       'Porque é o certo. Mesmo que ninguém visse, eu veria.',
-       'Porque o resultado vai ser avaliado, e quero que ele fale bem de mim.'),
-    cz('fx_13b', 1, 3, 'Quando o seu trabalho recebe um elogio, o que acontece?',
-       'Fico bem, mas logo vejo o que ainda poderia ser melhor.',
-       'É um alívio e um combustível. É para isso que eu me esforço tanto.'),
-    # 1 x 6 (6 social)
-    cz('fx_16a', 1, 6, 'Por que você segue regras?',
-       'Porque acredito no que é correto, e me incomoda o que está fora do lugar.',
-       'Porque elas me dão segurança e evitam problemas ou punições.'),
-    cz('fx_16b', 1, 6, 'Quando você critica alguém, o que costuma estar por trás?',
-       'A certeza de que aquilo está errado e precisa ser corrigido.',
-       'A desconfiança da intenção ou da competência da pessoa.'),
-    # 1 x 4 (4 autopreservacao)
-    cz('fx_14a', 1, 4, 'Quando você se cobra demais, qual é o motivo mais profundo?',
-       'Existe um padrão certo, e eu preciso cumpri-lo.',
-       'Sinto que, sem um esforço extra, eu não teria valor suficiente.'),
-    cz('fx_14b', 1, 4, 'O que dói mais quando você falha?',
-       'Ter feito algo errado.',
-       'Confirmar que não sou tão bom quanto os outros.'),
-    # 1 x 7 (7 social)
-    cz('fx_17a', 1, 7, 'Quando você se sacrifica por uma causa ou por outras pessoas, o que move você?',
-       'É o certo a fazer, e me irrita quem não faz a sua parte.',
-       'Me faz sentir bem comigo e com os outros, e prefiro nem pensar no que isso me custa.'),
-    cz('fx_17b', 1, 7, 'Qual é a sua relação com o prazer?',
-       'Primeiro o dever. O prazer vem depois, se vier.',
-       'Até me contenho, mas sinto que mereço aproveitar e gosto de ter algo bom planejado.'),
-    # 9 x 6 (6 autopreservacao)
-    cz('fx_96a', 9, 6, 'Quando você evita um conflito, qual é o motivo mais verdadeiro?',
-       'O atrito me tira a paz. Prefiro deixar para lá e me acomodar.',
-       'Tenho medo das consequências e de perder o apoio de quem importa.'),
-    cz('fx_96b', 9, 6, 'Diante de uma decisão importante, por que você às vezes adia?',
-       'Porque é difícil saber o que eu mesmo quero.',
-       'Porque fico pesando riscos e buscando garantias ou alguém de confiança.'),
-    # 9 x 2 (9 social / 2)
-    cz('fx_92a', 9, 2, 'Quando você se dedica muito aos outros, o que acontece por dentro?',
-       'É meio automático. Me adapto ao que o outro precisa e me esqueço de mim sem perceber.',
-       'Sinto satisfação por ser importante para eles e, no fundo, espero algum reconhecimento.'),
-    cz('fx_92b', 9, 2, 'Se alguém não agradece o que você fez, o que você sente?',
-       'Quase nada. Logo esqueço.',
-       'Fico magoado, mesmo que não demonstre.'),
-    # 9 x 5 (5 autopreservacao / 9 autopreservacao)
-    cz('fx_95a', 9, 5, 'Quando você se recolhe, para que é?',
-       'Para descansar e ficar no conforto, sem pensar em nada muito sério.',
-       'Para ter espaço mental. É ali que eu penso e me reorganizo.'),
-    cz('fx_95b', 9, 5, 'Como você costuma estar com as pessoas?',
-       'Me misturo fácil e me adapto ao grupo, mesmo que eu mesmo desapareça.',
-       'Observo de fora e mantenho uma distância que me protege.'),
-    # 9 x 4 (9 sexual)
-    cz('fx_94a', 9, 4, 'Quando você sofre numa relação, o que fica mais presente?',
-       'Sinto mais a dor do outro do que a minha e tento não incomodar.',
-       'Sinto a minha dor com intensidade, e ela diz muito sobre quem eu sou.'),
-    cz('fx_94b', 9, 4, 'Sobre o que falta na sua vida, o que é mais verdadeiro?',
+    cz('fx_86a', 8, 6, 'Você acabou de bater de frente com alguém, em voz alta. Cinco minutos depois:',
+       'Já passou. Fiz o que tinha que fazer e sigo, sem culpa.',
+       'Fico repassando: se exagerei, se vão revidar, se eu tinha mesmo razão.'),
+    cz('fx_86b', 8, 6, 'Antes de encarar uma situação difícil, o que acontece no seu corpo?',
+       'Nada de especial. Eu vou, porque quero e posso.',
+       'Tem uma tensão antes, que eu não mostro para ninguém, e é contra ela que eu vou.'),
+    cz('fx_86c', 8, 6, 'Alguém te prejudicou de verdade. Seis meses depois, o que você fez a respeito?',
+       'Devolvi de algum jeito. Não ficou só na vontade.',
+       'Imaginei várias vezes como revidar, mas na prática ficou na cabeça.'),
+    cz('fx_86d', 8, 6, 'Chega um chefe novo, com fama de durão. Como você age na primeira semana?',
+       'Testo na prática: faço do meu jeito e vejo se ele vem.',
+       'Observo tudo: se ele é coerente, se cumpre o que diz, de quem ele é amigo.'),
+    cz('fx_84a', 8, 4, 'Você está brigando por algo que considera seu por direito. O que move a briga?',
+       'Eu quero, então vou buscar. Não fico me comparando com ninguém.',
+       'A injustiça de ter recebido menos, e a dor de não ser reconhecido.'),
+    cz('fx_84b', 8, 4, 'Você explodiu com alguém que ama. Como você está no dia seguinte?',
+       'Normal. A pessoa provocou, não fico me torturando.',
+       'Oscilando entre a raiva e a culpa, me sentindo o monstro da história.'),
+    cz('fx_84c', 8, 4, 'Você está sobrecarregado e não pede ajuda. Por quê?',
+       'Porque eu dou conta e não gosto de dever nada a ninguém.',
+       'Porque ninguém ia dar mesmo, e aguentar calado é a prova de que eu valho.'),
+    cz('fx_84d', 8, 4, 'Alguém do seu meio conquistou algo que você também queria. E aí?',
+       'Se eu quiser, vou atrás. Não gasto energia olhando para ele.',
+       'Mexe comigo: dá tristeza, vontade de superar, ou vontade de diminuir a conquista.'),
+    cz('fx_82a', 8, 2, 'Você ajudou muito alguém e essa pessoa não reconheceu. O que fica?',
+       'Nada. Eu protejo os meus, não faço por agradecimento.',
+       'Mágoa. Eu queria ser insubstituível para ela.'),
+    cz('fx_82b', 8, 2, 'Você quer muito uma pessoa. Como você age?',
+       'Vou direto e digo o que quero.',
+       'Encanto, fico presente e útil, até ela não conseguir ficar sem mim.'),
+    cz('fx_87a', 8, 7, 'Chegou uma notícia pesada. Qual é o seu primeiro movimento?',
+       'Encaro de frente. Dor não me assusta.',
+       'Encaro se precisar, mas meu impulso é aliviar o clima e pensar em outra coisa.'),
+    cz('fx_87b', 8, 7, 'Você está muito empolgado com um projeto. O que te empolga nele?',
+       'A intensidade e estar no comando.',
+       'A novidade. Quando vira rotina, eu perco o interesse.'),
+    cz('fx_83a', 8, 3, 'Você está competindo por uma vaga. O que está em jogo?',
+       'O poder e não perder o que considero meu. Pouco importa o que vão achar.',
+       'Ser visto como o melhor. O reconhecimento é metade da vitória.'),
+    cz('fx_83b', 8, 3, 'Você precisa escolher: respeitado ou querido. Qual você escolhe?',
+       'Respeitado, mesmo que não gostem de mim.',
+       'Bem visto, e ajusto o que for preciso para isso.'),
+    cz('fx_13a', 1, 3, 'Você caprichou num trabalho que ninguém vai ver. Por que caprichou?',
+       'Porque é o certo. Mesmo sem ninguém ver, eu veria.',
+       'Se ninguém vai ver, eu faço o suficiente e uso o tempo no que aparece.'),
+    cz('fx_13b', 1, 3, 'Seu trabalho recebeu um elogio público. O que acontece?',
+       'Fico bem, mas já vejo o que ainda poderia melhorar.',
+       'É alívio e combustível. É para isso que eu me esforço.'),
+    cz('fx_16a', 1, 6, 'Você segue uma regra mesmo quando ninguém está vendo. Por quê?',
+       'Porque é o certo, e o errado me incomoda.',
+       'Porque evita problema e eu não quero correr risco.'),
+    cz('fx_16b', 1, 6, 'Você criticou alguém na semana passada. O que estava por trás?',
+       'A pessoa fez errado e alguém precisava dizer.',
+       'Desconfiança: achei que ela não era confiável ou não dava conta.'),
+    cz('fx_14a', 1, 4, 'Você está se cobrando muito. O que a cobrança diz, em palavras?',
+       '“Tem um jeito certo e eu preciso cumprir.”',
+       '“Sem esforço extra, eu não valho nada.”'),
+    cz('fx_14b', 1, 4, 'Você errou feio em algo. O que dói mais?',
+       'Ter feito errado.',
+       'Ter confirmado que eu não sou tão bom quanto os outros.'),
+    cz('fx_17a', 1, 7, 'Você se voluntariou para uma tarefa chata que ninguém queria. Por quê?',
+       'Porque é o certo, e me irrita quem não faz a parte dele.',
+       'Porque fico bem com os outros e comigo, e nem penso no que isso me custa.'),
+    cz('fx_17b', 1, 7, 'Fim de semana livre e tarefa pendente. O que você faz?',
+       'Resolvo a tarefa primeiro. Prazer depois, se sobrar.',
+       'Aproveito primeiro. Mereço, e depois eu corro atrás.'),
+    cz('fx_96a', 9, 6, 'Você evitou uma conversa difícil esta semana. Por quê?',
+       'Porque atrito me tira a paz e eu prefiro deixar quieto.',
+       'Porque temi a reação da pessoa e as consequências.'),
+    cz('fx_96b', 9, 6, 'Uma decisão importante está parada com você. O que trava?',
+       'Não sei direito o que eu quero.',
+       'Fico pesando riscos e procurando garantia ou alguém que confirme.'),
+    cz('fx_92a', 9, 2, 'Você passou o fim de semana resolvendo problema dos outros. Como foi?',
+       'Nem percebi. Fui levando o que apareceu e esqueci de mim.',
+       'Gostei de ser necessário, e no fundo esperava um reconhecimento.'),
+    cz('fx_92b', 9, 2, 'Ninguém agradeceu. O que fica?',
+       'Quase nada. Já esqueci.',
+       'Uma mágoa que eu não falo.'),
+    cz('fx_95a', 9, 5, 'Você passou a noite sozinho em casa. O que fez?',
+       'Comi algo, vi TV, deixei o tempo passar.',
+       'Li, estudei, pensei. É ali que eu me reorganizo.'),
+    cz('fx_95b', 9, 5, 'Num grupo grande de pessoas, como você fica?',
+       'Me misturo e acompanho o clima, mesmo sem aparecer.',
+       'Fico à margem, observando, e vou embora antes.'),
+    cz('fx_94a', 9, 4, 'Alguém próximo está sofrendo. O que acontece com você?',
+       'Sinto a dor dele mais do que a minha e tento não atrapalhar.',
+       'A dor dele acende a minha, e eu sinto as duas com força.'),
+    cz('fx_94b', 9, 4, 'Falta algo importante na sua vida hoje. Como você lida?',
        'Me conformo. Poderia ser pior.',
-       'Aquilo que falta ocupa muito espaço dentro de mim.'),
-    # 9 x 3 (9 social / 3 autopreservacao)
-    cz('fx_93a', 9, 3, 'Quando você trabalha muito por um grupo, o que busca?',
-       'Participar e pertencer. Não faço questão de aparecer.',
-       'Que o resultado seja visto e ligado ao meu nome, mesmo que de forma discreta.'),
-    cz('fx_93b', 9, 3, 'Sobre o que você quer da vida, o que é mais verdadeiro?',
-       'Às vezes nem sei ao certo. Vou seguindo.',
-       'Tenho metas claras e fico inquieto quando não estou avançando.'),
-    # 2 x 7
-    cz('fx_27a', 2, 7, 'Quando você está em um grupo, o que mais gosta de ser?',
-       'A pessoa querida, que cuida e que todos procuram.',
-       'A pessoa que anima, traz ideias e faz o momento render.'),
-    cz('fx_27b', 2, 7, 'Quando alguém precisa muito de você por muito tempo, o que acontece?',
-       'Me sinto importante, mesmo cansado.',
-       'Começo a me sentir preso e busco um respiro.'),
-    # 2 x 4
-    cz('fx_24a', 2, 4, 'Quando você está carente, o que costuma fazer?',
-       'Escondo e cuido dos outros, para não parecer necessitado.',
-       'Sinto isso fundo, e de algum jeito isso aparece ou endurece em mim.'),
-    cz('fx_24b', 2, 4, 'Como você se vê, lá no fundo?',
+       'Essa falta ocupa muito espaço em mim.'),
+    cz('fx_93a', 9, 3, 'Você trabalhou muito por um grupo e o resultado foi bom. O que você quer?',
+       'Ver o grupo bem. Não faço questão de aparecer.',
+       'Que saibam que boa parte daquilo foi minha.'),
+    cz('fx_93b', 9, 3, 'Alguém te pergunta onde você quer estar em cinco anos. O que você responde?',
+       'Não sei bem. Vou levando.',
+       'Tenho metas claras e fico inquieto se não avanço.'),
+    cz('fx_27a', 2, 7, 'Numa mesa de dez pessoas, qual costuma ser o seu lugar?',
+       'Cuidando de alguém, puxando quem está de fora.',
+       'Contando história, animando, fazendo rir.'),
+    cz('fx_27b', 2, 7, 'Alguém depende muito de você há meses. Como você está?',
+       'Cansado, mas me sinto importante nisso.',
+       'Começando a me sentir preso e querendo espaço.'),
+    cz('fx_24a', 2, 4, 'Você está precisando de carinho. O que você faz?',
+       'Escondo e vou cuidar de alguém.',
+       'Fica evidente, ou eu endureço para não depender de ninguém.'),
+    cz('fx_24b', 2, 4, 'Em uma frase, como você se vê?',
        'Como alguém com muito a oferecer.',
        'Como alguém a quem falta algo que os outros têm.'),
-    # 2 x 6 (6 autopreservacao)
-    cz('fx_26a', 2, 6, 'Quando você é carinhoso com alguém, o que também está em jogo?',
-       'Ser especial e importante para aquela pessoa.',
-       'Sentir que estou seguro e protegido naquela relação.'),
-    cz('fx_26b', 2, 6, 'Quando uma relação esfria, o que você sente primeiro?',
+    cz('fx_26a', 2, 6, 'Você é muito carinhoso com uma pessoa específica. O que isso te dá?',
+       'Um lugar especial na vida dela.',
+       'Segurança. Com ela por perto eu fico mais protegido.'),
+    cz('fx_26b', 2, 6, 'Uma relação sua esfriou. Qual é o primeiro sentimento?',
        'Que não estão me dando o valor que eu mereço.',
-       'Medo de ficar sozinho e sem apoio.'),
-    # 3 x 7 (3 social)
-    cz('fx_37a', 3, 7, 'Quando você se ocupa com muitos projetos, por que faz isso?',
-       'Para chegar lá e ser reconhecido. Cada meta tem um propósito.',
-       'Porque tudo me interessa, e não quero perder nenhuma possibilidade.'),
-    cz('fx_37b', 3, 7, 'Se um projeto seu fracassa, o que acontece?',
-       'Dói na imagem, e já penso em como compensar.',
-       'Vejo como aprendizado e parto para outra ideia.'),
-    # 4 x 5 (5 sexual)
-    cz('fx_45a', 4, 5, 'Quando você fica sozinho por um bom tempo, o que sente?',
-       'A falta de conexão, com intensidade.',
-       'Alívio. Tenho comigo o que preciso.'),
-    cz('fx_45b', 4, 5, 'O que você faz com as suas emoções mais fortes?',
-       'Elas ocupam o centro da minha vida e eu as vivo por inteiro.',
-       'Mesmo quando são intensas, eu as guardo e só abro para alguém raro em quem confio totalmente.'),
-    # 4 x 6
-    cz('fx_46a', 4, 6, 'Quando você desconfia do carinho de alguém, por que é?',
-       'Porque sinto que não mereço, ou que vão me deixar como sempre.',
-       'Porque não sei quais são as reais intenções da pessoa.'),
-    cz('fx_46b', 4, 6, 'Em torno de que a sua inquietação costuma girar?',
-       'De não ser especial ou suficiente.',
-       'De perigos, perdas e de em quem confiar.'),
-    # 4 x 9 ja coberto em 9x4; 3 x 6
-    cz('fx_36a', 3, 6, 'Quando você trabalha além da conta, o que move você?',
-       'Mostrar resultado e ser visto como alguém que dá conta.',
-       'Garantir que nada vai dar errado e que ninguém vai poder me culpar.'),
-    # 5 x 1 (1 social)
-    cz('fx_15a', 1, 5, 'Quando você se distancia das pessoas, o que costuma estar por trás?',
-       'Um incômodo com o jeito errado como as coisas são feitas.',
-       'A necessidade de preservar o meu espaço e a minha energia.'),
+       'Medo de ficar sem apoio.'),
+    cz('fx_37a', 3, 7, 'Você tem cinco projetos ao mesmo tempo. Por quê?',
+       'Cada um me leva a algum lugar. Tudo tem propósito.',
+       'Porque tudo me interessa e eu não quero perder nada.'),
+    cz('fx_37b', 3, 7, 'Um deles fracassou publicamente. E aí?',
+       'Dói na imagem e já penso em como compensar.',
+       'Vejo como aprendizado e já estou em outra ideia.'),
+    cz('fx_45a', 4, 5, 'Você passou três dias sem falar com ninguém. Como foi?',
+       'Senti a falta de conexão com força.',
+       'Foi ótimo. Não senti falta.'),
+    cz('fx_45b', 4, 5, 'Você está sentindo algo muito forte. O que faz com isso?',
+       'Vivo por inteiro, e transborda de algum jeito.',
+       'Guardo. No máximo abro para uma pessoa em quem confio totalmente.'),
+    cz('fx_46a', 4, 6, 'Alguém está sendo muito carinhoso com você. O que passa na sua cabeça?',
+       'Que não mereço, ou que vai acabar como sempre acaba.',
+       'O que será que a pessoa quer de mim?'),
+    cz('fx_46b', 4, 6, 'De madrugada, sem sono, o que costuma estar na sua cabeça?',
+       'Alguma coisa em mim que não presta, ou algo que me falta.',
+       'Algo que pode dar errado, ou alguém em quem eu não deveria ter confiado.'),
+    cz('fx_36a', 3, 6, 'Você está trabalhando muito além da conta. Por quê?',
+       'Para mostrar resultado e ser visto como quem dá conta.',
+       'Para garantir que nada dê errado e ninguém possa me culpar.'),
+    cz('fx_15a', 1, 5, 'Você se afastou de um grupo recentemente. Por quê?',
+       'Porque o jeito como as coisas eram feitas ali me incomodava.',
+       'Porque estava consumindo a minha energia e o meu tempo.'),
 ]
 
-# ===========================================================================
-# FASE 3: instinto (neutro em relacao ao tipo). 3 alternativas, 1 por instinto.
-# ===========================================================================
-SP, SO, SX = 'autopreservacao', 'social', 'sexual'
 
+# ===========================================================================
+# FASE 3 — instinto (cenas concretas, neutras quanto ao tipo)
+# ===========================================================================
 def f3(id_, cen, sp, so, sx, **kw):
     return item(id_, 3, cen, [(SP, sp), (SO, so), (SX, sx)], **kw)
 
+
 F3 = [
-    f3('f3_01', 'Quando a vida fica difícil, para onde a sua atenção vai primeiro?',
-       'Para garantir o básico: sustento, casa, saúde e segurança.',
-       'Para as pessoas do meu meio: se ainda faço parte, qual é o meu papel ali.',
-       'Para uma pessoa específica, a quem me ligo por inteiro e em quem busco força.', eixo='paixao'),
-    f3('f3_02', 'Em que você gasta mais energia mental, muitas vezes sem perceber?',
-       'Prevendo o que pode faltar e cuidando das reservas, do conforto e do futuro.',
-       'Observando as relações no grupo, quem está próximo de quem e onde eu me encaixo.',
-       'Pensando em uma pessoa em particular e na química e intensidade dessa ligação.', eixo='fixacao', peso=1.3),
-    f3('f3_03', 'O que você teria mais dificuldade em perder?',
-       'A minha estabilidade e a minha segurança material.',
-       'O meu lugar entre as pessoas do meu convívio e a sensação de pertencer.',
-       'Aquela conexão única e intensa com a pessoa que mais mexe comigo.'),
-    f3('f3_04', 'Em um encontro com muitas pessoas, o que você costuma fazer?',
-       'Procurar um lugar confortável, poupar energia e ficar à vontade.',
-       'Circular, sentir o clima e perceber como os grupos estão formados.',
-       'Criar uma conexão forte com uma ou duas pessoas e esquecer o resto do ambiente.', dominio='amizade'),
-    f3('f3_05', 'Um amigo diz que você exagera em alguma área da vida. Qual crítica parece mais familiar?',
-       '“Você se preocupa demais com conforto e segurança, em ter tudo garantido.”',
-       '“Você se envolve demais com grupos, causas e com o que acontece no seu meio.”',
-       '“Você se entrega com intensidade demais a uma pessoa de cada vez.”', eixo='fixacao', peso=1.3, indireto=True),
-    f3('f3_06', 'No início de um relacionamento amoroso, o que mais pesa para você?',
-       'Se a relação é estável e cabe na minha vida sem ameaçar a minha segurança.',
-       'Se a pessoa se encaixa no meu mundo, com meus amigos, minha família e meus grupos.',
-       'A intensidade da atração e da entrega, sentir que estamos completamente envolvidos.', dominio='romance'),
-    f3('f3_07', 'Depois de um período difícil, qual é a sua forma preferida de recuperar as energias?',
-       'Ficar mais recolhido, cuidar do corpo, comer bem e ter uma rotina aconchegante.',
-       'Estar com o meu grupo, participar e sentir que faço parte de algo maior.',
-       'Estar intensamente envolvido com alguém ou com algo que me desperte por completo.'),
-    f3('f3_08', 'Qual destes exageros em outras pessoas você consegue entender com mais facilidade?',
-       'O de quem organiza a vida inteira em torno da segurança e de não deixar faltar nada.',
-       'O de quem vive para o grupo ou para uma causa, e precisa sentir que pertence.',
-       'O de quem se entrega completamente a uma única pessoa, numa relação que ocupa todo o resto.', eixo='fixacao', peso=1.3, indireto=True),
-    f3('f3_09', 'Quando você chega a um lugar novo, o que percebe primeiro?',
-       'Se é confortável e seguro: onde sentar, se está frio, se tem o que comer.',
-       'Quem é quem, como as pessoas se organizam e qual é o clima do grupo.',
-       'Quem me atrai ou desperta curiosidade, com quem sinto química.', eixo='paixao'),
-    f3('f3_10', 'Quando está bem, para onde a sua energia sobra?',
-       'Para cuidar da casa, do dinheiro, da saúde e do meu canto.',
-       'Para projetos coletivos, grupos, causas e conexões.',
-       'Para uma relação ou uma paixão que me absorve.'),
-    f3('f3_11', 'O que desperta mais ansiedade em você?',
-       'O básico faltar: dinheiro, saúde, casa.',
-       'Ficar de fora, sem lugar ou sem papel no meu meio.',
-       'Perder a pessoa, ou a paixão, que me dá vida, ou nunca encontrar essa conexão.', eixo='fixacao', peso=1.3),
-    f3('f3_12', 'Numa viagem com amigos, o que mais importa para você?',
-       'Conforto, organização, comida boa e dormir bem.',
-       'Que o grupo esteja integrado e que todos participem.',
-       'Os momentos intensos com uma ou duas pessoas especiais.', dominio='amizade'),
+    f3('f3_01', 'Você perdeu o emprego hoje. Qual é a primeira preocupação concreta?',
+       'As contas, o aluguel, quanto tempo a reserva dura.',
+       'Como contar para as pessoas do meu meio e o que vou virar sem esse papel.',
+       'Como isso afeta a pessoa mais importante para mim e o que ela vai pensar.', eixo='paixao'),
+    f3('f3_02', 'Em que a sua cabeça fica quando você está no chuveiro, sem querer pensar em nada?',
+       'No que falta em casa, em dinheiro, em saúde, no que preciso resolver.',
+       'Numa conversa do grupo, em quem falou o quê, no meu lugar ali.',
+       'Numa pessoa específica, no que ela disse, no que eu vou dizer.', eixo='fixacao', peso=1.3),
+    f3('f3_03', 'Você tem uma noite livre e energia. Onde ela vai?',
+       'Arrumo a casa, cozinho, cuido de mim, durmo cedo.',
+       'Chamo o grupo, vou a um encontro, respondo o que está parado.',
+       'Chamo aquela pessoa, ou mergulho em algo que me absorve por completo.'),
+    f3('f3_04', 'Numa festa com muita gente, onde você acaba?',
+       'Num canto confortável, perto da comida, poupando energia.',
+       'Circulando, sentindo quem é quem e onde eu me encaixo.',
+       'Numa conversa longa com uma pessoa só, esquecendo o resto.', dominio='amizade', opcional=True),
+    f3('f3_05', 'Um amigo íntimo diz que você exagera em alguma área. Qual crítica você já ouviu?',
+       '“Você se preocupa demais com segurança e com ter tudo garantido.”',
+       '“Você se importa demais com o grupo e com o seu lugar nele.”',
+       '“Você se joga inteiro em uma pessoa de cada vez.”', eixo='fixacao', peso=1.3, indireto=True),
+    f3('f3_06', 'Você começou a namorar. O que você checa primeiro, mesmo sem perceber?',
+       'Se a relação cabe na minha vida sem bagunçar minha rotina e meu bolso.',
+       'Como essa pessoa se encaixa com meus amigos e minha família.',
+       'Se tem química de verdade e se ela se entrega tanto quanto eu.', dominio='romance', opcional=True),
+    f3('f3_07', 'Você passou por semanas difíceis e finalmente tem um fim de semana. O que te recupera?',
+       'Casa, comida boa, sono, corpo em ordem.',
+       'Estar com o meu grupo, sentir que faço parte.',
+       'Estar grudado em alguém, ou mergulhado em algo que me acende.', opcional=True),
+    f3('f3_08', 'Qual exagero dos outros você entende mais facilmente?',
+       'Quem organiza a vida toda em torno de segurança e de não faltar nada.',
+       'Quem vive para o grupo ou para uma causa.',
+       'Quem se entrega inteiro a uma pessoa só.', eixo='fixacao', peso=1.3, indireto=True, opcional=True),
+    f3('f3_09', 'Você chega a um lugar novo. O que você repara primeiro, sem querer?',
+       'Se é confortável e seguro: onde sentar, se tem o que comer, como sair.',
+       'Quem é quem, quem manda, qual é o clima entre as pessoas.',
+       'Quem me chamou a atenção ali.', eixo='paixao'),
+    f3('f3_10', 'Você tem um dinheiro guardado que dá para uma escolha só. Qual você faz?',
+       'Reformo algo da casa ou reforço a reserva.',
+       'Financio uma viagem ou um evento com o meu grupo.',
+       'Uso com a pessoa que mais importa para mim, ou com o que me apaixona.', opcional=True),
+    f3('f3_11', 'O que faz você acordar de madrugada preocupado?',
+       'Dinheiro, saúde, casa, o básico faltando.',
+       'Ter ficado de fora, ter perdido meu lugar ou meu papel.',
+       'Uma pessoa. A relação, a distância, o que ela sente por mim.', eixo='fixacao', peso=1.3),
+    f3('f3_12', 'Numa viagem com amigos, o que faria a viagem dar errado para você?',
+       'Dormir mal, comer mal, ficar sem dinheiro no meio.',
+       'O grupo rachar ou eu ficar de fora das decisões.',
+       'Não ter nenhum momento intenso com ninguém, tudo morno.', dominio='amizade', opcional=True),
 ]
 F3_DES = [
-    item('f3d_as', 3, 'Se tivesse que escolher, o que traria mais paz para você?', [
-        (SP, 'Ter a vida material segura e a rotina sob controle, mesmo que um pouco isolado.'),
-        (SO, 'Ter um lugar sólido em um grupo ou comunidade, mesmo com menos conforto pessoal.'),
+    item('f3d_as', 3, 'Você tem que escolher entre duas ofertas de emprego. Qual argumento pesa mais?', [
+        (SP, 'Estabilidade, salário garantido e previsibilidade.'),
+        (SO, 'O time, o ambiente e o reconhecimento que a posição dá.'),
     ], eixo='fixacao', peso=1.4, separa=[SP, SO]),
-    item('f3d_sx', 3, 'Do que seria mais difícil abrir mão?', [
-        (SO, 'Do meu lugar no grupo e do papel que tenho entre as pessoas próximas.'),
-        (SX, 'Daquela conexão única e intensa com uma pessoa, que me faz sentir vivo.'),
+    item('f3d_sx', 3, 'Você só pode manter uma coisa: o seu grupo de amigos ou a sua relação mais intensa. Qual?', [
+        (SO, 'O grupo. Sem eles eu fico sem chão.'),
+        (SX, 'A relação. Sem ela nada tem graça.'),
     ], eixo='fixacao', peso=1.4, separa=[SO, SX]),
-    item('f3d_ax', 3, 'Em um momento de estresse extremo, onde você busca apoio?', [
-        (SP, 'No que é concreto e seguro. Eu me volto para o que garante o meu sustento e o meu conforto.'),
-        (SX, 'Em uma pessoa específica, a mais importante para mim. Fico o mais perto possível dela.'),
+    item('f3d_ax', 3, 'Você está em crise. Para onde você corre?', [
+        (SP, 'Para o concreto: dinheiro, casa, o que me sustenta.'),
+        (SX, 'Para a pessoa mais importante para mim. Quero ficar perto dela.'),
     ], eixo='fixacao', peso=1.4, separa=[SP, SX]),
 ]
 
+
 # ===========================================================================
-# FASE 4: confirmacao do subtipo DENTRO do tipo encontrado (Naranjo).
+# FASE 4 — subtipo dentro do tipo, em cenas
 # ===========================================================================
 def f4(tipo, n, cen, sp, so, sx):
     return item(f'f4_{tipo}{n}', 4, cen, [(SP, sp), (SO, so), (SX, sx)], eixo='fixacao', peso=1.4, tipo_alvo=tipo)
 
+
 F4 = {
- 1: [f4(1, 'a', 'A sua exigência de fazer o certo se volta principalmente para:',
-        'Mim mesmo. Me corrijo, me preocupo e antecipo problemas para que nada saia errado.',
-        'O ambiente e as pessoas em geral. Vejo o que está errado no mundo e sinto que tenho algo a ensinar.',
-        'Quem está perto de mim. Quero muito que o outro melhore, e cobro isso com intensidade.'),
-     f4(1, 'b', 'Como a sua raiva costuma aparecer?',
-        'Quase não aparece. Vira preocupação, pressa e autocrítica.',
-        'Aparece fria, como superioridade, crítica educada ou distância.',
-        'Aparece aberta e com força, porque sinto que tenho razão.'),
-     f4(1, 'c', 'Qual imagem você mais preserva?',
-        'A de alguém bom, prestativo e responsável.',
-        'A de alguém correto e exemplar, que sabe como as coisas devem ser.',
-        'A de alguém apaixonado pelo que é justo, que não tolera erro de quem ama.')],
- 2: [f4(2, 'a', 'O que você mais espera de quem você ama?',
-        'Ser mimado e ter um lugar de privilégio, como alguém especial.',
-        'Ser reconhecido como uma pessoa de referência, importante na vida de muitos.',
-        'Ser desejado e insubstituível para aquela pessoa.'),
-     f4(2, 'b', 'Como você costuma conquistar as pessoas?',
-        'Com doçura, leveza e um jeito meio de criança que desperta cuidado.',
-        'Com contatos, conselhos, influência e ajudas que abrem portas.',
-        'Com charme, intensidade e atenção total à pessoa.'),
-     f4(2, 'c', 'Quando não recebe o que esperava, o que acontece?',
-        'Me queixo, faço birra ou me sinto injustiçado depois de tudo o que fiz.',
-        'Me imponho a partir da minha posição e posso ser duro ou irônico.',
-        'Insisto, pressiono ou explodo, porque não aceito bem um não.')],
- 3: [f4(3, 'a', 'Como você quer ser visto?',
-        'Como alguém confiável e eficiente, sem parecer vaidoso.',
-        'Como alguém de sucesso e prestígio, que tem destaque.',
-        'Como alguém atraente e desejável, que agrada a quem ama.'),
-     f4(3, 'b', 'Onde você investe mais energia?',
-        'No trabalho e em deixar tudo resolvido e garantido.',
-        'Em crescer, aparecer e ser reconhecido no meu meio.',
-        'Na aparência e na relação, em ser o parceiro ideal.'),
-     f4(3, 'c', 'Qual é a sua relação com a vaidade?',
-        'Não gosto de me exibir. Prefiro que o reconhecimento venha sem eu pedir.',
-        'Gosto de mostrar o que conquistei. Para mim é natural.',
-        'Cuido muito da imagem, mas é mais para ser amado do que para ser admirado por muitos.')],
- 4: [f4(4, 'a', 'O que você faz com a sensação de falta?',
-        'Transformo em esforço: aguento, trabalho e não peço nada.',
-        'Sinto vergonha e tristeza, e me comparo muito com os outros.',
-        'Transformo em reivindicação: cobro, compito e às vezes ataco.'),
-     f4(4, 'b', 'Como você lida com o próprio sofrimento?',
-        'Aguento calado. Reclamar seria fraqueza.',
-        'Ele aparece: choro, lamento, espero que alguém perceba.',
-        'Vira raiva e drama. Faço o outro sentir o que eu sinto.'),
-     f4(4, 'c', 'Nas relações, o que é mais verdadeiro?',
-        'Cuido muito dos outros, mas tenho dificuldade de me deixar cuidar.',
-        'Tenho medo de não ser suficiente e acabo me escondendo.',
-        'Quero ser o preferido e compito por esse lugar.')],
- 5: [f4(5, 'a', 'Onde você se sente mais seguro?',
-        'No meu canto, com os meus recursos, longe de exigências.',
-        'No conhecimento, em saber mais sobre o que realmente importa.',
-        'Com aquela pessoa rara em quem confio totalmente.'),
-     f4(5, 'b', 'O que você mais protege?',
-        'O meu espaço físico, o meu tempo e as minhas coisas.',
-        'O meu lugar como alguém que sabe e entende.',
-        'A intimidade de uma ligação profunda e reservada.'),
-     f4(5, 'c', 'Qual é a sua maior idealização?',
-        'Precisar de pouquíssimo e ser autossuficiente.',
-        'Um saber, um mestre ou um ideal elevado.',
-        'Um amor ou uma amizade absolutamente transparente e confiável.')],
- 6: [f4(6, 'a', 'Como você costuma lidar com o medo?',
-        'Busco alguém forte e caloroso a quem me ligar, e evito conflitos.',
-        'Me apoio em regras, deveres e referências claras.',
-        'Enfrento e mostro força, para não parecer que tenho medo.'),
-     f4(6, 'b', 'Como é a sua relação com a autoridade?',
-        'Me apego a quem pode me proteger, mas tenho medo de ser rejeitado.',
-        'Respeito a autoridade das normas e sou rigoroso com quem não cumpre.',
-        'Desafio, testo e às vezes intimido.'),
-     f4(6, 'c', 'Nas relações, o que é mais verdadeiro?',
-        'Sou afetuoso e evito brigas a quase qualquer custo.',
-        'Sou leal e responsável, às vezes rígido.',
-        'Protejo os meus e mantenho a guarda alta, sem me entregar totalmente.')],
- 7: [f4(7, 'a', 'O que você mais busca?',
-        'Garantir bons prazeres e boas oportunidades para mim e para os meus.',
-        'Contribuir para algo maior e ser visto como alguém bom e generoso.',
-        'Viver encantado, com ideias e paixões que me empolguem.'),
-     f4(7, 'b', 'Qual é o seu jeito de ver o mundo?',
-        'Realista e esperto. Sei me virar.',
-        'Idealista. Acredito num mundo melhor e me dedico a ele.',
-        'Sonhador. Tudo parece possível e fascinante.'),
-     f4(7, 'c', 'Quando algo dói, o que você faz?',
-        'Busco um prazer concreto e me cerco do meu grupo.',
-        'Me ocupo servindo aos outros e adio o que eu quero.',
-        'Mergulho numa nova fantasia ou numa nova paixão.')],
- 8: [f4(8, 'a', 'Onde a sua força mais aparece?',
-        'Em garantir o que eu preciso, sem depender de ninguém.',
-        'Em proteger os meus amigos e o meu grupo.',
-        'Em ter o controle da relação e da pessoa que eu quero.'),
-     f4(8, 'b', 'O que mais enfurece você?',
-        'Alguém atrapalhando o meu sustento, o meu território ou as minhas coisas.',
-        'Alguém traindo ou machucando quem é dos meus.',
-        'Alguém tentando tirar de mim quem é meu, ou não se entregando.'),
-     f4(8, 'c', 'O que é prazer para você?',
-        'Conforto e satisfação concreta: comer bem, ter o que é meu.',
-        'Estar com a turma, na cumplicidade.',
-        'Intensidade e entrega total com alguém.')],
- 9: [f4(9, 'a', 'Como você costuma se esquecer de si?',
-        'Me distraio com conforto, comida, séries e rotina.',
-        'Me ocupo com o grupo e com o que é preciso fazer pelos outros.',
-        'Me fundo com a pessoa que amo, e os desejos dela viram os meus.'),
+ 1: [f4(1, 'a', 'Quando alguma coisa está errada, para onde vai a sua correção?',
+        'Para mim. Eu me cobro, me preocupo e tento prevenir tudo.',
+        'Para o mundo. Vejo o que está errado na sociedade e sinto que tenho o que ensinar.',
+        'Para quem está perto. Quero que a pessoa melhore, e cobro com intensidade.'),
+     f4(1, 'b', 'Alguém te vê irritado. O que essa pessoa vê?',
+        'Quase nada. Vira preocupação, pressa e cara fechada.',
+        'Frieza, distância e um comentário cortante.',
+        'Voz alta e indignação aberta.'),
+     f4(1, 'c', 'O que você não suportaria que dissessem de você?',
+        'Que você é irresponsável e não cuidou do que era seu.',
+        'Que você é vulgar, sem princípios ou mal-educado.',
+        'Que você é omisso e deixou passar o que era errado.')],
+ 2: [f4(2, 'a', 'Do que você mais sente falta quando está sozinho?',
+        'De alguém que cuide de mim e me mime.',
+        'Do movimento: gente me procurando, eventos, meu telefone tocando.',
+        'Daquela pessoa específica, do desejo dela por mim.'),
+     f4(2, 'b', 'Como você conquista alguém de quem gosta?',
+        'Com doçura e um jeito meio de criança que desperta cuidado.',
+        'Com contatos, conselhos e ajudas que abrem portas.',
+        'Com charme, presença e atenção total.'),
+     f4(2, 'c', 'Você pediu algo e a pessoa disse não. O que você faz?',
+        'Fico emburrado ou faço birra. Depois de tudo que eu fiz, era o mínimo.',
+        'Uso a minha posição para conseguir de outro jeito.',
+        'Insisto, pressiono ou explodo. Não aceito bem um não.')],
+ 3: [f4(3, 'a', 'Você vai a um evento importante da sua área. Qual é o seu objetivo ali?',
+        'Resolver o que precisa e sair com tudo encaminhado.',
+        'Ser visto pelas pessoas certas.',
+        'Estar impecável e causar boa impressão em quem me interessa.'),
+     f4(3, 'b', 'Onde você gasta mais energia hoje?',
+        'No trabalho e em deixar tudo garantido.',
+        'Em crescer, aparecer e subir no meu meio.',
+        'Na minha aparência e na minha relação.'),
+     f4(3, 'c', 'Alguém te chama de vaidoso. Qual é a sua reação?',
+        'Acho injusto. Eu nem ligo para aparecer.',
+        'Acho natural. Eu gosto de mostrar o que conquistei.',
+        'Me pega. Eu cuido muito da imagem, mas para ser amado, não para me exibir.')],
+ 4: [f4(4, 'a', 'Você está com aquela sensação de falta. O que você faz com ela?',
+        'Trabalho mais, aguento e não peço nada.',
+        'Me comparo, sinto vergonha e me recolho.',
+        'Cobro do outro, compito ou ataco.'),
+     f4(4, 'b', 'Quando você está sofrendo, o que as pessoas ao redor veem?',
+        'Nada. Eu aguento calado e sigo funcionando.',
+        'Tudo. Meu rosto, meu choro, o clima.',
+        'Raiva. Sobra para quem estiver perto.'),
+     f4(4, 'c', 'No amor, qual destas cenas é mais a sua?',
+        'Eu cuidando de tudo e não deixando ninguém cuidar de mim.',
+        'Eu com medo de não ser suficiente e me escondendo.',
+        'Eu disputando o lugar de preferido, com ciúme e cobrança.')],
+ 5: [f4(5, 'a', 'Você teve um dia muito exigente. O que te devolve ao normal?',
+        'Meu canto, minhas coisas, ninguém me pedindo nada.',
+        'Ler, estudar, entender algo que me interessa.',
+        'Conversar longamente com a única pessoa em quem confio.'),
+     f4(5, 'b', 'O que você menos empresta a alguém?',
+        'Minhas coisas, meu espaço, meu tempo.',
+        'O que eu sei e levei anos para juntar.',
+        'A minha intimidade, o que eu só conto para uma pessoa.'),
+     f4(5, 'c', 'Alguém quebra a sua confiança. O que acontece?',
+        'Me fecho e diminuo o contato até quase sumir.',
+        'Perco o respeito intelectual por essa pessoa.',
+        'Desabo por dentro. Era justamente a pessoa em quem eu confiava.')],
+ 6: [f4(6, 'a', 'Você está com medo de verdade. O que faz?',
+        'Procuro alguém forte e caloroso para ficar perto.',
+        'Sigo regra, protocolo, o que está previsto.',
+        'Enfrento primeiro, para ninguém ver o medo.'),
+     f4(6, 'b', 'Seu chefe cometeu um erro claro. O que você faz?',
+        'Não falo nada. Preciso da boa relação com ele.',
+        'Aponto o procedimento correto, sem atacar a pessoa.',
+        'Falo na cara, mesmo sabendo que vai dar problema.'),
+     f4(6, 'c', 'Como as pessoas costumam te ver?',
+        'Como alguém doce, que evita briga.',
+        'Como alguém sério, correto e às vezes rígido.',
+        'Como alguém forte, que não se intimida.')],
+ 7: [f4(7, 'a', 'Sobrou um dinheiro e você vai usar com prazer. Em quê?',
+        'Em algo concreto e bom para mim e para os meus: comida, casa, um agrado.',
+        'Em algo que envolva um grupo, uma causa, gente junto.',
+        'Em uma experiência nova que eu venho sonhando.'),
+     f4(7, 'b', 'Como as pessoas te descreveriam?',
+        'Esperto, prático, bom de se ter por perto.',
+        'Generoso, idealista, preocupado com os outros.',
+        'Sonhador, entusiasmado, cheio de planos.'),
+     f4(7, 'c', 'Alguma coisa te frustrou hoje. Para onde você vai?',
+        'Para um prazer concreto e para o meu círculo.',
+        'Para o serviço aos outros. Adio o que eu queria.',
+        'Para uma fantasia ou paixão nova.')],
+ 8: [f4(8, 'a', 'Em que situação a sua força mais aparece?',
+        'Garantindo o que é meu e não dependendo de ninguém.',
+        'Defendendo meus amigos e meu grupo.',
+        'Segurando a relação e a pessoa que eu quero por perto.'),
+     f4(8, 'b', 'O que te deixa fora de si?',
+        'Mexerem no meu sustento, no meu território, nas minhas coisas.',
+        'Traírem ou machucarem alguém dos meus.',
+        'Tentarem tirar de mim quem é meu, ou a pessoa não se entregar.'),
+     f4(8, 'c', 'Sexta à noite, dia difícil. O que é prazer?',
+        'Comida boa, minha casa, o que é meu.',
+        'A turma reunida, cumplicidade, bar cheio.',
+        'Intensidade com alguém, a noite inteira.')],
+ 9: [f4(9, 'a', 'Você tem duas horas livres e nada pendente. Como elas passam?',
+        'Comida, sofá, série, celular. Passam rápido.',
+        'Acabo resolvendo algo para alguém ou indo a algum encontro.',
+        'Fico perto de quem eu amo, mesmo sem fazer nada.'),
      f4(9, 'b', 'Onde você se sente em casa?',
         'Na minha rotina e nas minhas coisas.',
-        'Participando, fazendo parte de algo.',
-        'Bem perto de alguém especial.'),
-     f4(9, 'c', 'Como são os seus devaneios?',
-        'Práticos e concretos.',
-        'Giram em torno de pertencer e de ser útil.',
-        'Românticos e cheios de detalhes.')],
+        'Fazendo parte de algo, com gente ao redor.',
+        'Colado em uma pessoa específica.'),
+     f4(9, 'c', 'Quando você sonha acordado, com o que sonha?',
+        'Com coisas práticas: a casa, uma viagem, um conserto.',
+        'Com o grupo, um projeto coletivo, ser útil.',
+        'Com uma pessoa, uma cena romântica, detalhe por detalhe.')],
 }
 
 banco = {
     "_meta": {
-        "descricao": "Banco de perguntas do teste de eneagrama (versão proposta). Cenários indiretos de múltipla escolha.",
-        "principio_cobertura": "REGRA DE OURO (revisada): (1) na Fase 1, cada item tem EXATAMENTE uma alternativa por tipo, com o mesmo eixo e o mesmo peso, para que nenhum tipo tenha vantagem estrutural; (2) nas Fases 2 e 4, cada tipo tem o mesmo número de alternativas por item, e pelo menos uma delas descreve o subtipo menos parecido com o estereótipo do tipo (contratipo); (3) o enunciado fixa o comportamento e as alternativas variam a motivação, porque é a motivação que diferencia tipos de comportamento parecido; (4) toda pergunta oferece 'Nenhuma dessas se parece comigo', que não pontua e entra no índice de confiabilidade.",
-        "eixos": {"fixacao": "distorção cognitiva, peso maior", "paixao": "reação passional, sensível ao tempo", "emocao": "emoção reativa de base"},
+        "descricao": "Banco de perguntas do teste de eneagrama (v3, cenas concretas).",
+        "principio_cobertura": "REGRA DE OURO: (1) todo item e uma SITUACAO concreta, nao uma auto-avaliacao: a pessoa responde com uma lembranca ou uma reacao, nao com uma teoria sobre si mesma; (2) o enunciado fixa a situacao e as alternativas variam a motivacao; (3) na Fase 1 cada item tem exatamente uma alternativa por tipo, com o mesmo eixo e o mesmo peso; nas Fases 2 e 4 cada tipo tem o mesmo numero de alternativas, e uma delas e sempre do subtipo menos parecido com o estereotipo; (4) nenhuma alternativa pode ser respondida com 'depende': cada uma e uma resposta inteira; (5) toda pergunta oferece 'Nenhuma dessas se parece comigo', que nao pontua e entra no indice de confiabilidade.",
+        "infancia": "Os itens de infancia e de crenca formada seguem os capitulos de infancia dos livros de subtipos de Naranjo e a etiologia descrita em Caracter e neurose: a cena familiar concreta primeiro, a conclusao que a crianca tirou dela depois.",
+        "eixos": {"fixacao": "distorcao cognitiva, peso maior", "paixao": "reacao passional, sensivel ao tempo", "emocao": "emocao reativa de base"},
         "triades": {"instintiva": [8, 9, 1], "emocional": [2, 3, 4], "mental": [5, 6, 7]},
-        "instintos": ["autopreservacao", "social", "sexual"],
-        "fluxo": "Fase 1 pontua tríade E tipo. Fase 2 aplica os itens da tríade vencedora (e da segunda, se a margem for pequena) mais itens cruzados para os tipos de outras tríades que ficaram entre os 3 primeiros. Fase 3 pontua o instinto. Fase 4 confirma o subtipo com itens específicos do tipo encontrado.",
-        "nota_calibracao": "Pesos e limiares são heurísticas ajustáveis, não validadas por amostra. Sem travessões.",
+        "instintos": [SP, SO, SX],
+        "fluxo": "Fase 1 pontua triade E tipo. Fase 2 aplica os itens da triade vencedora (e das triades dos tipos fortes) mais itens cruzados. Fase 3 pontua o instinto. Fase 4 confirma o subtipo dentro do tipo encontrado.",
+        "itens_opcionais": "Itens marcados com 'opcional': true saem primeiro no modo curto (limites em FLUXO). Continuam no banco.",
+        "nota_calibracao": "Pesos e limiares sao heuristicas ajustaveis, nao validadas por amostra. Sem travessoes.",
     },
     "fase1": F1,
     "fase1_desempate": F1_DES,
@@ -986,33 +926,27 @@ def coleta(x):
         for v in x.values(): coleta(v)
 coleta(banco)
 ids = [i['id'] for i in todos]
-assert len(ids) == len(set(ids)), 'ids repetidos'
+assert len(ids) == len(set(ids)), [k for k, v in Counter(ids).items() if v > 1]
 for it in todos:
     txt = it['cenario'] + ''.join(a['texto'] for a in it['alternativas'])
     assert '—' not in txt and '–' not in txt, ('travessao', it['id'])
     ativos = [a for a in it['alternativas'] if not a.get('nula')]
     assert len({(a['eixo'], a['peso']) for a in ativos}) == 1, ('eixo/peso desigual', it['id'])
+    assert not any(a['texto'].lower().startswith('depende') for a in ativos), ('depende', it['id'])
 for it in F1:
     ts = sorted(a['mapa']['tipo'] for a in it['alternativas'] if not a.get('nula'))
     assert ts == list(range(1, 10)), it['id']
-from collections import Counter
 for tri, lst in banco['fase2'].items():
     for it in lst:
         c = Counter(a['mapa']['tipo'] for a in it['alternativas'] if not a.get('nula'))
         assert len(set(c.values())) == 1 and len(c) == 3, it['id']
-
-OPCIONAIS = ['f1_05', 'f1_09', 'f2e_02', 'f2e_04', 'f2e_10', 'f2e_11', 'f2i_08', 'f2i_09', 'f2i_10', 'f2i_13', 'f2m_02', 'f2m_08', 'f2m_10', 'f2m_11', 'f3_04', 'f3_06', 'f3_07', 'f3_08', 'f3_10', 'f3_12']
-for it in todos:
-    if it['id'] in OPCIONAIS:
-        it['opcional'] = True
-banco['_meta']['itens_opcionais'] = (
-    'Itens marcados com "opcional": true sao os primeiros a sair quando o fluxo esta no modo curto '
-    '(FLUXO.itensFase1 / maxItensTriadePrincipal / maxItensSegundaTriade / maxCruzadosTotal / itensFase3). '
-    'Eles continuam no banco e voltam a ser usados se os limites forem afrouxados.'
-)
+for t, lst in F4.items():
+    for it in lst:
+        ins = sorted(a['mapa']['instinto'] for a in it['alternativas'] if not a.get('nula'))
+        assert ins == [SP, SX, SO], it['id']
 
 out = sys.argv[1] if len(sys.argv) > 1 else 'questions.json'
 json.dump(banco, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
-print('ok', out, 'itens:', len(todos),
-      '| f1', len(F1), '| f2', sum(len(v) for v in banco['fase2'].values()),
-      '| cruz', len(CRUZ), '| f3', len(F3), '| f4', sum(len(v) for v in F4.values()))
+print('ok', out, 'itens:', len(todos), '| f1', len(F1), '| f2',
+      sum(len(v) for v in banco['fase2'].values()), '| cruz', len(CRUZ),
+      '| f3', len(F3), '| f4', sum(len(v) for v in F4.values()))
