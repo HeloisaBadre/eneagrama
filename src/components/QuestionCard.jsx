@@ -1,52 +1,70 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-
-// Embaralhamento Fisher-Yates (apresentacao apenas).
-function embaralhar(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
+import { useEffect, useRef, useState } from 'react';
+import { tempoDaResposta } from '../engine/navegacao.js';
 
 /**
- * Renderiza um item e captura SILENCIOSAMENTE o tempo de resposta:
- * do momento em que o cenario aparece ate o clique na alternativa.
- * Nenhuma pista visual de cronometragem (por design).
+ * Renderiza um item. Clicar numa alternativa so a marca (a pessoa pode trocar);
+ * "Avancar" confirma a resposta e so fica ativo com uma alternativa marcada.
+ * "Voltar" leva a pergunta anterior (desativado na primeira).
  *
- * A ORDEM das alternativas e aleatorizada a cada exibicao (por item.id), para
- * que a posicao nunca vire uma pista de categoria. A alternativa "nula"
+ * O tempo de resposta e capturado SILENCIOSAMENTE, do momento em que o cenario
+ * aparece ate o ultimo clique numa alternativa (ver tempoDaResposta para as
+ * perguntas revisitadas). Nenhuma pista visual de cronometragem (por design).
+ *
+ * A ordem das alternativas vem pronta do App (`alternativas`), aleatoria mas
+ * estavel por pergunta, para que a posicao nunca vire pista de categoria e para
+ * que a pessoa reencontre a mesma ordem ao voltar. A alternativa "nula"
  * ("Nenhuma dessas se parece comigo") fica sempre por ultimo, separada.
+ *
+ * O App recria este componente a cada pergunta (key = item.id), entao o estado
+ * sempre nasce limpo, ou com a resposta anterior marcada.
+ *
+ * @param respostaAnterior { altId, rtMs } se a pessoa ja respondeu esta pergunta
  */
-export default function QuestionCard({ item, onAnswer }) {
+export default function QuestionCard({ item, alternativas, respostaAnterior, onAvancar, onVoltar }) {
   const inicioRef = useRef(0);
-  const [selecionada, setSelecionada] = useState(null);
+  const rtSelecaoRef = useRef(null);
+  const [selecionada, setSelecionada] = useState(respostaAnterior ? respostaAnterior.altId : null);
+  const [enviando, setEnviando] = useState(false);
+  // Trava sincrona: dois cliques seguidos em "Avancar" chegam antes de o estado
+  // `enviando` ser aplicado, e o segundo nao pode confirmar nada.
+  const enviandoRef = useRef(false);
 
-  const alternativas = useMemo(() => embaralhar(item.alternativas.filter((a) => !a.nula)), [item.id]);
-  const nula = useMemo(() => item.alternativas.find((a) => a.nula) || null, [item.id]);
+  const nula = item.alternativas.find((a) => a.nula) || null;
 
+  // O cronometro comeca quando a pergunta aparece.
   useEffect(() => {
     inicioRef.current = performance.now();
-    setSelecionada(null);
-  }, [item.id]);
+  }, []);
 
-  function escolher(altId) {
-    if (selecionada) return; // evita duplo clique
-    const rtMs = Math.round(performance.now() - inicioRef.current);
+  function marcar(altId) {
+    if (enviandoRef.current) return;
+    rtSelecaoRef.current = Math.round(performance.now() - inicioRef.current);
     setSelecionada(altId);
-    setTimeout(() => onAnswer(altId, rtMs), 180);
+  }
+
+  function avancar() {
+    if (!selecionada || enviandoRef.current) return;
+    enviandoRef.current = true;
+    setEnviando(true);
+    const rtMs = tempoDaResposta({ anterior: respostaAnterior, altId: selecionada, rtSelecao: rtSelecaoRef.current });
+    onAvancar(item.id, selecionada, rtMs);
+  }
+
+  function voltar() {
+    if (enviandoRef.current || !onVoltar) return;
+    enviandoRef.current = true;
+    setEnviando(true);
+    onVoltar(item.id);
   }
 
   function botao(alt, extraStyle) {
     const ativa = selecionada === alt.id;
-    const cls = 'answer' + (ativa ? ' sel' : '') + (selecionada && !ativa ? ' dim' : '');
     return (
       <button
         key={alt.id}
-        onClick={() => escolher(alt.id)}
-        disabled={!!selecionada}
-        className={cls}
+        onClick={() => marcar(alt.id)}
+        className={'answer' + (ativa ? ' sel' : '')}
+        aria-pressed={ativa}
         style={extraStyle}
       >
         {alt.texto}
@@ -71,7 +89,7 @@ export default function QuestionCard({ item, onAnswer }) {
       </div>
 
       <p style={{ fontSize: 12, color: '#33536f', margin: '12px 2px 8px' }}>
-        Escolha a alternativa mais verdadeira para você, mesmo que não seja perfeita:
+        Escolha a alternativa mais verdadeira para você, mesmo que não seja perfeita, e clique em Avançar:
       </p>
 
       <div>{alternativas.map((alt) => botao(alt))}</div>
@@ -79,6 +97,20 @@ export default function QuestionCard({ item, onAnswer }) {
       {nula && (
         <div style={{ marginTop: 10 }}>{botao(nula, { opacity: 0.8, fontStyle: 'italic' })}</div>
       )}
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginTop: 16 }}>
+        <button onClick={voltar} disabled={!onVoltar || enviando} className="bevel-btn">
+          Voltar
+        </button>
+        <button
+          onClick={avancar}
+          disabled={!selecionada || enviando}
+          className="aqua-btn"
+          style={{ fontSize: 14, padding: '7px 26px' }}
+        >
+          Avançar
+        </button>
+      </div>
     </div>
   );
 }

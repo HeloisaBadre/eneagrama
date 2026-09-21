@@ -14,6 +14,11 @@ import Landing from './components/Landing.jsx';
 import QuestionCard from './components/QuestionCard.jsx';
 import ProgressBar from './components/ProgressBar.jsx';
 import Report from './components/Report.jsx';
+import { assinaturaBanco } from './engine/exportar.js';
+import { clonarEstado, ordemAleatoria } from './engine/navegacao.js';
+
+// Identifica a versao do banco no arquivo de respostas que a pessoa pode baixar.
+const ASSINATURA_BANCO = assinaturaBanco(banco);
 
 /**
  * Maquina de estados:
@@ -38,8 +43,19 @@ export default function App() {
   const [analise, setAnalise] = useState(null);
 
   const fluxo = useRef(null);
+  // Navegacao: copia do estado antes de cada resposta (para "Voltar"), a ultima
+  // resposta dada a cada pergunta (fica marcada ao revisitar) e a ordem das
+  // alternativas de cada pergunta (a mesma ao voltar).
+  const historico = useRef([]);
+  const respostasDadas = useRef(new Map());
+  const ordens = useRef(new Map());
+  const [podeVoltar, setPodeVoltar] = useState(false);
 
   function iniciar() {
+    historico.current = [];
+    respostasDadas.current = new Map();
+    ordens.current = new Map();
+    setPodeVoltar(false);
     fluxo.current = {
       faseKey: 'fase1',
       fila: itensFase1(banco), // itens da fase atual, na ordem de apresentacao
@@ -68,9 +84,36 @@ export default function App() {
     return Object.values(f.itens).flat();
   }
 
-  function aoResponder(altId, rtMs) {
+  function ordemDe(item) {
+    if (!ordens.current.has(item.id)) ordens.current.set(item.id, ordemAleatoria(item));
+    return ordens.current.get(item.id);
+  }
+
+  // Os dois recebem o id da pergunta exibida quando o botao foi clicado. Um clique
+  // que chega atrasado (a pergunta ja mudou) e ignorado, para nunca gravar uma
+  // resposta numa pergunta que a pessoa nao viu nem voltar duas vezes.
+  function naTela(itemId) {
+    const f = fluxo.current;
+    return !!f && f.fila[f.idx] && f.fila[f.idx].id === itemId;
+  }
+
+  function voltar(itemId) {
+    if (!naTela(itemId)) return;
+    const anterior = historico.current.pop();
+    if (!anterior) return;
+    fluxo.current = anterior;
+    setRespondidas((n) => Math.max(0, n - 1));
+    setPodeVoltar(historico.current.length > 0);
+    setItemAtual(anterior.fila[anterior.idx]);
+  }
+
+  function aoResponder(itemId, altId, rtMs) {
+    if (!naTela(itemId)) return;
+    historico.current.push(clonarEstado(fluxo.current));
+    setPodeVoltar(true);
     const f = fluxo.current;
     const item = f.fila[f.idx];
+    respostasDadas.current.set(item.id, { altId, rtMs });
     const b = balde(f, item);
     f.respostas[b].push({ itemId: item.id, altId, rtMs });
     if (!f.itens[b].some((i) => i.id === item.id)) f.itens[b].push(item);
@@ -218,12 +261,23 @@ export default function App() {
           <div className="win-body">
             {stage === 'landing' && <Landing onStart={iniciar} />}
 
-            {stage === 'quiz' && itemAtual && <QuestionCard item={itemAtual} onAnswer={aoResponder} />}
+            {stage === 'quiz' && itemAtual && (
+              <QuestionCard
+                key={itemAtual.id}
+                item={itemAtual}
+                alternativas={ordemDe(itemAtual)}
+                respostaAnterior={respostasDadas.current.get(itemAtual.id) || null}
+                onAvancar={aoResponder}
+                onVoltar={podeVoltar ? voltar : null}
+              />
+            )}
 
             {stage === 'report' && analise && (
               <Report
                 analise={analise}
                 itensPorId={itensPorId}
+                respostasPorFase={fluxo.current.respostas}
+                assinatura={ASSINATURA_BANCO}
                 onRestart={() => setStage('landing')}
               />
             )}

@@ -166,6 +166,7 @@ body {
   border-color: #6f6f6f #ffffff #ffffff #808080;
   background: linear-gradient(180deg, #d0d0d0, #ececec);
 }
+.bevel-btn:disabled { opacity: 0.5; cursor: default; }
 
 /* --- Alternativas (linhas clicáveis estilo lista do Finder) ------------- */
 .answer {

@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { triades, tipos, instintos, subtipos, rotulos } from '../data/results.js';
 import { TRIADE_DE } from '../engine/fluxo.js';
+import { montarRegistro } from '../engine/exportar.js';
 
 /**
  * Relatorio final (repintura retro; lógica de dados inalterada). Recebe:
  *  - analise: saida de analisarFinal()
  *  - itensPorId: mapa id->item para citar textos de respostas decisivas
+ *  - respostasPorFase, assinatura: para o arquivo de respostas opcional (secao 5)
  */
-export default function Report({ analise, itensPorId, onRestart }) {
+export default function Report({ analise, itensPorId, respostasPorFase, assinatura, onRestart }) {
   const { triade, tipo, instinto, confiabilidade } = analise;
   const tipoNum = tipo.top ? tipo.top.categoria : null;
   const triadeTriagem = triade.top ? triade.top.categoria : null;
@@ -222,6 +225,16 @@ export default function Report({ analise, itensPorId, onRestart }) {
         )}
       </Secao>
 
+      {/* 5. CONTRIBUIR (opcional) */}
+      {respostasPorFase && (
+        <Contribuir
+          analise={analise}
+          itensPorId={itensPorId}
+          respostasPorFase={respostasPorFase}
+          assinatura={assinatura}
+        />
+      )}
+
       <hr className="rule" />
       <p style={{ fontSize: 11.5, color: '#5a5a5a', marginTop: 0 }}>
         Lembrete: os pesos e limiares deste instrumento são heurísticas transparentes, não valores
@@ -250,6 +263,92 @@ function Secao({ numero, titulo, children }) {
         {children}
       </div>
     </div>
+  );
+}
+
+/**
+ * Arquivo de respostas anonimo, para validar o teste com pessoas ja tipadas.
+ * Nada e enviado: o arquivo e gerado no navegador e baixado pela propria pessoa.
+ */
+function Contribuir({ analise, itensPorId, respostasPorFase, assinatura }) {
+  const [tipo, setTipo] = useState('');
+  const [instinto, setInstinto] = useState('');
+  const [fonte, setFonte] = useState('');
+  const [baixado, setBaixado] = useState(false);
+
+  function baixar() {
+    const registro = montarRegistro({
+      respostasPorFase,
+      itensPorId,
+      analise,
+      assinatura,
+      conhecido: { tipo, instinto, fonte },
+    });
+    const blob = new Blob([JSON.stringify(registro, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eneatipo-respostas-${registro.data}-${Math.random().toString(36).slice(2, 6)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setBaixado(true);
+  }
+
+  const estiloCampo = { display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginTop: 8 };
+  const estiloRotulo = { width: 190, fontSize: 13 };
+  const estiloSelect = { fontSize: 13, padding: '3px 6px', maxWidth: '100%' };
+
+  return (
+    <Secao numero="5" titulo="Contribuir com a validação do teste (opcional)">
+      <p style={{ marginTop: 0, fontSize: 13 }}>
+        Este teste ainda está sendo validado. Para ajudar, baixe um arquivo com as suas respostas e
+        entregue a quem indicou o teste. O arquivo não tem nome nem dados pessoais, só as alternativas
+        escolhidas, o tempo de cada resposta e o resultado. Nada é enviado pela internet.
+      </p>
+      <p style={{ fontSize: 13 }}>
+        Se você já conhece o seu tipo por outro caminho, indique abaixo. É isso que permite medir se o
+        teste acerta.
+      </p>
+
+      <label style={estiloCampo}>
+        <span style={estiloRotulo}>Meu tipo, se já sei:</span>
+        <select value={tipo} onChange={(e) => setTipo(e.target.value)} style={estiloSelect}>
+          <option value="">Não sei</option>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+            <option key={n} value={n}>
+              Tipo {n}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label style={estiloCampo}>
+        <span style={estiloRotulo}>Meu instinto, se já sei:</span>
+        <select value={instinto} onChange={(e) => setInstinto(e.target.value)} style={estiloSelect}>
+          <option value="">Não sei</option>
+          <option value="autopreservacao">Autopreservação</option>
+          <option value="social">Social</option>
+          <option value="sexual">Sexual</option>
+        </select>
+      </label>
+      <label style={estiloCampo}>
+        <span style={estiloRotulo}>Como sei:</span>
+        <select value={fonte} onChange={(e) => setFonte(e.target.value)} style={estiloSelect} disabled={!tipo}>
+          <option value="">Prefiro não dizer</option>
+          <option value="entrevista">Entrevista com alguém que conhece o modelo</option>
+          <option value="outro-teste">Outro teste</option>
+          <option value="auto-observacao">Observação de mim mesmo</option>
+        </select>
+      </label>
+
+      <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <button onClick={baixar} className="aqua-btn" style={{ fontSize: 13, padding: '6px 18px' }}>
+          Baixar minhas respostas
+        </button>
+        {baixado && <span style={{ fontSize: 12, color: '#1c5c1c' }}>Arquivo gerado.</span>}
+      </div>
+    </Secao>
   );
 }
 
