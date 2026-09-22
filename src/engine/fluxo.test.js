@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import banco from '../data/questions.json';
 import { calcularContexto, pontuarPorTaxa, analisarFinal } from './scoring.js';
-import { resultadoFase1, planejarFase2, itensFase4, TRIADE_DE } from './fluxo.js';
+import { resultadoFase1, planejarFase2, itensFase4, parParaConfirmar, TRIADE_DE } from './fluxo.js';
 
 const RT = 1500;
 
@@ -161,9 +161,13 @@ describe('fluxo adaptativo', () => {
     const plano = planejarFase2(banco, res1);
     const cruzados = plano.itensCruzados;
     const triadeItens = plano.itensTriade;
-    // Na Fase 2 da triade instintiva ele so encontra 8/9/1 e escolhe 8;
-    // nos itens cruzados (motivacao) ele escolhe a alternativa do 6.
-    const r2 = responderPorTipo(triadeItens, 8);
+    // Na Fase 2: no bloco da triade mental ele escolhe o 6 (o proprio tipo esta ali);
+    // no bloco instintivo, onde nao ha 6, escolhe o 8. Nos cruzados, o 6.
+    const r2 = triadeItens.map((it) => {
+      const alts = it.alternativas.filter((a) => !a.nula);
+      const alvo = alts.find((a) => a.mapa.tipo === 6) || alts.find((a) => a.mapa.tipo === 8) || alts[0];
+      return { itemId: it.id, altId: alvo.id, rtMs: RT };
+    });
     const r2x = responderPorTipo(cruzados, 6);
     const f3 = banco.fase3;
     const r3 = responderPorInstinto(f3, 'sexual');
@@ -255,5 +259,76 @@ describe('candidatos da Fase 2', () => {
     const plano = planejarFase2(banco, res1);
     expect(plano.triades).toEqual(['emocional']);
     expect(plano.itensCruzados.length).toBe(0);
+  });
+});
+
+describe('decisao do tipo em duas etapas (confronto direto)', () => {
+  const RT_ = 1500;
+  const escolher = (it, pred) => {
+    const alvo = it.alternativas.find((a) => !a.nula && pred(a)) || it.alternativas.find((a) => a.nula);
+    return { itemId: it.id, altId: alvo.id, rtMs: RT_ };
+  };
+
+  it('um 5 que marca o mais proximo no bloco 8/9/1 continua 5, e tipo e triade concordam', () => {
+    // Fase 1: o 5 aparece mais que o 8 (os nove tipos estao em todos os itens).
+    const f1 = banco.fase1.slice(0, 12);
+    const plano5 = new Map([[0, 8], [1, 8], [4, 5], [5, 5], [7, 5], [9, 5], [2, 7], [3, 9], [6, 1], [8, 4], [10, 1], [11, 9]]);
+    const r1 = f1.map((it, i) => escolher(it, (a) => a.mapa.tipo === plano5.get(i)));
+    // Fase 2: bloco mental escolhendo 5; bloco instintivo (sem 5) marcando o 8 ou "nenhuma".
+    const mental = banco.fase2.mental.slice(0, 10);
+    const instintiva = banco.fase2.instintiva.slice(0, 5);
+    const r2 = [
+      ...mental.map((it) => escolher(it, (a) => a.mapa.tipo === 5)),
+      ...instintiva.map((it, i) => (i % 2 ? escolher(it, () => false) : escolher(it, (a) => a.mapa.tipo === 8))),
+    ];
+    const fim = analisarFinal({
+      fase1: { respostas: r1, itens: f1 },
+      fase2: { respostas: r2, itens: [...mental, ...instintiva] },
+      fase2x: { respostas: [], itens: [] },
+      fase3: { respostas: [], itens: [] },
+      fase4: { respostas: [], itens: [] },
+    });
+    expect(fim.tipo.top.categoria).toBe(5);
+    expect(TRIADE_DE[fim.tipo.top.categoria]).toBe('mental');
+    // O 8 ganhou o bloco instintivo, mas perde o confronto direto com o 5 na Fase 1.
+    expect(fim.tipo.confrontoFinal).toMatchObject({ escolhasA: expect.any(Number), escolhasB: expect.any(Number) });
+    const c = fim.tipo.confrontoFinal;
+    const [do5, do8] = c.a === 5 ? [c.escolhasA, c.escolhasB] : [c.escolhasB, c.escolhasA];
+    expect(do5).toBeGreaterThan(do8);
+  });
+
+  it('vencedor decidido sem pergunta cruzada contra o rival pede confirmacao', () => {
+    const prov = { top: { categoria: 5 }, ambiguo: false, confrontoFinal: { a: 5, b: 8, cruzados: 0 } };
+    expect(parParaConfirmar(prov)).toEqual([5, 8]);
+    expect(parParaConfirmar({ ...prov, confrontoFinal: { a: 5, b: 8, cruzados: 2 } })).toBeNull();
+  });
+
+  it('marcar "nenhuma dessas" na maioria das perguntas de subtipo do tipo encontrado vira alerta', () => {
+    const f4 = itensFase4(banco, [4]);
+    const r4 = f4.map((it, i) => (i < 2 ? escolher(it, () => false) : escolher(it, (a) => a.mapa.instinto === 'sexual')));
+    const f2 = banco.fase2.emocional;
+    const fim = analisarFinal({
+      fase1: { respostas: responderPorTipo(banco.fase1, 4), itens: banco.fase1 },
+      fase2: { respostas: responderPorTipo(f2, 4), itens: f2 },
+      fase2x: { respostas: [], itens: [] },
+      fase3: { respostas: [], itens: [] },
+      fase4: { respostas: r4, itens: f4 },
+    });
+    expect(fim.tipo.top.categoria).toBe(4);
+    expect(fim.confiabilidade.subtipoNaoReconhecido).toMatchObject({ tipo: 4, nulas: 2, total: 3 });
+    expect(fim.confiabilidade.notas.join(' ')).toMatch(/subtipo do tipo 4/);
+  });
+});
+
+describe('cobertura dos confrontos diretos', () => {
+  it('todo par de tipos de triades diferentes tem pelo menos um item cruzado', () => {
+    const cobertos = new Set(banco.fase2_cruzada.map((it) => [...it.separa].sort((a, b) => a - b).join('-')));
+    const faltando = [];
+    for (let a = 1; a <= 9; a++) {
+      for (let b = a + 1; b <= 9; b++) {
+        if (TRIADE_DE[a] !== TRIADE_DE[b] && !cobertos.has(`${a}-${b}`)) faltando.push(`${a}-${b}`);
+      }
+    }
+    expect(faltando).toEqual([]);
   });
 });

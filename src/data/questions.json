@@ -830,11 +830,11 @@
     {
       "id": "f1_07",
       "fase": 1,
-      "dominio": "trabalho",
+      "dominio": "geral",
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Seu chefe chama você para uma conversa e não diz o assunto. O que passa na sua cabeça no caminho até a sala?",
+      "cenario": "Alguém importante para você manda uma mensagem: “precisamos conversar”, sem dizer o assunto. O que passa na sua cabeça até a conversa?",
       "alternativas": [
         {
           "id": "a",
@@ -874,7 +874,7 @@
         },
         {
           "id": "d",
-          "texto": "Se for encrenca, eu encaro. Já entro pronto para não levar desaforo.",
+          "texto": "Se for encrenca, eu encaro. Já chego pronto para o que vier.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -910,7 +910,7 @@
         },
         {
           "id": "g",
-          "texto": "Penso em tudo o que já fiz por essa equipe. Seria injusto reclamarem de mim.",
+          "texto": "Penso em tudo o que já fiz por essa pessoa. Seria injusto ela reclamar de mim.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -934,7 +934,7 @@
         },
         {
           "id": "i",
-          "texto": "Provavelmente não é nada. Já estou pensando no que faço depois do expediente.",
+          "texto": "Provavelmente não é nada. Já estou pensando no que vou fazer depois.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -1358,11 +1358,11 @@
     {
       "id": "f1_11",
       "fase": 1,
-      "dominio": "trabalho",
+      "dominio": "amizade",
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Numa reunião, alguém critica seu trabalho na frente dos outros. O que acontece primeiro dentro de você?",
+      "cenario": "Numa roda de conversa, alguém critica uma coisa que você fez, na frente de todo mundo. O que acontece primeiro dentro de você?",
       "alternativas": [
         {
           "id": "a",
@@ -2047,11 +2047,11 @@
       {
         "id": "f2i_01",
         "fase": 2,
-        "dominio": "trabalho",
+        "dominio": "amizade",
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Um colega quebra, pela segunda vez, um combinado que tinha com você. O que você faz?",
+        "cenario": "Alguém próximo quebra, pela segunda vez, um combinado que tinha com você. O que você faz?",
         "alternativas": [
           {
             "id": "a",
@@ -2251,11 +2251,11 @@
       {
         "id": "f2i_03",
         "fase": 2,
-        "dominio": "trabalho",
+        "dominio": "geral",
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Uma regra no trabalho está atrapalhando algo que você precisa entregar. O que você faz?",
+        "cenario": "Uma regra sem sentido está atrapalhando uma coisa que você precisa resolver. O que você faz?",
         "alternativas": [
           {
             "id": "a",
@@ -2272,7 +2272,7 @@
           },
           {
             "id": "b",
-            "texto": "Enfrento quem criou a regra, principalmente se ela estiver prejudicando a minha equipe.",
+            "texto": "Enfrento quem criou a regra, principalmente se ela estiver prejudicando gente do meu lado.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -2298,7 +2298,7 @@
           },
           {
             "id": "d",
-            "texto": "Não discuto, mas vou empurrando com a barriga até ninguém cobrar.",
+            "texto": "Não discuto, mas vou adiando até ninguém mais cobrar.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -2659,11 +2659,11 @@
       {
         "id": "f2i_12",
         "fase": 2,
-        "dominio": "trabalho",
+        "dominio": "amizade",
         "par_gemeo_id": "gemeo_conflito_intensidade",
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Em um conflito no trabalho, com gente olhando, o que você faz?",
+        "cenario": "Numa discussão com conhecidos, com outras pessoas olhando, o que você faz?",
         "alternativas": [
           {
             "id": "a",
@@ -2680,7 +2680,7 @@
           },
           {
             "id": "b",
-            "texto": "Defendo a minha equipe e deixo claro que quem mexer com ela lida comigo.",
+            "texto": "Defendo quem está do meu lado e deixo claro que quem mexer com eles lida comigo.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -2719,7 +2719,7 @@
           },
           {
             "id": "e",
-            "texto": "Mantenho a compostura e defendo o procedimento correto.",
+            "texto": "Mantenho a compostura e defendo o que é correto.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 1,
@@ -3476,7 +3476,7 @@
       {
         "id": "f2i_15",
         "fase": 2,
-        "dominio": "trabalho",
+        "dominio": "amizade",
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
@@ -4193,11 +4193,11 @@
       {
         "id": "f2e_05",
         "fase": 2,
-        "dominio": "trabalho",
+        "dominio": "geral",
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Você entregou um trabalho e não era o que esperavam. O que vem primeiro?",
+        "cenario": "Você fez uma coisa com cuidado para alguém, e não era o que a pessoa esperava. O que vem primeiro?",
         "alternativas": [
           {
             "id": "a",
@@ -4240,7 +4240,7 @@
           },
           {
             "id": "d",
-            "texto": "Vontade de trabalhar o dobro, calado, até ninguém ter o que dizer.",
+            "texto": "Vontade de me esforçar o dobro, calado, até ninguém ter o que dizer.",
             "mapa": {
               "triade": "emocional",
               "tipo": 3,
@@ -5829,15 +5829,15 @@
       {
         "id": "f2m_04",
         "fase": 2,
-        "dominio": "trabalho",
+        "dominio": "geral",
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Seu chefe novo ainda não é alguém que você conhece. Como você age nos primeiros meses?",
+        "cenario": "Alguém novo passa a ter autoridade sobre você (um professor, um chefe, um coordenador). Como você age no começo?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Mantenho distância, entrego o combinado e preservo o meu espaço.",
+            "texto": "Mantenho distância, faço o que me cabe e preservo o meu espaço.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -5850,7 +5850,7 @@
           },
           {
             "id": "b",
-            "texto": "Só respeito de verdade se ele souber mais do que eu.",
+            "texto": "Só respeito de verdade se a pessoa souber mais do que eu.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -5863,7 +5863,7 @@
           },
           {
             "id": "c",
-            "texto": "Fico oscilando entre confiar e desconfiar dele.",
+            "texto": "Fico oscilando entre confiar e desconfiar dela.",
             "mapa": {
               "triade": "mental",
               "tipo": 6,
@@ -5876,7 +5876,7 @@
           },
           {
             "id": "d",
-            "texto": "Testo os limites dele desde cedo.",
+            "texto": "Testo os limites dessa pessoa desde cedo.",
             "mapa": {
               "triade": "mental",
               "tipo": 6,
@@ -6852,7 +6852,7 @@
       {
         "id": "f2m_14",
         "fase": 2,
-        "dominio": "trabalho",
+        "dominio": "geral",
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
@@ -7797,11 +7797,11 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Chega um chefe novo, com fama de durão. Como você age na primeira semana?",
+      "cenario": "Chega alguém com autoridade sobre você e fama de durão. Como você age na primeira semana?",
       "alternativas": [
         {
           "id": "a",
-          "texto": "Testo na prática: faço do meu jeito e vejo se ele vem.",
+          "texto": "Testo na prática: faço do meu jeito e vejo se a pessoa reage.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -7813,7 +7813,7 @@
         },
         {
           "id": "b",
-          "texto": "Observo tudo: se ele é coerente, se cumpre o que diz, de quem ele é amigo.",
+          "texto": "Observo tudo: se é coerente, se cumpre o que diz, com quem se alia.",
           "mapa": {
             "triade": "mental",
             "tipo": 6,
@@ -8369,11 +8369,11 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você caprichou num trabalho que ninguém vai ver. Por que caprichou?",
+      "cenario": "Você está fazendo uma coisa que ninguém vai ver. Quanto capricho você coloca?",
       "alternativas": [
         {
           "id": "a",
-          "texto": "Porque é o certo. Mesmo sem ninguém ver, eu veria.",
+          "texto": "Todo. É o certo, e mesmo sem ninguém ver, eu veria.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -8385,7 +8385,7 @@
         },
         {
           "id": "b",
-          "texto": "Se ninguém vai ver, eu faço o suficiente e uso o tempo no que aparece.",
+          "texto": "O suficiente. Guardo o esforço para o que vai aparecer.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -8421,7 +8421,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Seu trabalho recebeu um elogio público. O que acontece?",
+      "cenario": "Uma coisa que você fez recebeu um elogio na frente de todos. O que acontece?",
       "alternativas": [
         {
           "id": "a",
@@ -8997,7 +8997,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Comi algo, vi TV, deixei o tempo passar.",
+          "texto": "Deixei a noite passar sem perceber, e no fim nem sei direito o que fiz.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 9,
@@ -9009,7 +9009,7 @@
         },
         {
           "id": "b",
-          "texto": "Li, estudei, pensei. É ali que eu me reorganizo.",
+          "texto": "Aproveitei para ficar comigo, sem ninguém pedindo nada. É assim que eu recupero a energia.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -9049,7 +9049,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Me misturo e acompanho o clima, mesmo sem aparecer.",
+          "texto": "Vou no embalo do grupo, sem esforço, quase esquecendo de mim.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 9,
@@ -9061,7 +9061,7 @@
         },
         {
           "id": "b",
-          "texto": "Fico à margem, observando, e vou embora antes.",
+          "texto": "Mesmo participando, fico à parte por dentro, guardando energia, e saio assim que dá.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -9201,7 +9201,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você trabalhou muito por um grupo e o resultado foi bom. O que você quer?",
+      "cenario": "Você se dedicou muito a uma coisa de um grupo (uma festa, uma viagem, um evento), e deu certo. O que você quer?",
       "alternativas": [
         {
           "id": "a",
@@ -9617,11 +9617,11 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você tem cinco projetos ao mesmo tempo. Por quê?",
+      "cenario": "Você está com várias coisas começadas ao mesmo tempo. Por quê?",
       "alternativas": [
         {
           "id": "a",
-          "texto": "Cada um me leva a algum lugar. Tudo tem propósito.",
+          "texto": "Cada uma me leva a algum lugar. Tudo tem propósito.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -10033,7 +10033,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Um projeto prático precisa sair do papel esta semana. Como você se sai?",
+      "cenario": "Uma coisa prática precisa ficar pronta esta semana (uma mudança, uma festa, um conserto). Como você se sai?",
       "alternativas": [
         {
           "id": "a",
@@ -10085,11 +10085,11 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você precisa falar de um trabalho seu na frente de gente que não conhece. E aí?",
+      "cenario": "Você precisa se apresentar e falar de si para um grupo de desconhecidos. E aí?",
       "alternativas": [
         {
           "id": "a",
-          "texto": "Eu me apresento bem. Sei como me vender.",
+          "texto": "Eu me apresento bem. Sei causar boa impressão.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -10101,7 +10101,7 @@
         },
         {
           "id": "b",
-          "texto": "Evito. Se der para mandar por escrito, melhor.",
+          "texto": "Evito. Se desse para mandar por escrito, seria melhor.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -10545,6 +10545,318 @@
         9,
         5
       ]
+    },
+    {
+      "id": "fx_58a",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Você quer muito uma coisa que depende de outra pessoa liberar. O que você faz?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Prefiro abrir mão, ou dar um jeito sozinho, a ter que pedir e depender.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 5,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Vou atrás e pressiono até conseguir. Se eu quero, eu tomo a frente.",
+          "mapa": {
+            "triade": "instintiva",
+            "tipo": 8,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        5,
+        8
+      ]
+    },
+    {
+      "id": "fx_58b",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Alguém próximo passa de um limite seu. O que acontece dentro de você?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Eu me recolho. Fecho a porta por dentro e passo a dar menos de mim para essa pessoa.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 5,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Eu cresço para cima. A resposta sai na hora, e a pessoa percebe que passou do ponto.",
+          "mapa": {
+            "triade": "instintiva",
+            "tipo": 8,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        5,
+        8
+      ]
+    },
+    {
+      "id": "fx_12a",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Um amigo pede um favor que atrapalha os seus planos. O que pesa na sua decisão?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Se é certo ajudar. Se eu prometi ou se é justo, eu faço, mesmo sem vontade.",
+          "mapa": {
+            "triade": "instintiva",
+            "tipo": 1,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "O que ele vai sentir por mim. Não quero que pense que eu falhei com ele.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 2,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "fx_12b",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Você fez uma coisa muito bem feita, e ninguém comentou. O que fica?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Fico revendo se estava mesmo bom, ou se tinha algum defeito que eu não vi.",
+          "mapa": {
+            "triade": "instintiva",
+            "tipo": 1,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Uma pontada. Eu queria que tivessem percebido o quanto eu me dediquei.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 2,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "fx_25a",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Um amigo está passando por um momento difícil. O que você faz?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Fico perto, ligo, levo alguma coisa, me faço presente, mesmo que ele não tenha pedido.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 2,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Ofereço o que posso de longe e respeito o espaço dele, como gostaria que respeitassem o meu.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 5,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        2,
+        5
+      ]
+    },
+    {
+      "id": "fx_25b",
+      "fase": 2,
+      "dominio": "geral",
+      "par_gemeo_id": null,
+      "indireto": false,
+      "flag_desejabilidade_social": false,
+      "cenario": "Numa festa, alguém que você mal conhece começa a contar a vida inteira para você. Como você fica?",
+      "alternativas": [
+        {
+          "id": "a",
+          "texto": "Gosto. Me sinto especial por ter sido escolhido para ouvir.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 2,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "b",
+          "texto": "Fico incomodado. Aquilo é mais proximidade do que eu queria dar.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 5,
+            "instinto": null
+          },
+          "eixo": "fixacao",
+          "peso": 1.4,
+          "desejavel": false
+        },
+        {
+          "id": "z",
+          "texto": "Nenhuma dessas se parece comigo.",
+          "nula": true,
+          "mapa": {
+            "triade": null,
+            "tipo": null,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 0,
+          "desejavel": false
+        }
+      ],
+      "separa": [
+        2,
+        5
+      ]
     }
   ],
   "fase3": [
@@ -10559,7 +10871,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Garantir alguma coisa com ela: guardar, resolver uma pendência, cuidar da casa.",
+          "texto": "Pensar no que ela resolve na minha vida e deixar as coisas mais seguras.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -10571,7 +10883,7 @@
         },
         {
           "id": "b",
-          "texto": "Contar para o meu grupo e pensar no que muda no meu lugar ali.",
+          "texto": "Dividir com as pessoas do meu meio e ver o que isso muda para nós.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -10583,7 +10895,7 @@
         },
         {
           "id": "c",
-          "texto": "Correr para contar para a pessoa mais importante para mim.",
+          "texto": "Me jogar de cabeça: contar para a pessoa que mais importa, ou mergulhar no que essa notícia abre.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -10619,7 +10931,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "No que falta em casa, em dinheiro, em saúde, no que preciso resolver.",
+          "texto": "No que eu preciso resolver para ficar tranquilo: contas, saúde, as coisas da casa.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -10643,7 +10955,7 @@
         },
         {
           "id": "c",
-          "texto": "Numa pessoa específica, no que ela disse, no que eu vou dizer.",
+          "texto": "Numa pessoa ou numa ideia que me fisgou, repassando cada detalhe.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -10824,7 +11136,7 @@
         },
         {
           "id": "c",
-          "texto": "“Você se joga inteiro em uma pessoa de cada vez.”",
+          "texto": "“Você se joga inteiro numa coisa só, uma pessoa ou uma paixão, e o resto some.”",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -10945,7 +11257,7 @@
         },
         {
           "id": "c",
-          "texto": "Estar grudado em alguém, ou mergulhado em algo que me acende.",
+          "texto": "Estar bem perto de alguém, ou mergulhado em algo que me acende.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11006,7 +11318,7 @@
         },
         {
           "id": "c",
-          "texto": "Quem se entrega inteiro a uma pessoa só.",
+          "texto": "Quem se entrega inteiro a uma pessoa ou a uma paixão, e esquece o resto.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11067,7 +11379,7 @@
         },
         {
           "id": "c",
-          "texto": "Quem me chamou a atenção ali.",
+          "texto": "Quem ou o que me atrai de imediato ali. A minha atenção vai sozinha para lá.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11188,7 +11500,7 @@
         },
         {
           "id": "c",
-          "texto": "Uma pessoa. A relação, a distância, o que ela sente por mim.",
+          "texto": "A intensidade que eu posso perder: uma relação, ou aquilo em que estou mergulhado de corpo e alma.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11248,7 +11560,7 @@
         },
         {
           "id": "c",
-          "texto": "Não ter nenhum momento intenso com ninguém, tudo morno.",
+          "texto": "Tudo morno: nenhum momento, conversa ou experiência que me pegasse de verdade.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11283,11 +11595,11 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você tem que escolher entre duas ofertas de emprego. Qual argumento pesa mais?",
+      "cenario": "Você vai se mudar e tem duas opções de lugar. Qual argumento pesa mais?",
       "alternativas": [
         {
           "id": "a",
-          "texto": "Estabilidade, salário garantido e previsibilidade.",
+          "texto": "Segurança, conforto e contas que eu consigo manter.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11299,7 +11611,7 @@
         },
         {
           "id": "b",
-          "texto": "O time, o ambiente e o lugar que eu ocupo no grupo.",
+          "texto": "Ficar perto das pessoas e do grupo de que eu faço parte.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11335,11 +11647,11 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você só pode manter uma coisa: o seu grupo de amigos ou a sua relação mais intensa. Qual?",
+      "cenario": "Você só pode manter uma coisa: o seu grupo, ou aquilo que mais acende você (uma pessoa, uma paixão). Qual?",
       "alternativas": [
         {
           "id": "a",
-          "texto": "O grupo. Sem eles eu fico sem chão.",
+          "texto": "O grupo. Sem ele eu fico sem chão.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11351,7 +11663,7 @@
         },
         {
           "id": "b",
-          "texto": "A relação. Sem ela nada tem graça.",
+          "texto": "O que me acende. Sem isso nada tem graça.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11403,7 +11715,7 @@
         },
         {
           "id": "b",
-          "texto": "Para a pessoa mais importante para mim. Quero ficar perto dela.",
+          "texto": "Para a pessoa mais importante para mim, ou para aquilo que me absorve inteiro.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11812,11 +12124,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Você vai a um evento importante da sua área. Qual é o seu objetivo ali?",
+        "cenario": "Você vai a um encontro onde vai estar muita gente importante para você. Qual é o seu objetivo ali?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Resolver o que precisa e sair com tudo encaminhado.",
+            "texto": "Resolver o que eu preciso e sair com as coisas encaminhadas.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12210,7 +12522,7 @@
           },
           {
             "id": "c",
-            "texto": "Conversar longamente com a única pessoa em quem confio.",
+            "texto": "Uma conversa sem pressa com a única pessoa em quem confio, ou algo que me emocione de verdade.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12428,11 +12740,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Seu chefe cometeu um erro claro. O que você faz?",
+        "cenario": "Alguém com autoridade sobre você cometeu um erro claro. O que você faz?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Não falo nada. Preciso da boa relação com ele.",
+            "texto": "Não falo nada. Preciso da boa relação com essa pessoa.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12444,7 +12756,7 @@
           },
           {
             "id": "b",
-            "texto": "Aponto o procedimento correto, sem atacar a pessoa.",
+            "texto": "Aponto o que seria o correto, sem atacar a pessoa.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12887,7 +13199,7 @@
           },
           {
             "id": "c",
-            "texto": "Intensidade com alguém, a noite inteira, sem limite.",
+            "texto": "Intensidade, sem limite: alguém ou alguma coisa que me pegue por inteiro.",
             "mapa": {
               "triade": null,
               "tipo": null,

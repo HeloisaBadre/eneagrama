@@ -225,6 +225,6 @@ describe('avaliarConfiabilidade — notas honestas', () => {
     };
     const c = avaliarConfiabilidade(contexto, [], [0.8, 0.8, 0.8]);
     expect(c.confiancaAutorrelato).toBe('baixo');
-    expect(c.notas.join(' ')).toMatch(/elogiavel/i);
+    expect(c.notas.join(' ')).toMatch(/elogi[aá]vel/i);
   });
 });

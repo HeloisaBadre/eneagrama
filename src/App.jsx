@@ -9,6 +9,7 @@ import {
   itensDesempateTipo,
   itensFase4,
   tipoProvisorio,
+  parParaConfirmar,
 } from './engine/fluxo.js';
 import Landing from './components/Landing.jsx';
 import QuestionCard from './components/QuestionCard.jsx';
@@ -175,9 +176,11 @@ export default function App() {
         ctx,
         PESOS
       );
-      if (prov.ambiguo && prov.segundo && !f.desempateAplicado.fase2) {
+      // Uma rodada extra: se ficou ambiguo, ou se o vencedor ganhou de um tipo de
+      // outra triade sem nenhuma pergunta cruzada entre os dois.
+      const par = parParaConfirmar(prov);
+      if (par && !f.desempateAplicado.fase2) {
         f.desempateAplicado.fase2 = true;
-        const par = [prov.top.categoria, prov.segundo.categoria];
         const extras = itensDesempateTipo(banco, par, todosItens(f));
         const saoCruzados = extras.length > 0 && extras[0].id.startsWith('fx_');
         if (anexar(extras, { cruzados: saoCruzados })) return;

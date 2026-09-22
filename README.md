@@ -22,7 +22,7 @@ do apêndice estão cobertos por itens cruzados ou de desempate, e isso é verif
 
 ## Como as perguntas são escritas
 
-Cinco regras governam o banco inteiro. Três delas são verificadas por teste automático.
+Sete regras governam o banco inteiro. Quatro delas são verificadas por teste automático.
 
 1. **Toda pergunta é uma situação, não uma auto-avaliação.** Nada de "que imagem você passa"
    ou "o que você sente quando está sozinho": isso exige um acesso ao próprio mundo interno
@@ -41,13 +41,22 @@ Cinco regras governam o banco inteiro. Três delas são verificadas por teste au
    (o 6 contrafóbico, o 4 tenaz da autopreservação, o 3 antivaidoso, o 7 antissete social).
 5. **Ninguém é obrigado a mentir.** Toda pergunta oferece "Nenhuma dessas se parece comigo".
    Ela não pontua, não conta como exposição do tipo, e entra no índice de confiabilidade.
+6. **A cena tem que caber na vida de qualquer pessoa.** Nada de chefe, reunião ou entrega de
+   trabalho como cenário: quem estuda, é autônomo, está sem emprego ou aposentado responderia
+   no escuro, e mesmo quem trabalha dependeria de como é aquele trabalho. Quando a pergunta é
+   sobre autoridade, ela vale para qualquer uma ("um professor, um chefe, um coordenador").
+7. **O instinto sexual não é só romance.** Para Naranjo ele é união e fusão, e a intensidade
+   pode estar numa pessoa ou numa paixão que absorve (o livro da avareza fala de E5 sexuais
+   "cuja motivação básica é o trabalho ou uma causa"). As alternativas sexuais descrevem essa
+   qualidade (intensidade, tudo ou nada, fundir-se), e as de autopreservação e social também
+   descrevem a motivação, não só "a casa" e "o grupo".
 
 ## As quatro fases
 
 | Fase | O que faz | Itens no banco | Itens aplicados |
 |---|---|---|---|
 | 1 | Triagem: pontua tríade **e** os nove tipos | 14 (6 de infância e crença, 8 do presente) + 3 desempates | 12 |
-| 2 | Tipo: itens da tríade vencedora, das tríades dos tipos fortes, e itens **cruzados** entre candidatos de tríades diferentes | 50 de tríade + 9 desempates + 56 cruzados | ~19 |
+| 2 | Tipo: itens da tríade vencedora, das tríades dos tipos fortes, e itens **cruzados** entre candidatos de tríades diferentes | 50 de tríade + 9 desempates + 62 cruzados (todos os 27 pares de tríades diferentes) | ~19 |
 | 3 | Instinto dominante | 12 + 3 desempates | 6 |
 | 4 | Subtipo dentro do tipo encontrado (27 subtipos de Naranjo) | 27 | 3 |
 
@@ -83,7 +92,7 @@ src/
     fluxo.js           # FLUXO ADAPTATIVO — decide quais perguntas aparecem em cada fase
     scoring.test.js    # 11 testes do motor
     exportar.js        # ARQUIVO DE RESPOSTAS — monta o registro anônimo e soma vários registros
-    fluxo.test.js      # 13 testes do fluxo, da integridade do banco, dos casos-limite e dos pares do apêndice
+    fluxo.test.js      # 17 testes do fluxo, do banco, dos casos-limite, dos pares e da decisão em duas etapas
     exportar.test.js   # 9 testes do arquivo de respostas e da soma
     navegacao.js       # "Voltar" e "Avançar": cópia do estado, tempo de resposta, ordem das alternativas
     navegacao.test.js  # 7 testes da navegação
@@ -137,11 +146,35 @@ contribuição = peso_base
                                       peso quando a desejabilidade social é alta)
 ```
 
-E o score de cada tipo é uma **taxa de escolha**: o que foi escolhido dividido pelo que
-poderia ter sido escolhido nos itens em que aquele tipo era opção (`pontuarPorTaxa`). Sem
-isso, um tipo testado em 14 itens vence um testado em 4 mesmo com a mesma adesão. As
-componentes entram com pesos diferentes (`PESOS`): Fase 1 conta 1, Fase 2 conta 1, itens
-cruzados contam 1,5, porque comparam os dois finalistas cara a cara.
+O tipo é decidido em **duas etapas**, sempre comparando tipos nas mesmas perguntas
+(`decidirTipo`):
+
+1. **Dentro de cada tríade testada**, os três tipos disputam por **taxa de escolha**: o que foi
+   escolhido dividido pelo que poderia ter sido escolhido (`pontuarPorTaxa`), na Fase 1 e no
+   bloco daquela tríade. Os três aparecem em todos esses itens, então a taxa é justa. Sai um
+   vencedor por tríade.
+2. **Entre os vencedores de tríades diferentes**, a disputa é um **confronto direto**
+   (`confrontar`): só contam as perguntas em que os dois tipos eram opção ao mesmo tempo, que
+   são a Fase 1 (onde os nove aparecem sempre) e os itens cruzados daquele par (peso 1,5). Ganha
+   quem vence mais confrontos.
+
+Isso substituiu uma média de taxas medidas em perguntas diferentes, que deixava um tipo ganhar
+com a taxa de um bloco em que o tipo da pessoa nem aparecia. Um 5 sexual que, no bloco 8/9/1,
+marcava o mais próximo (o 8) saía 8, mesmo com o 5 à frente na Fase 1 e na tríade mental. Com
+as duas etapas, o tipo e a tríade só divergem da triagem quando um confronto direto mostra isso,
+e o relatório diz qual foi.
+
+Se o vencedor ganhou de um tipo de outra tríade **sem nenhuma pergunta cruzada** entre os dois,
+o teste faz até duas antes de fechar (`parParaConfirmar`). Todo par de tipos de tríades
+diferentes tem itens cruzados no banco, e isso é verificado por teste.
+
+Na Fase 4, se a pessoa marca "nenhuma dessas" na maioria das perguntas de subtipo do tipo
+encontrado, o relatório avisa que o tipo pode ser outro e aponta o segundo candidato.
+
+Na simulação (`ferramentas/simular.mjs`), a decisão em duas etapas aguenta respondentes bem
+mais confusos: com um respondente que escolhe o próprio tipo só metade das vezes, o acerto de
+tipo foi de 49% (média de taxas) para 80%. Com 70%, de 87% para 99%, número que vale só como
+teste de viés, porque o respondente sintético é coerente demais.
 
 - **Fixação > emoção**: alternativas de fixação têm peso maior (1.2–1.5 vs 1.0), pois a
   fixação é o elemento mais estável e menos disfarçável pela persona.

@@ -10,7 +10,7 @@
  *   3. itens CRUZADOS para cada par de candidatos de triades diferentes
  *      (ex.: 8 x 6, 8 x 4), que perguntam pela motivacao, nao pelo comportamento.
  */
-import { pontuarFase, pontuarPorTaxa, tiposTestados, LIMIARES } from './scoring.js';
+import { pontuarFase, pontuarPorTaxa, tiposTestados, decidirTipo, LIMIARES } from './scoring.js';
 
 export const TRIADE_DE = {
   8: 'instintiva', 9: 'instintiva', 1: 'instintiva',
@@ -184,17 +184,21 @@ export function itensFase4(banco, tipos) {
 
 /** Tipo provisorio ao fim da Fase 2 (mesma regra do relatorio final). */
 export function tipoProvisorio(fase1, fase2, fase2x, contexto, pesos) {
-  const candidatos = tiposTestados([...fase2.itens, ...fase2x.itens]);
-  return pontuarPorTaxa(
-    [
-      { ...fase1, peso: pesos.tipoF1 },
-      { ...fase2, peso: pesos.tipoF2 },
-      { ...fase2x, peso: pesos.tipoCruz },
-    ].filter((c) => c.respostas.length),
-    'tipo',
-    contexto,
-    candidatos.length ? candidatos : null
-  );
+  return decidirTipo({ fase1, fase2, fase2x }, contexto, pesos);
+}
+
+/**
+ * Par que ainda precisa de perguntas extras ao fim da Fase 2, ou null:
+ * - o tipo ficou ambiguo entre dois candidatos; ou
+ * - o vencedor foi decidido contra um tipo de outra triade sem nenhuma pergunta
+ *   cruzada entre os dois (so pela Fase 1): antes de fechar, pergunta direto.
+ */
+export function parParaConfirmar(prov) {
+  if (!prov || !prov.top) return null;
+  if (prov.ambiguo && prov.segundo) return [prov.top.categoria, prov.segundo.categoria];
+  const c = prov.confrontoFinal;
+  if (c && c.cruzados === 0) return [c.a, c.b];
+  return null;
 }
 
 export { LIMIARES };

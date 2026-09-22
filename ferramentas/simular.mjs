@@ -247,8 +247,14 @@ function rodarNovo(persona, rand, opts) {
     ctx,
     novoEng.PESOS
   );
-  if (prov.ambiguo && prov.segundo) {
-    const par = [prov.top.categoria, prov.segundo.categoria];
+  // Mesma regra do App: rodada extra se ambiguo, ou se o vencedor ganhou de um tipo
+  // de outra triade sem pergunta cruzada entre os dois (versoes antigas: so ambiguo).
+  const par = fluxo.parParaConfirmar
+    ? fluxo.parParaConfirmar(prov)
+    : prov.ambiguo && prov.segundo
+      ? [prov.top.categoria, prov.segundo.categoria]
+      : null;
+  if (par) {
     const ex = fluxo.itensDesempateTipo(bancoN, par, todos());
     if (ex.length) {
       aplicar(ex[0].id.startsWith('fx_') ? 'fase2x' : 'fase2', ex);

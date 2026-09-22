@@ -51,16 +51,17 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
           <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
             <div className="bar-olive">A triagem inicial apontou outro centro</div>
             <div className="box-bd" style={{ fontSize: 13 }}>
-              Nas primeiras perguntas o seu centro aparente foi{' '}
-              <strong>{(triades[triadeTriagem]?.nome || '').toLowerCase()}</strong>, mas as perguntas
-              de motivação apontaram um tipo da tríade acima. Isso é comum em quem tem um
-              comportamento parecido com o de outro centro (por exemplo, um 6 sexual ou um 4 sexual que
-              se comportam como 8). O centro exibido acima segue o tipo encontrado.
+              Nas primeiras perguntas, o centro que mais apareceu foi{' '}
+              <strong>{(triades[triadeTriagem]?.nome || '').toLowerCase()}</strong>. Mas o tipo é
+              decidido comparando os candidatos só nas perguntas em que os dois apareciam juntos
+              <ConfrontoDecisivo tipo={tipo} />. Isso é comum em quem tem um comportamento parecido
+              com o de outro centro (por exemplo, um 6 sexual ou um 4 sexual que se comportam como 8).
+              O centro exibido acima é o do tipo encontrado.
             </div>
           </div>
         )}
         <PorQue
-          rotulo="Como esta tríade foi inferida"
+          rotulo="Como a triagem inicial pontuou os centros"
           scores={triade.scores}
           decisivo={analise.decisivos.triade}
           itensPorId={itensPorId}
@@ -92,15 +93,29 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
             />
           )}
 
+          {confiabilidade.subtipoNaoReconhecido && (
+            <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
+              <div className="bar-olive">Você não se reconheceu nas variantes deste tipo</div>
+              <div className="box-bd" style={{ fontSize: 13 }}>
+                Nas perguntas de subtipo do Tipo {confiabilidade.subtipoNaoReconhecido.tipo}, você marcou
+                “nenhuma dessas” em {confiabilidade.subtipoNaoReconhecido.nulas} de{' '}
+                {confiabilidade.subtipoNaoReconhecido.total}. Quando a pessoa não se reconhece nas três
+                variantes do tipo encontrado, é comum o tipo ser outro. Leia com atenção a descrição do
+                segundo candidato, na seção 5.
+              </div>
+            </div>
+          )}
+
           <PorQue
-            rotulo="Como este tipo foi inferido"
-            scores={tipo.scores}
+            rotulo={`Como este tipo foi inferido dentro do centro ${(triadeInfo?.nome || '').toLowerCase()}`}
+            scores={soDaTriade(tipo.scores, triadeFinalKey)}
             decisivo={analise.decisivos.tipo}
             itensPorId={itensPorId}
             ambiguo={tipo.ambiguo}
             segundo={tipo.segundo}
             rotuladorNome={(k) => `Tipo ${k}`}
           />
+          <Confrontos tipo={tipo} />
         </Secao>
       ) : (
         <Secao numero="2" titulo="Eneatipo">
@@ -401,6 +416,56 @@ function Contribuir({ analise, itensPorId, respostasPorFase, assinatura }) {
         {baixado && <span style={{ fontSize: 12, color: '#1c5c1c' }}>Arquivo gerado.</span>}
       </div>
     </Secao>
+  );
+}
+
+/** So os tipos de uma triade, para as barras nao compararem taxas de blocos diferentes. */
+function soDaTriade(scores, triadeKey) {
+  return Object.fromEntries(Object.entries(scores || {}).filter(([k]) => TRIADE_DE[Number(k)] === triadeKey));
+}
+
+/** Frase curta com o confronto direto que decidiu o tipo (para o aviso de divergencia). */
+function ConfrontoDecisivo({ tipo }) {
+  const c = tipo.confrontoFinal;
+  if (!c || !tipo.top) return null;
+  const venc = tipo.top.categoria;
+  const rival = c.a === venc ? c.b : c.a;
+  const [ev, er] = c.a === venc ? [c.escolhasA, c.escolhasB] : [c.escolhasB, c.escolhasA];
+  return (
+    <>
+      , e nelas o <strong>Tipo {venc}</strong> ficou à frente do <strong>Tipo {rival}</strong> ({ev}{' '}
+      {ev === 1 ? 'escolha' : 'escolhas'} contra {er})
+    </>
+  );
+}
+
+/**
+ * Confrontos diretos entre os vencedores de cada centro testado: so as perguntas em
+ * que os dois tipos eram opcao (Fase 1 e itens cruzados daquele par).
+ */
+function Confrontos({ tipo }) {
+  if (!tipo.confrontos || !tipo.confrontos.length) return null;
+  return (
+    <details style={{ marginTop: 8 }}>
+      <summary className="retro-link" style={{ fontSize: 12.5 }}>
+        Como os candidatos de centros diferentes foram comparados
+      </summary>
+      <p style={{ marginTop: 8, fontSize: 12.5, color: '#333' }}>
+        Cada centro testado tem um vencedor. Entre eles, a decisão usa só as perguntas em que os dois
+        tipos eram opção ao mesmo tempo, para nenhum tipo levar vantagem por ter sido medido em
+        perguntas mais fáceis para ele.
+      </p>
+      <ul style={{ marginTop: 4, paddingLeft: 18, fontSize: 12.5, lineHeight: 1.6 }}>
+        {tipo.confrontos.map((c) => (
+          <li key={`${c.a}-${c.b}`}>
+            Tipo {c.a} × Tipo {c.b}: {c.escolhasA} × {c.escolhasB}{' '}
+            {c.escolhasA + c.escolhasB === 1 ? 'escolha' : 'escolhas'} em {c.itens}{' '}
+            {c.itens === 1 ? 'pergunta' : 'perguntas'}
+            {c.cruzados ? ` (${c.cruzados} feitas só para comparar os dois)` : ''}.
+          </li>
+        ))}
+      </ul>
+    </details>
   );
 }
 

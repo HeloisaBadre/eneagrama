@@ -423,31 +423,31 @@ export function avaliarConfiabilidade(contexto, divergenciasGemeas, consistencia
 
   if (desejabilidade.total > 0 && desejabilidade.nivel === 'alto') {
     notas.push(
-      'Voce marcou a opcao mais "elogiavel" com frequencia acima do esperado nos itens ' +
-        'desenhados para isso. Isso reduz a confianca no autorrelato direto e faz o ' +
-        'instrumento dar mais peso as suas respostas indiretas e ao ritmo das respostas. ' +
-        'Por si so, esse padrao ja e informacao: costuma aparecer em torno dos eneatipos 1, 2 e 3.'
+      'Você marcou a opção mais "elogiável" com frequência acima do esperado nos itens ' +
+        'desenhados para isso. Isso reduz a confiança no autorrelato direto e faz o ' +
+        'instrumento dar mais peso às suas respostas indiretas e ao ritmo das respostas. ' +
+        'Por si só, esse padrão já é informação: costuma aparecer em torno dos eneatipos 1, 2 e 3.'
     );
   }
   if (deliberacao.nivel === 'alto') {
     notas.push(
-      'Voce deliberou bastante em itens que costumam ser respondidos de forma visceral. ' +
-        'Isso pode indicar monitoramento da propria imagem/correcao (tipico da triade mental ' +
-        'e das fixacoes dos tipos 1 e 3), e foi levado em conta ao ponderar essas respostas.'
+      'Você deliberou bastante em itens que costumam ser respondidos de forma visceral. ' +
+        'Isso pode indicar monitoramento da própria imagem ou da correção (típico da tríade mental ' +
+        'e das fixações dos tipos 1 e 3), e foi levado em conta ao ponderar essas respostas.'
     );
   }
   if (contexto.nulas && contexto.nulas.nivel !== 'baixo') {
     notas.push(
-      `Em ${contexto.nulas.marcadas} de ${contexto.nulas.total} perguntas voce indicou que nenhuma ` +
-        'alternativa se parecia com voce. O resultado foi calculado so com as respostas em que voce ' +
-        'se reconheceu, mas vale ler as descricoes dos tipos vizinhos antes de fechar uma conclusao.'
+      `Em ${contexto.nulas.marcadas} de ${contexto.nulas.total} perguntas você indicou que nenhuma ` +
+        'alternativa se parecia com você. O resultado foi calculado só com as respostas em que você ' +
+        'se reconheceu, mas vale ler as descrições dos tipos vizinhos antes de fechar uma conclusão.'
     );
   }
   if (divergenciasGemeas && divergenciasGemeas.length) {
     notas.push(
-      `Suas respostas divergiram em ${divergenciasGemeas.length} par(es) de cenarios quase-identicos ` +
-        '(mesma tensao, contexto diferente, publico vs privado, hierarquia vs intimidade). ' +
-        'Isso nao foi descartado como erro: indica em qual contexto sua defesa relaxa e em qual ' +
+      `Suas respostas divergiram em ${divergenciasGemeas.length} par(es) de cenários quase idênticos ` +
+        '(mesma tensão, contexto diferente: em público ou na intimidade). ' +
+        'Isso não foi descartado como erro: indica em qual contexto sua defesa relaxa e em qual ' +
         'a persona fica mais vigiada.'
     );
   }
@@ -507,6 +507,206 @@ export function avaliarConfiabilidade(contexto, divergenciasGemeas, consistencia
  */
 export const PESOS = { tipoF1: 1.0, tipoF2: 1.0, tipoCruz: 1.5, instF3: 1.0, instF4: 1.5 };
 
+const TRIADE_DO_TIPO = {
+  8: 'instintiva', 9: 'instintiva', 1: 'instintiva',
+  2: 'emocional', 3: 'emocional', 4: 'emocional',
+  5: 'mental', 6: 'mental', 7: 'mental',
+};
+const TIPOS_DA_TRIADE = { instintiva: [8, 9, 1], emocional: [2, 3, 4], mental: [5, 6, 7] };
+
+/** Tipos (sem a "nula") oferecidos como alternativa num item. */
+function tiposDoItem(item) {
+  return new Set(item.alternativas.filter((a) => !a.nula && a.mapa && a.mapa.tipo != null).map((a) => a.mapa.tipo));
+}
+
+/** Triade de um item em que todos os tipos oferecidos sao da mesma triade (blocos da Fase 2). */
+function triadeDoItem(item) {
+  const triades = new Set([...tiposDoItem(item)].map((t) => TRIADE_DO_TIPO[t]));
+  return triades.size === 1 ? [...triades][0] : null;
+}
+
+/**
+ * CONFRONTO DIRETO entre dois tipos: so conta as respostas a itens em que OS DOIS
+ * eram opcao (Fase 1, onde os nove aparecem sempre, e os itens cruzados daquele par).
+ * Assim os dois sao medidos nas mesmas perguntas. "Nenhuma dessas" nao conta para
+ * nenhum dos dois.
+ * @returns { a, b, pontosA, pontosB, escolhasA, escolhasB, itens, cruzados }
+ */
+export function confrontar(a, b, componentes, contexto) {
+  const res = { a, b, pontosA: 0, pontosB: 0, escolhasA: 0, escolhasB: 0, itens: 0, cruzados: 0 };
+  for (const comp of componentes) {
+    const porId = indexarItens(comp.itens);
+    const { fatorPorItem } = analisarGemeos(comp.respostas, comp.itens, 'tipo');
+    for (const r of comp.respostas) {
+      const item = porId.get(r.itemId);
+      if (!item) continue;
+      const tipos = tiposDoItem(item);
+      if (!tipos.has(a) || !tipos.has(b)) continue;
+      const alt = altDe(item, r.altId);
+      if (!alt || alt.nula) continue;
+      res.itens += 1;
+      if (tipos.size === 2) res.cruzados += 1;
+      const valor =
+        alt.peso *
+        (fatorPorItem.get(item.id) || 1.0) *
+        fatorImediatismo(r.rtMs, contexto.medianaRt, alt) *
+        fatorConfiabilidade(item, alt, contexto.desejabilidade.nivel) *
+        comp.peso;
+      if (alt.mapa.tipo === a) {
+        res.pontosA += valor;
+        res.escolhasA += 1;
+      } else if (alt.mapa.tipo === b) {
+        res.pontosB += valor;
+        res.escolhasB += 1;
+      }
+    }
+  }
+  return res;
+}
+
+/**
+ * DECISAO DO TIPO em duas etapas, sempre comparando tipos nas mesmas perguntas:
+ *
+ * 1. Dentro de cada triade testada na Fase 2, os tres tipos disputam por taxa de
+ *    escolha na Fase 1 e no bloco daquela triade (os tres aparecem em todos esses
+ *    itens). Sai um vencedor por triade.
+ * 2. Os vencedores de triades diferentes disputam em CONFRONTO DIRETO (confrontar):
+ *    so os itens em que os dois eram opcao. Ganha quem vence mais confrontos.
+ *
+ * Isso substitui a media de taxas medidas em itens diferentes, que deixava um tipo
+ * ganhar com a taxa de um bloco em que o tipo da pessoa nem aparecia (ex.: um 5 que,
+ * no bloco 8/9/1, marca o mais proximo) e deixava o tipo e a triade se contradizerem.
+ */
+export function decidirTipo({ fase1, fase2, fase2x }, contexto, pesos = PESOS) {
+  const vazio = { respostas: [], itens: [] };
+  const f1 = fase1 || vazio;
+  const f2 = fase2 || vazio;
+  const f2x = fase2x || vazio;
+
+  // Blocos de Fase 2 por triade (inclui os desempates internos da triade).
+  const blocos = {};
+  const porIdF2 = indexarItens(f2.itens);
+  for (const r of f2.respostas) {
+    const item = porIdF2.get(r.itemId);
+    const tr = item ? triadeDoItem(item) : null;
+    if (!tr) continue;
+    const bloco = (blocos[tr] ||= { respostas: [], itens: [] });
+    bloco.respostas.push(r);
+    if (!bloco.itens.includes(item)) bloco.itens.push(item);
+  }
+  const triades = Object.keys(blocos).length ? Object.keys(blocos) : Object.keys(TIPOS_DA_TRIADE);
+
+  // 1. Vencedor de cada triade.
+  const dentro = {};
+  for (const tr of triades) {
+    const comps = [{ ...f1, peso: pesos.tipoF1 }];
+    if (blocos[tr]) comps.push({ ...blocos[tr], peso: pesos.tipoF2 });
+    const r = pontuarPorTaxa(comps.filter((c) => c.respostas.length), 'tipo', contexto, TIPOS_DA_TRIADE[tr]);
+    if (r.top && r.top.score > 0) dentro[tr] = r;
+  }
+  const finalistas = Object.values(dentro).map((r) => r.top.categoria);
+  const divergencias = Object.values(dentro).flatMap((r) => r.divergenciasGemeas);
+  const unicas = [...new Map(divergencias.map((d) => [d.parId, d])).values()];
+
+  if (!finalistas.length) {
+    return {
+      scores: {}, ranking: [], top: null, segundo: null, margem: 0, ambiguo: false,
+      consistenciaInterna: 0, divergenciasGemeas: unicas, decisivo: null, contribuicoes: [],
+      confrontos: [], confrontoFinal: null,
+    };
+  }
+
+  // 2. Confrontos diretos entre os vencedores de triades diferentes.
+  const compsConfronto = [
+    { ...f1, peso: pesos.tipoF1 },
+    { ...f2x, peso: pesos.tipoCruz },
+  ].filter((c) => c.respostas.length);
+  const confrontos = [];
+  for (let i = 0; i < finalistas.length; i++) {
+    for (let j = i + 1; j < finalistas.length; j++) {
+      confrontos.push(confrontar(finalistas[i], finalistas[j], compsConfronto, contexto));
+    }
+  }
+  const scoreDentro = (t) => dentro[TRIADE_DO_TIPO[t]].top.score;
+  const vitorias = Object.fromEntries(finalistas.map((t) => [t, 0]));
+  const saldo = Object.fromEntries(finalistas.map((t) => [t, 0]));
+  for (const c of confrontos) {
+    if (c.pontosA > c.pontosB) vitorias[c.a] += 1;
+    else if (c.pontosB > c.pontosA) vitorias[c.b] += 1;
+    saldo[c.a] += c.pontosA - c.pontosB;
+    saldo[c.b] += c.pontosB - c.pontosA;
+  }
+  const ordem = [...finalistas].sort(
+    (x, y) => vitorias[y] - vitorias[x] || saldo[y] - saldo[x] || scoreDentro(y) - scoreDentro(x)
+  );
+  const vencedor = ordem[0];
+  const doVencedor = dentro[TRIADE_DO_TIPO[vencedor]];
+
+  // Rival mais proximo: o outro finalista com o confronto mais apertado contra o
+  // vencedor, ou o segundo da propria triade, o que estiver mais perto.
+  const margemDe = (p, q) => (p > 0 ? (p - q) / p : 0);
+  const rivais = [];
+  let confrontoFinal = null;
+  for (const c of confrontos) {
+    if (c.a !== vencedor && c.b !== vencedor) continue;
+    const [pv, pr, rival] = c.a === vencedor ? [c.pontosA, c.pontosB, c.b] : [c.pontosB, c.pontosA, c.a];
+    const m = margemDe(pv, pr);
+    rivais.push({ categoria: rival, margem: m, score: scoreDentro(rival) });
+    if (!confrontoFinal || m < confrontoFinal.margem) confrontoFinal = { ...c, margem: m };
+  }
+  const segundoDentro = doVencedor.segundo;
+  if (segundoDentro && segundoDentro.score > 0) {
+    rivais.push({ categoria: segundoDentro.categoria, margem: doVencedor.margem, score: segundoDentro.score });
+  }
+  rivais.sort((x, y) => x.margem - y.margem);
+  const rival = rivais[0] || null;
+
+  // Scores para o relatorio: taxa de cada tipo dentro da propria triade.
+  const scores = {};
+  for (const r of Object.values(dentro)) Object.assign(scores, r.scores);
+  const top = { categoria: vencedor, score: scores[vencedor] };
+  const segundo = rival ? { categoria: rival.categoria, score: scores[rival.categoria] ?? rival.score } : null;
+  const resto = Object.entries(scores)
+    .map(([k, v]) => ({ categoria: coerceKey(k), score: v }))
+    .filter((x) => x.categoria !== vencedor && (!segundo || x.categoria !== segundo.categoria))
+    .sort((a, b) => b.score - a.score);
+  const margem = rival ? rival.margem : 1;
+
+  return {
+    scores,
+    ranking: [top, ...(segundo ? [segundo] : []), ...resto],
+    top,
+    segundo,
+    margem,
+    ambiguo: !!rival && margem < LIMIARES.margemAmbiguo,
+    consistenciaInterna: doVencedor.consistenciaInterna,
+    divergenciasGemeas: unicas,
+    decisivo: doVencedor.decisivo,
+    contribuicoes: doVencedor.contribuicoes,
+    confrontos,
+    confrontoFinal,
+  };
+}
+
+/**
+ * Quantas perguntas de subtipo (Fase 4) de cada tipo a pessoa respondeu com
+ * "nenhuma dessas". Se ela nao se reconhece nas perguntas do tipo encontrado, o
+ * tipo provavelmente esta errado.
+ */
+function nulasFase4PorTipo(f4) {
+  const porId = indexarItens(f4.itens);
+  const cont = {};
+  for (const r of f4.respostas) {
+    const item = porId.get(r.itemId);
+    if (!item || item.tipo_alvo == null) continue;
+    const alt = altDe(item, r.altId);
+    const c = (cont[item.tipo_alvo] ||= { total: 0, nulas: 0 });
+    c.total += 1;
+    if (alt && alt.nula) c.nulas += 1;
+  }
+  return cont;
+}
+
 export function analisarFinal(dados) {
   const vazio = { respostas: [], itens: [] };
   const f2x = dados.fase2x || vazio;
@@ -529,17 +729,7 @@ export function analisarFinal(dados) {
 
   const triade = pontuarFase(dados.fase1.respostas, dados.fase1.itens, 'triade', contexto);
 
-  const candidatos = tiposTestados([...dados.fase2.itens, ...f2x.itens]);
-  const tipo = pontuarPorTaxa(
-    [
-      { respostas: dados.fase1.respostas, itens: dados.fase1.itens, peso: PESOS.tipoF1 },
-      { respostas: dados.fase2.respostas, itens: dados.fase2.itens, peso: PESOS.tipoF2 },
-      { respostas: f2x.respostas, itens: f2x.itens, peso: PESOS.tipoCruz },
-    ].filter((c) => c.respostas.length),
-    'tipo',
-    contexto,
-    candidatos.length ? candidatos : null
-  );
+  const tipo = decidirTipo({ fase1: dados.fase1, fase2: dados.fase2, fase2x: f2x }, contexto);
 
   const instinto = pontuarPorTaxa(
     [
@@ -555,6 +745,20 @@ export function analisarFinal(dados) {
     [...triade.divergenciasGemeas, ...tipo.divergenciasGemeas, ...instinto.divergenciasGemeas],
     [triade.consistenciaInterna, tipo.consistenciaInterna, instinto.consistenciaInterna]
   );
+
+  // A pessoa nao se reconheceu na maioria das perguntas de subtipo do tipo encontrado:
+  // sinal forte de que o tipo pode ser outro. Entra como nota e limita a confianca.
+  const f4Nulas = tipo.top ? nulasFase4PorTipo(f4)[tipo.top.categoria] : null;
+  const subtipoNaoReconhecido = !!f4Nulas && f4Nulas.total >= 2 && f4Nulas.nulas / f4Nulas.total >= 2 / 3;
+  confiabilidade.subtipoNaoReconhecido = subtipoNaoReconhecido ? { tipo: tipo.top.categoria, ...f4Nulas } : null;
+  if (subtipoNaoReconhecido) {
+    confiabilidade.notas.push(
+      `Nas perguntas de subtipo do tipo ${tipo.top.categoria}, você marcou "nenhuma dessas" em ${f4Nulas.nulas} de ` +
+        `${f4Nulas.total}. Quando a pessoa não se reconhece nas variantes do tipo encontrado, o tipo pode ser outro: ` +
+        'leia com atenção a descrição do segundo candidato.'
+    );
+    if (confiabilidade.confiancaAutorrelato === 'alto') confiabilidade.confiancaAutorrelato = 'medio';
+  }
 
   const subtipo = tipo.top && instinto.top ? `${tipo.top.categoria}-${instinto.top.categoria}` : null;
 
