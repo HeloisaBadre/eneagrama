@@ -61,6 +61,17 @@ Oito regras governam o banco inteiro. Quatro delas são verificadas por teste au
    qualidade (intensidade, tudo ou nada, fundir-se), e as de autopreservação e social também
    descrevem a motivação, não só "a casa" e "o grupo".
 
+## O banco não pode favorecer nenhum tipo
+
+`node ferramentas/neutralidade.mjs` aplica o teste N vezes com um respondente que
+marca **ao acaso**. Sem viés, os nove tipos saem perto de 11,1% cada: se um tipo for
+um ímã — porque as alternativas dele são mais longas, mais fáceis de concordar, ou
+porque ele aparece em mais itens — ele aparece aqui, e não na simulação com personas,
+onde o respondente já sabe o próprio tipo. Hoje: de 9,7% a 11,9% (amplitude de 2,2
+pontos), centros entre 32,6% e 33,9%, instintos entre 32,1% e 34,7%. `ORIG=<outro
+checkout>` compara duas versões do banco lado a lado, que é como se verifica que uma
+rodada de reescrita não puxou o teste para um tipo.
+
 ## As quatro fases
 
 | Fase | O que faz | Itens no banco | Itens aplicados |
