@@ -128,3 +128,25 @@ describe('agregar', () => {
     expect(r.porBanco.deadbeef.registros).toBe(1);
   });
 });
+
+describe('"nenhuma dessas" de quem tinha a propria opcao', () => {
+  it('conta so quando o item oferecia o tipo (ou o instinto) da pessoa', () => {
+    const itens = [banco.fase2.emocional[0], banco.fase2.mental[0], banco.fase3[0]];
+    const nula = (it) => ({ itemId: it.id, altId: it.alternativas.find((a) => a.nula).id, rtMs: RT });
+    const respostasPorFase = { fase1: [], fase2: [nula(itens[0]), nula(itens[1])], fase2x: [], fase3: [nula(itens[2])], fase4: [] };
+    const analise = analisarFinal({
+      fase1: { respostas: [], itens: [] },
+      fase2: { respostas: respostasPorFase.fase2, itens: itens.slice(0, 2) },
+      fase3: { respostas: respostasPorFase.fase3, itens: [itens[2]] },
+    });
+    const reg = montarRegistro({ respostasPorFase, itensPorId: porId(itens), analise, assinatura, conhecido: { tipo: 4, instinto: 'sexual' } });
+    const grupo = agregar([marcarOferta(reg, todosItens)]).porBanco[assinatura];
+    const de = (id) => grupo.itens.find((x) => x.id === id);
+    // Fase 2 emocional oferece o 4: o "nenhuma" conta como sinal de item mal escrito.
+    expect(de(itens[0].id)).toMatchObject({ comPropria: 1, nulasComPropria: 1 });
+    // Fase 2 mental nao oferece o 4: "nenhuma" e o esperado e nao entra na taxa.
+    expect(de(itens[1].id)).toMatchObject({ comPropria: 0, nulasComPropria: 0, taxaNulaComPropria: null });
+    // Item de instinto oferece o sexual: conta.
+    expect(de(itens[2].id)).toMatchObject({ comPropria: 1, nulasComPropria: 1 });
+  });
+});

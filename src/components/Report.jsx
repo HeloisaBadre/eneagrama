@@ -1,24 +1,22 @@
+import { useState } from 'react';
 import { triades, tipos, instintos, subtipos, rotulos } from '../data/results.js';
+import { TRIADE_DE } from '../engine/fluxo.js';
+import { montarRegistro } from '../engine/exportar.js';
 
 /**
  * Relatorio final (repintura retro; lógica de dados inalterada). Recebe:
  *  - analise: saida de analisarFinal()
- *  - tipoDisponivel: se a Fase 2 daquela triade existe nesta fatia
  *  - itensPorId: mapa id->item para citar textos de respostas decisivas
+ *  - respostasPorFase, assinatura: para o arquivo de respostas opcional (secao 6)
  */
-const TRIADE_DE = {
-  8: 'instintiva', 9: 'instintiva', 1: 'instintiva',
-  2: 'emocional', 3: 'emocional', 4: 'emocional',
-  5: 'mental', 6: 'mental', 7: 'mental',
-};
-
-export default function Report({ analise, tipoDisponivel, itensPorId, onRestart }) {
+export default function Report({ analise, itensPorId, respostasPorFase, assinatura, onRestart }) {
   const { triade, tipo, instinto, confiabilidade } = analise;
   const tipoNum = tipo.top ? tipo.top.categoria : null;
+  const triadeTriagem = triade.top ? triade.top.categoria : null;
   // O tipo manda: a triade e o centro do tipo encontrado. A Fase 1 e so triagem.
-  const triadeFinalKey = tipoNum != null ? TRIADE_DE[tipoNum] : triade.top.categoria;
-  const triadeDivergiu = triadeFinalKey !== triade.top.categoria;
-  const triadeInfo = triades[triadeFinalKey];
+  const triadeFinalKey = tipoNum != null ? TRIADE_DE[tipoNum] : triadeTriagem;
+  const triadeDivergiu = triadeTriagem !== null && triadeFinalKey !== triadeTriagem;
+  const triadeInfo = triadeFinalKey ? triades[triadeFinalKey] : null;
   const tipoInfo = tipoNum != null ? tipos[tipoNum] : null;
   const instintoKey = instinto.top ? instinto.top.categoria : null;
   const subKey = tipoNum != null && instintoKey ? `${tipoNum}-${instintoKey}` : null;
@@ -34,18 +32,27 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
 
       {/* 1. TRIADE */}
       <Secao numero="1" titulo="Centro dominante (tríade)">
-        <div className="pill" style={{ fontSize: 15 }}>{triadeInfo.nome}</div>
-        <p style={{ marginTop: 12 }}>{triadeInfo.texto}</p>
-        <p style={{ marginTop: 10, fontSize: 13, color: '#4a4a4a' }}>
-          A emoção reativa de fundo aqui é <strong>{triadeInfo.emocao}</strong>. A pergunta
-          silenciosa que organiza suas reações: <em>“{triadeInfo.pergunta}”</em>
-        </p>
+        {triadeInfo ? (
+          <>
+            <div className="pill" style={{ fontSize: 15 }}>{triadeInfo.nome}</div>
+            <p style={{ marginTop: 12 }}>{triadeInfo.texto}</p>
+            <p style={{ marginTop: 10, fontSize: 13, color: '#4a4a4a' }}>
+              A emoção reativa de fundo aqui é <strong>{triadeInfo.emocao}</strong>. A pergunta
+              silenciosa que organiza suas reações: <em>“{triadeInfo.pergunta}”</em>
+            </p>
+          </>
+        ) : (
+          <SemResultado>
+            Suas respostas não apontaram um centro dominante. Isso acontece quando quase nenhuma
+            alternativa pareceu com você.
+          </SemResultado>
+        )}
         {triadeDivergiu && (
           <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
             <div className="bar-olive">A triagem inicial apontou outro centro</div>
             <div className="box-bd" style={{ fontSize: 13 }}>
               Nas primeiras perguntas o seu centro aparente foi{' '}
-              <strong>{(triades[triade.top.categoria]?.nome || '').toLowerCase()}</strong>, mas as perguntas
+              <strong>{(triades[triadeTriagem]?.nome || '').toLowerCase()}</strong>, mas as perguntas
               de motivação apontaram um tipo da tríade acima. Isso é comum em quem tem um
               comportamento parecido com o de outro centro (por exemplo, um 6 sexual ou um 4 sexual que
               se comportam como 8). O centro exibido acima segue o tipo encontrado.
@@ -64,7 +71,7 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
       </Secao>
 
       {/* 2. TIPO */}
-      {tipoDisponivel && tipoInfo && !tipoInfo._stub ? (
+      {tipoInfo ? (
         <Secao numero="2" titulo="Eneatipo">
           <div className="pill" style={{ fontSize: 15 }}>{tipoInfo.nome}</div>
           <p style={{ marginTop: 12 }}>{tipoInfo.nucleo}</p>
@@ -97,27 +104,22 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
         </Secao>
       ) : (
         <Secao numero="2" titulo="Eneatipo">
-          <div className="box" style={{ borderColor: '#c9b96a' }}>
-            <div className="bar-olive">Ainda não disponível para esta tríade</div>
-            <div className="box-bd" style={{ fontSize: 13, lineHeight: 1.55 }}>
-              <p style={{ marginTop: 0 }}>
-                Esta versão tem a Fase 2 desenvolvida por completo para a{' '}
-                <strong>tríade instintiva (8/9/1)</strong>. Como seu centro dominante saiu{' '}
-                <strong>{triadeInfo.nome.toLowerCase()}</strong>, a distinção entre os três tipos
-                dessa tríade será adicionada numa próxima etapa.
-              </p>
-              <p style={{ marginBottom: 0 }}>
-                Mesmo assim, o centro, o instinto e o índice de confiabilidade abaixo já são válidos.
-              </p>
-            </div>
-          </div>
+          <SemResultado>
+            Não foi possível identificar o seu tipo, porque você não se reconheceu nas alternativas
+            das perguntas que distinguem os tipos. Refazer o teste escolhendo a opção mais próxima,
+            mesmo quando nenhuma for perfeita, costuma resolver.
+          </SemResultado>
         </Secao>
       )}
 
       {/* 3. INSTINTO / SUBTIPO */}
       <Secao numero="3" titulo="Instinto dominante (subtipo)">
-        <div className="pill" style={{ fontSize: 15 }}>{instintos[instintoKey]?.nome}</div>
-        <p style={{ marginTop: 8, fontSize: 13, color: '#4a4a4a' }}>{instintos[instintoKey]?.resumo}</p>
+        {instintoKey && (
+          <>
+            <div className="pill" style={{ fontSize: 15 }}>{instintos[instintoKey]?.nome}</div>
+            <p style={{ marginTop: 8, fontSize: 13, color: '#4a4a4a' }}>{instintos[instintoKey]?.resumo}</p>
+          </>
+        )}
         {subInfo ? (
           <>
             <p style={{ marginTop: 12, fontWeight: 700, color: '#12325e' }}>{subInfo.titulo}</p>
@@ -125,9 +127,9 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
           </>
         ) : (
           <p style={{ marginTop: 12, fontSize: 13, color: '#4a4a4a' }}>
-            O texto do subtipo específico ({tipoNum ?? '?'} · {instintos[instintoKey]?.nome}) será
-            exibido quando a Fase 2 desta tríade estiver disponível. O instinto dominante já está
-            identificado acima.
+            {instintoKey
+              ? 'O texto do subtipo depende do tipo, que não pôde ser identificado. O instinto dominante está indicado acima.'
+              : 'Suas respostas não apontaram um instinto dominante.'}
           </p>
         )}
         <PorQue
@@ -223,20 +225,18 @@ export default function Report({ analise, tipoDisponivel, itensPorId, onRestart 
         )}
       </Secao>
 
-      <Secao numero="5" titulo="O que fazer com este resultado">
-        <p style={{ marginTop: 0 }}>
-          Um teste escrito não substitui o reconhecimento. Naranjo tratava a leitura das
-          descrições como o instrumento de diagnóstico: o tipo certo é aquele em que a pessoa se
-          reconhece por inteiro, não o que soma mais pontos. Então o primeiro passo é ler a
-          descrição acima e a do segundo candidato, e ver qual delas incomoda mais.
-        </p>
-        <p>
-          O passo seguinte que ele recomendava é escrever uma autobiografia focada na paixão e na
-          fixação encontradas: começar pelas cenas concretas da infância, sobretudo as dolorosas,
-          e acompanhar como o caráter foi se formando como defesa diante delas. Sem pressa e sem
-          abstração: o som, a imagem, o que foi dito, o que você concluiu ali.
-        </p>
-      </Secao>
+      {/* 5. PROXIMO PASSO (Naranjo: reconhecimento e autobiografia) */}
+      <ProximoPasso tipo={tipo} />
+
+      {/* 6. CONTRIBUIR (opcional) */}
+      {respostasPorFase && (
+        <Contribuir
+          analise={analise}
+          itensPorId={itensPorId}
+          respostasPorFase={respostasPorFase}
+          assinatura={assinatura}
+        />
+      )}
 
       <hr className="rule" />
       <p style={{ fontSize: 11.5, color: '#5a5a5a', marginTop: 0 }}>
@@ -269,6 +269,152 @@ function Secao({ numero, titulo, children }) {
   );
 }
 
+/**
+ * O passo seguinte que Naranjo recomendava: o tipo se confirma pelo reconhecimento na
+ * descricao, nao pela soma de pontos, e depois pela autobiografia. Mostra o segundo
+ * candidato (quando ele teve alguma pontuacao) e a diferenca central entre os dois.
+ */
+function ProximoPasso({ tipo }) {
+  const a = tipo.top ? tipo.top.categoria : null;
+  const b = tipo.segundo && tipo.segundo.score > 0 ? tipo.segundo.categoria : null;
+  const segundoInfo = a != null && b != null ? tipos[b] : null;
+
+  return (
+    <Secao numero="5" titulo="O que fazer com este resultado">
+      <p style={{ marginTop: 0 }}>
+        Um teste escrito não substitui o reconhecimento. Naranjo tratava a leitura das
+        descrições como o instrumento de diagnóstico: o tipo certo é aquele em que a pessoa se
+        reconhece por inteiro, não o que soma mais pontos. Então o primeiro passo é ler a
+        descrição acima
+        {segundoInfo
+          ? ' e a do segundo candidato, e ver qual delas incomoda mais.'
+          : ' com calma, e ver o quanto ela incomoda.'}
+      </p>
+      {segundoInfo && (
+        <>
+          <p>
+            O segundo candidato nas suas respostas foi o <strong>{segundoInfo.nome}</strong>. A
+            diferença central entre os dois: {diferencaTipos(a, b)}
+          </p>
+          <details style={{ marginTop: 4 }}>
+            <summary className="retro-link" style={{ fontSize: 12.5 }}>
+              Ler a descrição do {segundoInfo.nome}
+            </summary>
+            <p style={{ marginTop: 8 }}>{segundoInfo.nucleo}</p>
+            <p style={{ marginTop: 8 }}>
+              <span style={{ fontWeight: 700, color: '#12325e' }}>A dor por trás: </span>
+              {segundoInfo.dorDeFundo}
+            </p>
+          </details>
+        </>
+      )}
+      <p>
+        O passo seguinte que ele recomendava é escrever uma autobiografia focada na paixão e na
+        fixação encontradas: começar pelas cenas concretas da infância, sobretudo as dolorosas,
+        e acompanhar como o caráter foi se formando como defesa diante delas. Sem pressa e sem
+        abstração: o som, a imagem, o que foi dito, o que você concluiu ali.
+      </p>
+    </Secao>
+  );
+}
+
+/**
+ * Arquivo de respostas anonimo, para validar o teste com pessoas ja tipadas.
+ * Nada e enviado: o arquivo e gerado no navegador e baixado pela propria pessoa.
+ */
+function Contribuir({ analise, itensPorId, respostasPorFase, assinatura }) {
+  const [tipo, setTipo] = useState('');
+  const [instinto, setInstinto] = useState('');
+  const [fonte, setFonte] = useState('');
+  const [baixado, setBaixado] = useState(false);
+
+  function baixar() {
+    const registro = montarRegistro({
+      respostasPorFase,
+      itensPorId,
+      analise,
+      assinatura,
+      conhecido: { tipo, instinto, fonte },
+    });
+    const blob = new Blob([JSON.stringify(registro, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eneatipo-respostas-${registro.data}-${Math.random().toString(36).slice(2, 6)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setBaixado(true);
+  }
+
+  const estiloCampo = { display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginTop: 8 };
+  const estiloRotulo = { width: 190, fontSize: 13 };
+  const estiloSelect = { fontSize: 13, padding: '3px 6px', maxWidth: '100%' };
+
+  return (
+    <Secao numero="6" titulo="Contribuir com a validação do teste (opcional)">
+      <p style={{ marginTop: 0, fontSize: 13 }}>
+        Este teste ainda está sendo validado. Para ajudar, baixe um arquivo com as suas respostas e
+        entregue a quem indicou o teste. O arquivo não tem nome nem dados pessoais, só as alternativas
+        escolhidas, o tempo de cada resposta e o resultado. Nada é enviado pela internet.
+      </p>
+      <p style={{ fontSize: 13 }}>
+        Se você já conhece o seu tipo por outro caminho, indique abaixo. É isso que permite medir se o
+        teste acerta.
+      </p>
+
+      <label style={estiloCampo}>
+        <span style={estiloRotulo}>Meu tipo, se já sei:</span>
+        <select value={tipo} onChange={(e) => setTipo(e.target.value)} style={estiloSelect}>
+          <option value="">Não sei</option>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+            <option key={n} value={n}>
+              Tipo {n}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label style={estiloCampo}>
+        <span style={estiloRotulo}>Meu instinto, se já sei:</span>
+        <select value={instinto} onChange={(e) => setInstinto(e.target.value)} style={estiloSelect}>
+          <option value="">Não sei</option>
+          <option value="autopreservacao">Autopreservação</option>
+          <option value="social">Social</option>
+          <option value="sexual">Sexual</option>
+        </select>
+      </label>
+      <label style={estiloCampo}>
+        <span style={estiloRotulo}>Como sei:</span>
+        <select value={fonte} onChange={(e) => setFonte(e.target.value)} style={estiloSelect} disabled={!tipo}>
+          <option value="">Prefiro não dizer</option>
+          <option value="entrevista">Entrevista com alguém que conhece o modelo</option>
+          <option value="outro-teste">Outro teste</option>
+          <option value="auto-observacao">Observação de mim mesmo</option>
+        </select>
+      </label>
+
+      <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <button onClick={baixar} className="aqua-btn" style={{ fontSize: 13, padding: '6px 18px' }}>
+          Baixar minhas respostas
+        </button>
+        {baixado && <span style={{ fontSize: 12, color: '#1c5c1c' }}>Arquivo gerado.</span>}
+      </div>
+    </Secao>
+  );
+}
+
+function SemResultado({ children }) {
+  return (
+    <div className="box" style={{ borderColor: '#c9b96a' }}>
+      <div className="bar-olive">Resultado inconclusivo</div>
+      <div className="box-bd" style={{ fontSize: 13, lineHeight: 1.55 }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function Ambiguidade({ a, b, diferenca }) {
   return (
     <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
@@ -286,12 +432,15 @@ function PorQue({ rotulo, scores, decisivo, itensPorId, ambiguo, segundo, rotula
   const entradas = Object.entries(scores)
     .map(([k, v]) => ({ k: coerce(k), v }))
     .sort((a, b) => b.v - a.v);
-  const max = entradas.length ? entradas[0].v : 1;
+  const max = entradas.length && entradas[0].v > 0 ? entradas[0].v : 1;
 
   const itemDecisivo = decisivo ? itensPorId.get(decisivo.itemId) : null;
+  // Prefere a alternativa escolhida (altId): o item pode ter mais de uma
+  // alternativa da mesma categoria, e a primeira nem sempre e a escolhida.
   const altDecisiva =
     itemDecisivo && decisivo
-      ? itemDecisivo.alternativas.find(
+      ? itemDecisivo.alternativas.find((al) => al.id === decisivo.altId) ||
+        itemDecisivo.alternativas.find(
           (al) =>
             (al.mapa.tipo != null && al.mapa.tipo === decisivo.categoria) ||
             al.mapa.triade === decisivo.categoria ||
@@ -374,7 +523,10 @@ function truncar(s, n) {
   return s.length > n ? s.slice(0, n - 1) + '…' : s;
 }
 
-/** Diferenca central entre dois tipos da triade instintiva, para o caso ambiguo. */
+/**
+ * Diferenca central entre dois tipos (36 pares, do apendice de diagnostico
+ * diferencial de Caracter e neurose). Se faltar um par, usa paixao e fixacao.
+ */
 function diferencaTipos(a, b) {
   const par = [a, b].sort((x, y) => x - y).join('-');
   // Adaptado do apendice de diagnostico diferencial de Caracter e neurose.
@@ -416,5 +568,12 @@ function diferencaTipos(a, b) {
     '7-9': 'no 7 a vida de fantasia é intensa, com astúcia e autoindulgência; no 9 há pouca vida interior, ingenuidade e facilidade em adiar o próprio desejo.',
     '8-9': 'no 8 a raiva explode e se impõe; no 9 ela é anestesiada e a vontade se dissolve para manter a paz.',
   };
-  return mapa[par] || 'observe qual paixão e qual fixação ressoam mais com a sua experiência interna.';
+  if (mapa[par]) return mapa[par];
+  const [ta, tb] = [tipos[a], tipos[b]];
+  if (!ta || !tb) return 'observe qual paixão/fixação ressoa mais com sua experiência interna.';
+  return (
+    `no ${a} a paixão é ${ta.paixao.toLowerCase()}, e a fixação, ${ta.fixacao.toLowerCase()}. ` +
+    `No ${b} a paixão é ${tb.paixao.toLowerCase()}, e a fixação, ${tb.fixacao.toLowerCase()}. ` +
+    'Observe qual das duas descreve melhor o que acontece por dentro, e não só o comportamento.'
+  );
 }

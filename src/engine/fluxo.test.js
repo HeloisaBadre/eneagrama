@@ -196,3 +196,64 @@ describe('fluxo adaptativo', () => {
     expect(faltando).toEqual([]);
   });
 });
+
+describe('respostas "nenhuma dessas" em tudo', () => {
+  const nula = (it) => ({ itemId: it.id, altId: it.alternativas.find((a) => a.nula).id, rtMs: RT });
+
+  it('sem triade na Fase 1, a Fase 2 testa as tres triades em vez de quebrar', () => {
+    const f1 = banco.fase1;
+    const r1 = f1.map(nula);
+    const res1 = resultadoFase1(r1, f1, calcularContexto(r1, f1));
+    expect(res1.triade.top).toBeNull();
+    const plano = planejarFase2(banco, res1);
+    expect(plano.triades.sort()).toEqual(['emocional', 'instintiva', 'mental']);
+    const tipos = new Set(plano.itensTriade.flatMap((it) => it.alternativas.map((a) => a.mapa.tipo)));
+    for (const t of [1, 2, 3, 4, 5, 6, 7, 8, 9]) expect(tipos.has(t)).toBe(true);
+  });
+
+  it('a analise final nao quebra e devolve tipo e triade vazios', () => {
+    const f1 = banco.fase1;
+    const f2 = banco.fase2.instintiva;
+    const f3 = banco.fase3;
+    const fim = analisarFinal({
+      fase1: { respostas: f1.map(nula), itens: f1 },
+      fase2: { respostas: f2.map(nula), itens: f2 },
+      fase2x: { respostas: [], itens: [] },
+      fase3: { respostas: f3.map(nula), itens: f3 },
+      fase4: { respostas: [], itens: [] },
+    });
+    expect(fim.triade.top).toBeNull();
+    expect(fim.tipo.top).toBeNull();
+    expect(fim.instinto.top).toBeNull();
+    expect(fim.subtipo).toBeNull();
+    expect(fim.confiabilidade.confiancaAutorrelato).toBe('baixo');
+  });
+});
+
+describe('resposta decisiva', () => {
+  it('guarda a alternativa escolhida, mesmo com duas alternativas do mesmo tipo no item', () => {
+    // Na Fase 2 cada tipo tem duas alternativas; escolhe sempre a SEGUNDA do 4.
+    const itens = banco.fase2.emocional;
+    const respostas = itens.map((it) => {
+      const doQuatro = it.alternativas.filter((a) => a.mapa.tipo === 4);
+      return { itemId: it.id, altId: doQuatro[doQuatro.length - 1].id, rtMs: RT };
+    });
+    const ctx = calcularContexto(respostas, itens);
+    const r = pontuarPorTaxa([{ respostas, itens, peso: 1 }], 'tipo', ctx);
+    expect(r.top.categoria).toBe(4);
+    const escolhida = respostas.find((x) => x.itemId === r.decisivo.itemId).altId;
+    expect(r.decisivo.altId).toBe(escolhida);
+  });
+});
+
+describe('candidatos da Fase 2', () => {
+  it('tipo com pontuacao zero na Fase 1 nao abre triade extra', () => {
+    // Respondente que so escolhe 4: os outros tipos ficam com zero.
+    const f1 = banco.fase1;
+    const r1 = responderPorTipo(f1, 4);
+    const res1 = resultadoFase1(r1, f1, calcularContexto(r1, f1));
+    const plano = planejarFase2(banco, res1);
+    expect(plano.triades).toEqual(['emocional']);
+    expect(plano.itensCruzados.length).toBe(0);
+  });
+});

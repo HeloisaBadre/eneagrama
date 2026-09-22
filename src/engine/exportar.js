@@ -118,9 +118,17 @@ export function agregar(registros) {
     const inst = reg.conhecido ? reg.conhecido.instinto : null;
 
     for (const r of reg.respostas) {
-      const it = (grupo.itens[r.item] ||= { id: r.item, vezes: 0, nulas: 0, comTipoConhecido: 0, escolheuProprioTipo: 0 });
+      const it = (grupo.itens[r.item] ||= {
+        id: r.item, vezes: 0, nulas: 0, comTipoConhecido: 0, escolheuProprioTipo: 0, comPropria: 0, nulasComPropria: 0,
+      });
       it.vezes += 1;
       if (r.nula) it.nulas += 1;
+      // "Nenhuma dessas" de quem tinha a propria opcao no item: sinal de item mal escrito.
+      // (Quem nao tinha o proprio tipo ali marcar "nenhuma" e o esperado.)
+      if (r.ofereceProprio === true) {
+        it.comPropria += 1;
+        if (r.nula) it.nulasComPropria += 1;
+      }
     }
     // Discriminacao: so conta respostas marcadas por marcarOferta() como vindas de um
     // item que oferecia o tipo conhecido da pessoa (o registro sozinho nao sabe disso).
@@ -151,6 +159,7 @@ export function agregar(registros) {
       ...it,
       taxaNula: it.vezes ? it.nulas / it.vezes : 0,
       taxaProprioTipo: it.comTipoConhecido ? it.escolheuProprioTipo / it.comTipoConhecido : null,
+      taxaNulaComPropria: it.comPropria ? it.nulasComPropria / it.comPropria : null,
     }));
     itens.sort((a, b) => b.taxaNula - a.taxaNula || b.vezes - a.vezes || a.id.localeCompare(b.id));
     saida[assinatura] = { registros: grupo.registros, itens };
@@ -159,19 +168,29 @@ export function agregar(registros) {
 }
 
 /**
- * Marca em cada resposta se o item oferecia uma alternativa do tipo conhecido da
- * pessoa. Precisa do banco da mesma versao do registro; sem essa marca, agregar()
- * nao calcula a discriminacao daquele registro.
+ * Marca em cada resposta, a partir do tipo e do instinto conhecidos da pessoa:
+ * - ofereceTipoConhecido: o item tinha uma alternativa do tipo dela (discriminacao);
+ * - ofereceProprio: o item tinha a opcao que descreve a pessoa. Nos itens de tipo, e o
+ *   tipo dela; nos de instinto, o instinto dela (e, na Fase 4, o item e do tipo dela).
+ * Precisa do banco da mesma versao do registro; sem essas marcas, agregar() nao
+ * calcula a discriminacao nem a taxa de "nenhuma dessas" de quem tinha a propria opcao.
  */
 export function marcarOferta(registro, itensPorId) {
   const t = registro.conhecido ? registro.conhecido.tipo : null;
-  if (!t) return registro;
+  const inst = registro.conhecido ? registro.conhecido.instinto : null;
+  if (!t && !inst) return registro;
   return {
     ...registro,
     respostas: registro.respostas.map((r) => {
       const item = itensPorId.get(r.item);
       if (!item) return r;
-      return { ...r, ofereceTipoConhecido: item.alternativas.some((a) => !a.nula && a.mapa && a.mapa.tipo === t) };
+      const alts = item.alternativas.filter((a) => !a.nula && a.mapa);
+      const ofereceTipoConhecido = t ? alts.some((a) => a.mapa.tipo === t) : false;
+      const deInstinto = alts.some((a) => a.mapa.instinto);
+      const ofereceProprio = deInstinto
+        ? !!inst && alts.some((a) => a.mapa.instinto === inst) && (item.tipo_alvo == null || item.tipo_alvo === t)
+        : ofereceTipoConhecido;
+      return { ...r, ofereceTipoConhecido, ofereceProprio };
     }),
   };
 }

@@ -382,7 +382,7 @@
         },
         {
           "id": "g",
-          "texto": "Eu ficava medindo o clima para pedir na hora certa e não levar não.",
+          "texto": "Eu pedia com medo, sem saber se ia ouvir um sim, um não ou uma bronca.",
           "mapa": {
             "triade": "mental",
             "tipo": 6,
@@ -394,7 +394,7 @@
         },
         {
           "id": "h",
-          "texto": "Eu deixava para lá antes mesmo de pedir. Não valia o desgaste.",
+          "texto": "Eu quase não sabia o que queria. Ia no embalo do que os adultos decidiam.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 9,
@@ -702,7 +702,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Qual destas conclusões você tirou cedo, sem ninguém ter te ensinado?",
+      "cenario": "Qual destas conclusões você tirou cedo, sem que ninguém precisasse ensinar?",
       "alternativas": [
         {
           "id": "a",
@@ -834,7 +834,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Seu chefe te chama para uma conversa e não diz o assunto. O que passa na sua cabeça no caminho até a sala?",
+      "cenario": "Seu chefe chama você para uma conversa e não diz o assunto. O que passa na sua cabeça no caminho até a sala?",
       "alternativas": [
         {
           "id": "a",
@@ -1006,7 +1006,7 @@
         },
         {
           "id": "d",
-          "texto": "Fico tenso avaliando se vale a pena e se a pessoa vai reagir mal.",
+          "texto": "Fico tenso. Ou engulo, avaliando se a pessoa vai reagir mal, ou enfrento para não parecer que tive medo.",
           "mapa": {
             "triade": "mental",
             "tipo": 6,
@@ -1054,7 +1054,7 @@
         },
         {
           "id": "h",
-          "texto": "Não falo nada. Me desligo e volto para o meu celular.",
+          "texto": "Não falo nada. Não vou gastar a minha energia com um estranho.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -1230,7 +1230,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "É sábado à noite, você está em casa e ninguém te chamou para nada. Como é isso para você?",
+      "cenario": "É sábado à noite, você está em casa e não recebeu nenhum convite. Como é isso para você?",
       "alternativas": [
         {
           "id": "a",
@@ -2051,7 +2051,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Um colega passa por cima de uma combinação sua pela segunda vez. O que você faz?",
+        "cenario": "Um colega quebra, pela segunda vez, um combinado que tinha com você. O que você faz?",
         "alternativas": [
           {
             "id": "a",
@@ -2153,7 +2153,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém te tratou mal ontem. Hoje de manhã, qual pensamento aparece?",
+        "cenario": "Alguém tratou você mal ontem. Hoje de manhã, qual pensamento aparece?",
         "alternativas": [
           {
             "id": "a",
@@ -2765,7 +2765,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": true,
-        "cenario": "Alguém próximo te diz: “às vezes você é difícil.” Com o que você concorda?",
+        "cenario": "Alguém próximo comenta: “às vezes você é difícil.” Com o que você concorda?",
         "alternativas": [
           {
             "id": "a",
@@ -3071,7 +3071,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Um amigo seu vai te descrever para alguém que não te conhece. O que ele provavelmente diz?",
+        "cenario": "Um amigo vai apresentar você a alguém que ainda não sabe nada a seu respeito. O que ele provavelmente diz?",
         "alternativas": [
           {
             "id": "a",
@@ -4095,7 +4095,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Você vai encontrar pessoas que ainda não te conhecem. O que você faz antes de sair de casa?",
+        "cenario": "Você vai encontrar pessoas que ainda não conhecem você. O que você faz antes de sair de casa?",
         "alternativas": [
           {
             "id": "a",
@@ -4503,7 +4503,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "O que alguém faz que te faz sentir realmente querido?",
+        "cenario": "Qual gesto de alguém faz você se sentir realmente querido?",
         "alternativas": [
           {
             "id": "a",
@@ -5320,7 +5320,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém te pergunta como você está se sentindo de verdade. O que acontece?",
+        "cenario": "Alguém pergunta como você está se sentindo de verdade. O que acontece?",
         "alternativas": [
           {
             "id": "a",
@@ -6037,11 +6037,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": true,
-        "cenario": "Do que você tem orgulho, mesmo que nunca tenha falado em voz alta?",
+        "cenario": "Um amigo antigo faz um brinde a você e fala de uma qualidade sua. Qual destas faria você pensar que ele conhece você de verdade?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "De precisar de pouquíssimo e não pedir nada a ninguém.",
+            "texto": "Que você precisa de pouquíssimo e nunca pede nada a ninguém.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -6054,7 +6054,7 @@
           },
           {
             "id": "b",
-            "texto": "De pensar por conta própria e não seguir a manada.",
+            "texto": "Que você pensa por conta própria e não segue a manada.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -6067,7 +6067,7 @@
           },
           {
             "id": "c",
-            "texto": "De ser leal e cumprir o que prometo.",
+            "texto": "Que você é leal e sempre cumpre o que promete.",
             "mapa": {
               "triade": "mental",
               "tipo": 6,
@@ -6080,7 +6080,7 @@
           },
           {
             "id": "d",
-            "texto": "De não me intimidar com ninguém.",
+            "texto": "Que você não se intimida com ninguém.",
             "mapa": {
               "triade": "mental",
               "tipo": 6,
@@ -6093,7 +6093,7 @@
           },
           {
             "id": "e",
-            "texto": "De aproveitar a vida e ver o lado bom de tudo.",
+            "texto": "Que você aproveita a vida e vê o lado bom de tudo.",
             "mapa": {
               "triade": "mental",
               "tipo": 7,
@@ -6106,7 +6106,7 @@
           },
           {
             "id": "f",
-            "texto": "De me dedicar aos outros sem esperar nada.",
+            "texto": "Que você se dedica aos outros sem esperar nada em troca.",
             "mapa": {
               "triade": "mental",
               "tipo": 7,
@@ -6241,7 +6241,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém te conta uma versão de uma história que não fecha. O que você faz?",
+        "cenario": "Alguém conta a você uma versão de uma história que não fecha. O que você faz?",
         "alternativas": [
           {
             "id": "a",
@@ -6343,7 +6343,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Um amigo vai te descrever para alguém que não te conhece. O que ele diz?",
+        "cenario": "Um amigo vai apresentar você a alguém que ainda não sabe nada a seu respeito. O que ele diz?",
         "alternativas": [
           {
             "id": "a",
@@ -6856,7 +6856,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém te cobra uma coisa que você não entregou. O que acontece?",
+        "cenario": "Alguém cobra uma coisa que você não entregou. O que acontece?",
         "alternativas": [
           {
             "id": "a",
@@ -7534,7 +7534,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Você vai fazer algo que te dá medo (falar em público, uma consulta, uma conversa dura). O que faz?",
+        "cenario": "Você vai fazer algo de que tem medo (falar em público, uma consulta, uma conversa dura). O que faz?",
         "alternativas": [
           {
             "id": "a",
@@ -7745,7 +7745,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Alguém te prejudicou de verdade. Seis meses depois, o que você fez a respeito?",
+      "cenario": "Alguém prejudicou você de verdade. Seis meses depois, o que você fez a respeito?",
       "alternativas": [
         {
           "id": "a",
@@ -8213,7 +8213,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você está muito empolgado com um projeto. O que te empolga nele?",
+      "cenario": "Você está muito empolgado com um projeto. O que nele mais empolga você?",
       "alternativas": [
         {
           "id": "a",
@@ -8889,7 +8889,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você passou o fim de semana resolvendo problema dos outros. Como foi?",
+      "cenario": "Alguém próximo pediu ajuda, e você acabou passando o fim de semana resolvendo o problema dessa pessoa. Como foi?",
       "alternativas": [
         {
           "id": "a",
@@ -8941,7 +8941,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Ninguém agradeceu. O que fica?",
+      "cenario": "Você ajudou alguém numa coisa grande, e ninguém agradeceu. O que fica?",
       "alternativas": [
         {
           "id": "a",
@@ -9253,7 +9253,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Alguém te pergunta onde você quer estar em cinco anos. O que você responde?",
+      "cenario": "Alguém pergunta onde você quer estar daqui a cinco anos. O que você responde?",
       "alternativas": [
         {
           "id": "a",
@@ -9513,7 +9513,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você é muito carinhoso com uma pessoa específica. O que isso te dá?",
+      "cenario": "Você é muito carinhoso com uma pessoa específica. O que isso traz para você?",
       "alternativas": [
         {
           "id": "a",
@@ -10555,11 +10555,11 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você perdeu o emprego hoje. Qual é a primeira preocupação concreta?",
+      "cenario": "Você recebeu hoje uma notícia muito boa. Qual é o seu primeiro impulso?",
       "alternativas": [
         {
           "id": "a",
-          "texto": "As contas, o aluguel, quanto tempo a reserva dura.",
+          "texto": "Garantir alguma coisa com ela: guardar, resolver uma pendência, cuidar da casa.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -10571,7 +10571,7 @@
         },
         {
           "id": "b",
-          "texto": "Como contar para as pessoas do meu meio e o que vou virar sem esse papel.",
+          "texto": "Contar para o meu grupo e pensar no que muda no meu lugar ali.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -10583,7 +10583,7 @@
         },
         {
           "id": "c",
-          "texto": "Como isso afeta a pessoa mais importante para mim e o que ela vai pensar.",
+          "texto": "Correr para contar para a pessoa mais importante para mim.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -10800,7 +10800,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "“Você se preocupa demais com segurança e com ter tudo garantido.”",
+          "texto": "“Você se preocupa demais com dinheiro, comida, conforto e saúde.”",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -10917,7 +10917,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "Você passou por semanas difíceis e finalmente tem um fim de semana. O que te recupera?",
+      "cenario": "Você passou por semanas difíceis e finalmente tem um fim de semana. O que mais ajuda você a se recuperar?",
       "alternativas": [
         {
           "id": "a",
@@ -10982,7 +10982,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Quem organiza a vida toda em torno de segurança e de não faltar nada.",
+          "texto": "Quem organiza a vida toda em torno de não faltar nada: casa, comida, dinheiro, saúde.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11043,7 +11043,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Se é confortável e seguro: onde sentar, se tem o que comer, como sair.",
+          "texto": "Se é confortável: onde sentar, se está frio ou calor, se tem o que comer.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11160,7 +11160,7 @@
       "par_gemeo_id": null,
       "indireto": false,
       "flag_desejabilidade_social": false,
-      "cenario": "O que faz você acordar de madrugada preocupado?",
+      "cenario": "Numa semana difícil, qual preocupação volta mais vezes à sua cabeça?",
       "alternativas": [
         {
           "id": "a",
@@ -11299,7 +11299,7 @@
         },
         {
           "id": "b",
-          "texto": "O time, o ambiente e o reconhecimento que a posição dá.",
+          "texto": "O time, o ambiente e o lugar que eu ocupo no grupo.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11503,7 +11503,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém te vê irritado. O que essa pessoa vê?",
+        "cenario": "Alguém vê você irritado. O que essa pessoa vê?",
         "alternativas": [
           {
             "id": "a",
@@ -11934,7 +11934,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém te chama de vaidoso. Qual é a sua reação?",
+        "cenario": "Alguém chama você de vaidoso. Qual é a sua reação?",
         "alternativas": [
           {
             "id": "a",
@@ -12182,7 +12182,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Você teve um dia muito exigente. O que te devolve ao normal?",
+        "cenario": "Você teve um dia muito exigente. O que faz você voltar ao normal?",
         "alternativas": [
           {
             "id": "a",
@@ -12489,7 +12489,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Como as pessoas costumam te ver?",
+        "cenario": "Como as pessoas costumam ver você?",
         "alternativas": [
           {
             "id": "a",
@@ -12613,7 +12613,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Como as pessoas te descreveriam?",
+        "cenario": "Como as pessoas descreveriam você?",
         "alternativas": [
           {
             "id": "a",
@@ -12674,7 +12674,7 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguma coisa te frustrou hoje. Para onde você vai?",
+        "cenario": "Alguma coisa frustrou você hoje. Para onde você vai?",
         "alternativas": [
           {
             "id": "a",
@@ -12737,11 +12737,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Em que situação a sua força mais aparece?",
+        "cenario": "Um problema sério cai no seu colo. Como você lida com ele?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Garantindo o que é meu e não dependendo de ninguém.",
+            "texto": "Resolvo sozinho, do meu jeito, sem pedir ajuda e sem muita conversa.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12753,7 +12753,7 @@
           },
           {
             "id": "b",
-            "texto": "Defendendo meus amigos e meu grupo.",
+            "texto": "Assumo o comando. As pessoas olham para mim, e eu protejo quem está do meu lado.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12765,7 +12765,7 @@
           },
           {
             "id": "c",
-            "texto": "Segurando a relação e a pessoa que eu quero por perto.",
+            "texto": "Quero a pessoa que é minha inteira do meu lado, e fico de olho em tudo.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12798,11 +12798,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "O que te deixa fora de si?",
+        "cenario": "O que deixa você fora de si?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Mexerem no meu sustento, no meu território, nas minhas coisas.",
+            "texto": "Mexerem no meu sustento, no meu espaço, nas minhas coisas.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12814,7 +12814,7 @@
           },
           {
             "id": "b",
-            "texto": "Traírem ou machucarem alguém dos meus.",
+            "texto": "Alguém do meu grupo ser desleal, ou alguém machucar um dos meus.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12826,7 +12826,7 @@
           },
           {
             "id": "c",
-            "texto": "Tentarem tirar de mim quem é meu, ou a pessoa não se entregar.",
+            "texto": "Tentarem tirar de mim quem é meu, ou a pessoa não se entregar por inteiro.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12859,11 +12859,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Sexta à noite, dia difícil. O que é prazer?",
+        "cenario": "Sexta à noite, depois de um dia difícil. O que é prazer para você?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Comida boa, minha casa, o que é meu.",
+            "texto": "Comida boa, a minha casa, as minhas coisas, ninguém me pedindo nada.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12875,7 +12875,7 @@
           },
           {
             "id": "b",
-            "texto": "A turma reunida, cumplicidade, bar cheio.",
+            "texto": "Reunir a minha turma, gente de confiança, e ser quem comanda a noite.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12887,7 +12887,7 @@
           },
           {
             "id": "c",
-            "texto": "Intensidade com alguém, a noite inteira.",
+            "texto": "Intensidade com alguém, a noite inteira, sem limite.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12926,7 +12926,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Comida, sofá, série, celular. Passam rápido.",
+            "texto": "Comida boa, descanso e o meu canto do jeito que eu gosto.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -12950,7 +12950,7 @@
           },
           {
             "id": "c",
-            "texto": "Fico perto de quem eu amo, mesmo sem fazer nada.",
+            "texto": "Com uma pessoa, perto ou conversando por mensagem, sem ver a hora passar.",
             "mapa": {
               "triade": null,
               "tipo": null,
@@ -13011,7 +13011,7 @@
           },
           {
             "id": "c",
-            "texto": "Colado em uma pessoa específica.",
+            "texto": "Junto de uma pessoa específica, quase como se eu fosse parte dela.",
             "mapa": {
               "triade": null,
               "tipo": null,
