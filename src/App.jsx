@@ -154,15 +154,15 @@ export default function App() {
     const ctx = calcularContexto(todasRespostas(f), todosItens(f));
 
     if (f.faseKey === 'fase1') {
-      const res1 = resultadoFase1(f.respostas.fase1, f.itens.fase1, ctx);
-      if (res1.triade.ambiguo && !f.desempateAplicado.fase1 && res1.triade.segundo) {
+      // As tres perguntas que separam os centros (corpo, emocao, mente) sao feitas
+      // sempre, e nao so quando a triagem empata: elas perguntam direto pelo centro
+      // e protegem o caso em que a pessoa se reconhece pouco nas alternativas do
+      // proprio tipo e o centro dela nem chegaria a ser testado.
+      if (!f.desempateAplicado.fase1) {
         f.desempateAplicado.fase1 = true;
-        const par = [res1.triade.top.categoria, res1.triade.segundo.categoria];
-        const extras = (banco.fase1_desempate || []).filter(
-          (it) => Array.isArray(it.separa) && it.separa.length === 2 && par.every((p) => it.separa.includes(p))
-        );
-        if (anexar(extras)) return;
+        if (anexar(banco.fase1_desempate || [])) return;
       }
+      const res1 = resultadoFase1(f.respostas.fase1, f.itens.fase1, ctx);
       const plano = planejarFase2(banco, res1);
       plano.itensCruzados.forEach((it) => f.cruzadosIds.add(it.id));
       return iniciarFase('fase2', plano.itens);

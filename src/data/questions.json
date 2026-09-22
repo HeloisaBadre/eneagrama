@@ -46,7 +46,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Aprendi rápido que chorar não resolvia e podia até piorar. Fui ficando duro.",
+          "texto": "Eu endurecia. Chorar ali era entregar um ponto fraco, e eu não ia ficar à mercê de ninguém.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -58,7 +58,7 @@
         },
         {
           "id": "b",
-          "texto": "Não era um problema para ninguém. Eu me acalmava sozinho, no meu canto.",
+          "texto": "Eu me acalmava sozinho e deixava passar. Virar assunto só ia pesar o clima da casa.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 9,
@@ -70,7 +70,7 @@
         },
         {
           "id": "c",
-          "texto": "Me mandavam parar, dizendo que era manha ou que eu tinha que dar exemplo.",
+          "texto": "Eu engolia e me corrigia. Chorar era perder a linha, e eu tinha que dar o exemplo.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -82,7 +82,7 @@
         },
         {
           "id": "d",
-          "texto": "Me davam colo e carinho, e eu aprendi que sendo dócil e gracinha eu conseguia isso.",
+          "texto": "Eu buscava colo, e aprendi que sendo doce e prestativo esse carinho vinha.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -94,7 +94,7 @@
         },
         {
           "id": "e",
-          "texto": "Não tinha muito espaço para isso. O que contava era eu estar bem e dar conta.",
+          "texto": "Eu me recompunha rápido. Precisava continuar sendo o motivo de orgulho, não o problema.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -106,7 +106,7 @@
         },
         {
           "id": "f",
-          "texto": "Eu tinha a impressão de que com meus irmãos era diferente, que eles recebiam mais.",
+          "texto": "Ficava a impressão de que comigo era diferente, que os outros recebiam o que faltava para mim.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -118,7 +118,7 @@
         },
         {
           "id": "g",
-          "texto": "Eu ia para o meu quarto e resolvia por dentro. Ninguém ia perguntar mesmo.",
+          "texto": "Eu guardava para mim. Mostrar o que eu sentia era abrir uma porta que depois não fecha.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -130,7 +130,7 @@
         },
         {
           "id": "h",
-          "texto": "Dependia do humor do adulto naquele dia, e isso me deixava ainda mais assustado.",
+          "texto": "Eu ficava atento ao humor do adulto. Nunca sabia se vinha acolhida ou bronca.",
           "mapa": {
             "triade": "mental",
             "tipo": 6,
@@ -142,7 +142,7 @@
         },
         {
           "id": "i",
-          "texto": "Alguém me distraía, ou eu mesmo achava um jeito de virar a página rápido.",
+          "texto": "Eu virava a página rápido, arrumava uma distração. Ficar ali doendo não levava a nada.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -178,7 +178,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Sendo carinhoso, engraçadinho e prestativo com os adultos.",
+          "texto": "Sendo querido e útil. Quem cuida dos outros vira alguém de quem não se abre mão.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -190,7 +190,7 @@
         },
         {
           "id": "b",
-          "texto": "Indo bem: notas, esportes, prêmios, sendo motivo de orgulho.",
+          "texto": "Sendo motivo de orgulho. Eu valia pelo que conseguia mostrar.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -202,7 +202,7 @@
         },
         {
           "id": "c",
-          "texto": "Eu não conseguia. A atenção parecia ir sempre para outra pessoa.",
+          "texto": "Eu não conseguia, e isso confirmava que faltava em mim o que sobrava nos outros.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -214,7 +214,7 @@
         },
         {
           "id": "d",
-          "texto": "Sendo o responsável, o certinho, o que fazia tudo direito.",
+          "texto": "Sendo o certinho. Sem motivo de crítica, sobrava aprovação.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -226,7 +226,7 @@
         },
         {
           "id": "e",
-          "texto": "Fazendo bagunça, batendo de frente, não levando desaforo para casa.",
+          "texto": "Batendo de frente. Se eu fosse forte, ninguém passaria por cima de mim.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -238,7 +238,7 @@
         },
         {
           "id": "f",
-          "texto": "Eu nem tentava. Era a criança que não dava trabalho.",
+          "texto": "Eu nem tentava. O que eu queria mesmo era que não houvesse tensão por minha causa.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 9,
@@ -250,7 +250,7 @@
         },
         {
           "id": "g",
-          "texto": "Eu me afastava. Preferia meu canto e meus assuntos a disputar espaço.",
+          "texto": "Eu não disputava. Preferia o meu canto a ter que me expor para caber ali.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -274,7 +274,7 @@
         },
         {
           "id": "i",
-          "texto": "Fazendo graça e animando o ambiente. Eu era a diversão da casa.",
+          "texto": "Animando o ambiente. Onde tem graça, tem lugar para mim.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -310,7 +310,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Eu conseguia quase sempre, principalmente com quem gostava mais de mim.",
+          "texto": "Eu sabia a quem pedir e como. Com quem gostava de mim, quase sempre dava certo.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -322,7 +322,7 @@
         },
         {
           "id": "b",
-          "texto": "Se diziam não, eu dava um jeito de conseguir por outro caminho.",
+          "texto": "Se vinha um não, eu dava um jeito por outro caminho. Ficar sem é que não dava.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -334,7 +334,7 @@
         },
         {
           "id": "c",
-          "texto": "Eu insistia até conseguir, ou simplesmente pegava e depois eu via.",
+          "texto": "Eu insistia até conseguir. Depender da boa vontade dos outros nunca foi comigo.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -346,7 +346,7 @@
         },
         {
           "id": "d",
-          "texto": "Eu nem pedia muito. Tinha que ser merecido e na hora certa.",
+          "texto": "Eu nem pedia muito. Tinha que ser merecido, e na hora certa.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -358,7 +358,7 @@
         },
         {
           "id": "e",
-          "texto": "Vinha uma explicação de que não dava, e eu ficava com a sensação de que para outros dava.",
+          "texto": "Vinha uma explicação de que não dava, e ficava a sensação de que para os outros dava.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -370,7 +370,7 @@
         },
         {
           "id": "f",
-          "texto": "Eu quase não pedia. Pedir já me parecia um incômodo.",
+          "texto": "Eu quase não pedia. Pedir já era ficar devendo alguma coisa a alguém.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -382,7 +382,7 @@
         },
         {
           "id": "g",
-          "texto": "Eu pedia com medo, sem saber se ia ouvir um sim, um não ou uma bronca.",
+          "texto": "Eu pedia com medo, sem saber se vinha um sim, um não ou uma bronca.",
           "mapa": {
             "triade": "mental",
             "tipo": 6,
@@ -406,7 +406,7 @@
         },
         {
           "id": "i",
-          "texto": "Eu mostrava que merecia: boas notas, tarefas feitas, algo em troca.",
+          "texto": "Eu mostrava que merecia: notas, tarefas feitas, alguma coisa em troca.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -442,7 +442,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Eu sumia e esperava passar. Fazia de conta que não estava acontecendo.",
+          "texto": "Eu me desligava e esperava passar. Se eu não sentisse aquilo, não me atingia.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 9,
@@ -454,31 +454,7 @@
         },
         {
           "id": "b",
-          "texto": "Eu ficava atento a cada barulho, tentando prever o que ia acontecer.",
-          "mapa": {
-            "triade": "mental",
-            "tipo": 6,
-            "instinto": null
-          },
-          "eixo": "emocao",
-          "peso": 1.0,
-          "desejavel": false
-        },
-        {
-          "id": "c",
-          "texto": "Eu tentava consolar alguém, geralmente o que estava pior.",
-          "mapa": {
-            "triade": "emocional",
-            "tipo": 2,
-            "instinto": null
-          },
-          "eixo": "emocao",
-          "peso": 1.0,
-          "desejavel": false
-        },
-        {
-          "id": "d",
-          "texto": "Eu ficava com raiva de quem estava errado e queria pôr ordem naquilo.",
+          "texto": "Eu ficava tenso. Alguém ali estava errado, e nada daquilo deveria estar acontecendo.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -489,8 +465,8 @@
           "desejavel": false
         },
         {
-          "id": "e",
-          "texto": "Eu me metia no meio, principalmente se alguém estivesse sendo injustiçado.",
+          "id": "c",
+          "texto": "Eu entrava no meio, com raiva de quem estava sendo injusto com o mais fraco.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -501,11 +477,11 @@
           "desejavel": false
         },
         {
-          "id": "f",
-          "texto": "Eu sentia tudo muito fundo e me trancava com aquilo.",
+          "id": "d",
+          "texto": "Eu cuidava de quem estava pior. Se o clima voltasse, eu tinha feito a minha parte.",
           "mapa": {
             "triade": "emocional",
-            "tipo": 4,
+            "tipo": 2,
             "instinto": null
           },
           "eixo": "emocao",
@@ -513,8 +489,20 @@
           "desejavel": false
         },
         {
-          "id": "g",
-          "texto": "Eu ia para o meu quarto e me desligava com um livro, um jogo, qualquer coisa.",
+          "id": "e",
+          "texto": "Eu ficava em alerta, tentando prever até onde ia e o que ia sobrar para mim.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 6,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 1.0,
+          "desejavel": false
+        },
+        {
+          "id": "f",
+          "texto": "Eu saía de perto e me fechava. Aquilo consumia uma energia que eu não tinha para dar.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -525,8 +513,20 @@
           "desejavel": false
         },
         {
+          "id": "g",
+          "texto": "Eu sentia aquilo mais fundo que os outros, e carregava por dias.",
+          "mapa": {
+            "triade": "emocional",
+            "tipo": 4,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 1.0,
+          "desejavel": false
+        },
+        {
           "id": "h",
-          "texto": "Eu tocava a minha vida e cuidava do que era prático: lição, comida, o que precisasse.",
+          "texto": "Eu seguia com as minhas coisas, mostrando que comigo estava tudo bem.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -538,7 +538,7 @@
         },
         {
           "id": "i",
-          "texto": "Eu ia brincar, sair, inventar alguma coisa. Não ficava ali.",
+          "texto": "Eu escapava para outra coisa: televisão, brincadeira, imaginação.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -574,7 +574,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "O responsável, o que tinha que ser exemplo e não dar motivo de crítica.",
+          "texto": "O responsável, que não podia dar motivo de crítica.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -586,7 +586,7 @@
         },
         {
           "id": "b",
-          "texto": "O querido, aquele que alegrava e cuidava dos outros.",
+          "texto": "O querido, que cuidava dos outros e era preciso.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -610,7 +610,7 @@
         },
         {
           "id": "d",
-          "texto": "O diferente, aquele que não se encaixava bem ali.",
+          "texto": "O que não se encaixava, e sentia isso como uma falha só dele.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -622,7 +622,7 @@
         },
         {
           "id": "e",
-          "texto": "O quietinho, que ficava no canto dele.",
+          "texto": "O que não pedia nada, e também não queria que exigissem nada dele.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -646,7 +646,7 @@
         },
         {
           "id": "g",
-          "texto": "O animado, que aliviava o clima.",
+          "texto": "O que aliviava o clima e trazia leveza.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -658,7 +658,7 @@
         },
         {
           "id": "h",
-          "texto": "O forte, que resolvia e protegia os outros.",
+          "texto": "O forte, que resolvia e protegia.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -850,7 +850,7 @@
         },
         {
           "id": "b",
-          "texto": "Reviso o que pode ter saído errado e se a culpa é minha.",
+          "texto": "Reviso o que pode ter saído errado. Se a falha for minha, já começo a me cobrar.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -862,7 +862,7 @@
         },
         {
           "id": "c",
-          "texto": "Penso em como me sair bem na conversa e reverter se for crítica.",
+          "texto": "Penso em como me sair bem e não ficar mal na foto.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -874,7 +874,7 @@
         },
         {
           "id": "d",
-          "texto": "Se for encrenca, eu encaro. Já chego pronto para o que vier.",
+          "texto": "Se for encrenca, eu encaro. O que me incomoda é ficar na mão de alguém.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -886,7 +886,7 @@
         },
         {
           "id": "e",
-          "texto": "Procuro não pensar até chegar lá. Depois eu vejo.",
+          "texto": "Empurro para depois. Nem penso no assunto até chegar lá.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 9,
@@ -898,7 +898,7 @@
         },
         {
           "id": "f",
-          "texto": "Já sinto que é comigo, que vão apontar algo em mim.",
+          "texto": "Já sinto que é comigo, que vão apontar em mim aquilo que eu já suspeito.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -910,7 +910,7 @@
         },
         {
           "id": "g",
-          "texto": "Penso em tudo o que já fiz por essa pessoa. Seria injusto ela reclamar de mim.",
+          "texto": "Penso em tudo o que já fiz por essa pessoa. Seria injusto ela vir com cobrança.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -922,7 +922,7 @@
         },
         {
           "id": "h",
-          "texto": "Me incomoda ser pego de surpresa, sem tempo de me preparar.",
+          "texto": "Me incomoda ser pego sem tempo de me preparar, exposto sem ter escolhido.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -934,7 +934,7 @@
         },
         {
           "id": "i",
-          "texto": "Provavelmente não é nada. Já estou pensando no que vou fazer depois.",
+          "texto": "Provavelmente não é nada. Já estou pensando em outra coisa.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -970,7 +970,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Falo na hora. Não vou fingir que não vi.",
+          "texto": "Falo na hora. Deixar passar seria aceitar que podem me passar para trás.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -982,7 +982,7 @@
         },
         {
           "id": "b",
-          "texto": "Falo, ou fico indignado por dentro, porque aquilo é falta de educação.",
+          "texto": "Fico indignado. Não é sobre mim: é sobre a pessoa estar fazendo uma coisa errada.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -994,7 +994,7 @@
         },
         {
           "id": "c",
-          "texto": "Deixo passar. Não vale a briga.",
+          "texto": "Deixo passar. Não vale virar um atrito por causa disso.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 9,
@@ -1006,7 +1006,7 @@
         },
         {
           "id": "d",
-          "texto": "Fico tenso. Ou engulo, avaliando se a pessoa vai reagir mal, ou enfrento para não parecer que tive medo.",
+          "texto": "Fico tenso medindo o risco. Se eu falar, dá confusão. Se eu não falar, fico remoendo.",
           "mapa": {
             "triade": "mental",
             "tipo": 6,
@@ -1018,7 +1018,7 @@
         },
         {
           "id": "e",
-          "texto": "Deixo quieto para não fazer cena, mas fico irritado.",
+          "texto": "Não faço cena. Brigar por causa de fila me deixaria mal diante dos outros.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -1030,7 +1030,7 @@
         },
         {
           "id": "f",
-          "texto": "Fico indignado que façam isso comigo, logo eu, que sempre sou educado.",
+          "texto": "Fico indignado que façam isso comigo, logo eu, que sempre tenho consideração pelos outros.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -1042,7 +1042,7 @@
         },
         {
           "id": "g",
-          "texto": "Sinto como desfeita pessoal, como se eu não valesse o suficiente para ser respeitado.",
+          "texto": "Sinto como desfeita pessoal, como se eu não valesse o bastante para ser respeitado.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -1066,7 +1066,7 @@
         },
         {
           "id": "i",
-          "texto": "Faço um comentário irônico ou levo na brincadeira e sigo.",
+          "texto": "Faço um comentário irônico e sigo. Não vou estragar o meu dia com isso.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -1102,7 +1102,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Fico magoado. Eu sempre estou lá quando ele precisa.",
+          "texto": "Fico magoado. Eu sempre estou lá quando ele precisa, e isso cria uma conta que ele não paga.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -1114,7 +1114,7 @@
         },
         {
           "id": "b",
-          "texto": "Falo na cara dele, ou simplesmente paro de chamar.",
+          "texto": "Falo na cara, ou simplesmente paro de chamar. Não fico na mão de ninguém.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -1126,7 +1126,7 @@
         },
         {
           "id": "c",
-          "texto": "Acho um desrespeito com o tempo dos outros, mesmo que eu não diga.",
+          "texto": "Acho um desrespeito com o tempo dos outros, mesmo que eu não diga nada.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -1150,7 +1150,7 @@
         },
         {
           "id": "e",
-          "texto": "Penso que talvez ele prefira a companhia de outras pessoas.",
+          "texto": "Penso que ele prefere a companhia de outras pessoas, e isso mexe comigo mais do que deveria.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -1162,7 +1162,7 @@
         },
         {
           "id": "f",
-          "texto": "Fico pensando se ele está me evitando, ou se aconteceu alguma coisa.",
+          "texto": "Fico com a pulga atrás da orelha: será que ele está me evitando, ou aconteceu alguma coisa?",
           "mapa": {
             "triade": "mental",
             "tipo": 6,
@@ -1174,7 +1174,7 @@
         },
         {
           "id": "g",
-          "texto": "Sinceramente, dá até um alívio. Ganhei a noite de volta.",
+          "texto": "Dá até um alívio. A noite volta a ser minha, e sai mais barato para mim.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -1198,7 +1198,7 @@
         },
         {
           "id": "i",
-          "texto": "Chamo outra pessoa ou invento outro programa.",
+          "texto": "Chamo outra pessoa ou invento outro programa. Não fico parado na frustração.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -1234,7 +1234,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Ótimo. É quando eu recupero a energia.",
+          "texto": "Ótimo. É quando eu recupero o que os outros gastam de mim durante a semana.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -1246,7 +1246,7 @@
         },
         {
           "id": "b",
-          "texto": "Tranquilo. Ponho uma série, como alguma coisa e a noite passa.",
+          "texto": "Fico numa boa. Vou levando a noite sem pensar muito.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 9,
@@ -1258,7 +1258,7 @@
         },
         {
           "id": "c",
-          "texto": "Começo a procurar o que fazer. Ficar parado me incomoda.",
+          "texto": "Começo a imaginar o que dá para fazer. Ficar sem nada me incomoda.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -1270,10 +1270,10 @@
         },
         {
           "id": "d",
-          "texto": "Me pego olhando o celular, esperando alguém lembrar de mim.",
+          "texto": "Bate a sensação de estar de fora, como se os outros tivessem algo que eu não tenho.",
           "mapa": {
             "triade": "emocional",
-            "tipo": 2,
+            "tipo": 4,
             "instinto": null
           },
           "eixo": "paixao",
@@ -1282,10 +1282,10 @@
         },
         {
           "id": "e",
-          "texto": "Bate aquela sensação de que a vida acontece mais para os outros.",
+          "texto": "Estranho. Eu estou sempre disponível para os outros, e ninguém lembrou de mim.",
           "mapa": {
             "triade": "emocional",
-            "tipo": 4,
+            "tipo": 2,
             "instinto": null
           },
           "eixo": "paixao",
@@ -1306,7 +1306,7 @@
         },
         {
           "id": "g",
-          "texto": "Aproveito para adiantar alguma coisa. Sábado à toa é tempo perdido.",
+          "texto": "Aproveito para adiantar alguma coisa. Tempo parado me dá sensação de ficar para trás.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -1318,7 +1318,7 @@
         },
         {
           "id": "h",
-          "texto": "Uso para organizar o que está pendente em casa.",
+          "texto": "Uso o tempo para colocar em ordem o que está pendente.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -1330,7 +1330,7 @@
         },
         {
           "id": "i",
-          "texto": "Se eu quiser companhia, eu chamo. Não fico esperando.",
+          "texto": "Se eu quiser companhia, eu chamo. Não fico esperando ser lembrado.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -1378,7 +1378,7 @@
         },
         {
           "id": "b",
-          "texto": "Sobe uma quentura e vontade de responder na hora.",
+          "texto": "Sobe uma quentura. Ninguém vai me diminuir na frente dos outros.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -1390,7 +1390,7 @@
         },
         {
           "id": "c",
-          "texto": "Checo se a crítica é justa, e se não for, me indigno.",
+          "texto": "Checo se a crítica é justa. Se for, dói mais, porque eu deveria ter feito melhor.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -1402,7 +1402,7 @@
         },
         {
           "id": "d",
-          "texto": "Sinto vergonha e aquilo dói mais do que deveria.",
+          "texto": "Sinto vergonha, e aquilo confirma o que eu já desconfiava sobre mim.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -1426,7 +1426,7 @@
         },
         {
           "id": "f",
-          "texto": "Me magoo por não reconhecerem tudo o que eu faço.",
+          "texto": "Me magoo. Depois de tudo o que eu faço, era para terem mais consideração comigo.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -1438,7 +1438,7 @@
         },
         {
           "id": "g",
-          "texto": "Fico meio anestesiado. Só percebo depois o quanto me incomodou.",
+          "texto": "Fico meio anestesiado. Só depois percebo o quanto aquilo me incomodou.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 9,
@@ -1450,7 +1450,7 @@
         },
         {
           "id": "h",
-          "texto": "Me fecho e respondo o mínimo. Depois penso sozinho.",
+          "texto": "Me fecho e respondo o mínimo. Ali eu não entrego nada.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -1462,7 +1462,7 @@
         },
         {
           "id": "i",
-          "texto": "Levo na leveza, faço uma piada e sigo.",
+          "texto": "Levo na leveza e faço uma piada. Não quero estragar o clima.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -1498,10 +1498,10 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Circulo, converso com todo mundo e já estou animando alguém.",
+          "texto": "Procuro as pessoas que valem a pena conhecer ali.",
           "mapa": {
-            "triade": "mental",
-            "tipo": 7,
+            "triade": "emocional",
+            "tipo": 3,
             "instinto": null
           },
           "eixo": "emocao",
@@ -1510,7 +1510,7 @@
         },
         {
           "id": "b",
-          "texto": "Procuro alguém para conversar e logo estou cuidando de alguma pessoa.",
+          "texto": "Puxo conversa e me aproximo de quem parece precisar de companhia.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -1522,10 +1522,10 @@
         },
         {
           "id": "c",
-          "texto": "Fico em um canto, observando, com bebida na mão.",
+          "texto": "Vou onde está mais animado. Vim para aproveitar.",
           "mapa": {
             "triade": "mental",
-            "tipo": 5,
+            "tipo": 7,
             "instinto": null
           },
           "eixo": "emocao",
@@ -1534,6 +1534,18 @@
         },
         {
           "id": "d",
+          "texto": "Fico perto de quem eu conheço até entender o clima do lugar.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 6,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 1.0,
+          "desejavel": false
+        },
+        {
+          "id": "e",
           "texto": "Acompanho quem me levou e vou no ritmo do grupo.",
           "mapa": {
             "triade": "instintiva",
@@ -1545,44 +1557,8 @@
           "desejavel": false
         },
         {
-          "id": "e",
-          "texto": "Procuro as pessoas que valem a pena conhecer e me apresento bem.",
-          "mapa": {
-            "triade": "emocional",
-            "tipo": 3,
-            "instinto": null
-          },
-          "eixo": "emocao",
-          "peso": 1.0,
-          "desejavel": false
-        },
-        {
           "id": "f",
-          "texto": "Demoro a relaxar, leio o ambiente antes de me soltar.",
-          "mapa": {
-            "triade": "mental",
-            "tipo": 6,
-            "instinto": null
-          },
-          "eixo": "emocao",
-          "peso": 1.0,
-          "desejavel": false
-        },
-        {
-          "id": "g",
-          "texto": "Chego junto, puxo assunto e o clima me segue.",
-          "mapa": {
-            "triade": "instintiva",
-            "tipo": 8,
-            "instinto": null
-          },
-          "eixo": "emocao",
-          "peso": 1.0,
-          "desejavel": false
-        },
-        {
-          "id": "h",
-          "texto": "Fico meio à margem, com a sensação de não pertencer àquilo.",
+          "texto": "Fico meio de fora, sentindo que não sou daquele lugar.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -1593,8 +1569,32 @@
           "desejavel": false
         },
         {
+          "id": "g",
+          "texto": "Fico num canto observando. Prefiro olhar a ter que me expor.",
+          "mapa": {
+            "triade": "mental",
+            "tipo": 5,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 1.0,
+          "desejavel": false
+        },
+        {
+          "id": "h",
+          "texto": "Chego junto e falo com quem eu quiser. Não fico esperando ser aceito.",
+          "mapa": {
+            "triade": "instintiva",
+            "tipo": 8,
+            "instinto": null
+          },
+          "eixo": "emocao",
+          "peso": 1.0,
+          "desejavel": false
+        },
+        {
           "id": "i",
-          "texto": "Reparo em como as coisas estão organizadas e demoro a entrar no clima.",
+          "texto": "Fico um pouco rígido, achando as conversas meio sem propósito.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -1630,7 +1630,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Já penso que fiz algo errado ou que a pessoa se cansou de mim.",
+          "texto": "Já penso que fiz algo errado, ou que a pessoa se cansou de mim.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -1642,7 +1642,7 @@
         },
         {
           "id": "b",
-          "texto": "Fico remoendo o que pode ter acontecido e se ainda posso confiar.",
+          "texto": "Fico remoendo o que houve e se ainda dá para confiar.",
           "mapa": {
             "triade": "mental",
             "tipo": 6,
@@ -1654,7 +1654,7 @@
         },
         {
           "id": "c",
-          "texto": "Fico magoado e espero que a pessoa perceba a falta que eu faço.",
+          "texto": "Fico magoado e espero que ela perceba a falta que eu faço.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -1666,7 +1666,7 @@
         },
         {
           "id": "d",
-          "texto": "Cobro direto quando aparecer. Ou corto, se me sentir desrespeitado.",
+          "texto": "Cobro direto quando aparecer. Sumir comigo tem consequência.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -1702,7 +1702,7 @@
         },
         {
           "id": "g",
-          "texto": "Não estranho. Eu mesmo sumo às vezes.",
+          "texto": "Não estranho. Some quem quer, e eu também preciso dos meus sumiços.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -1726,7 +1726,7 @@
         },
         {
           "id": "i",
-          "texto": "Sigo minha vida, que está cheia de coisas boas.",
+          "texto": "Sigo a minha vida, que está cheia de coisas boas.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -1762,7 +1762,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Guardo quase tudo. Dinheiro parado é liberdade.",
+          "texto": "Guardo quase tudo. Dinheiro parado é autonomia, e autonomia é não precisar de ninguém.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -1774,7 +1774,7 @@
         },
         {
           "id": "b",
-          "texto": "Coloco na reserva de emergência. É para isso que serve.",
+          "texto": "Coloco na reserva. É para quando alguma coisa der errado.",
           "mapa": {
             "triade": "mental",
             "tipo": 6,
@@ -1798,7 +1798,7 @@
         },
         {
           "id": "d",
-          "texto": "Uso boa parte com as pessoas de quem gosto, dando presentes ou pagando algo.",
+          "texto": "Uso boa parte com quem eu gosto. Gosto de ser quem proporciona.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -1822,7 +1822,7 @@
         },
         {
           "id": "f",
-          "texto": "Pago o que está pendente e faço o mais correto com o resto.",
+          "texto": "Pago o que está pendente. Primeiro o dever, depois o resto.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 1,
@@ -1858,7 +1858,7 @@
         },
         {
           "id": "i",
-          "texto": "Compro algo bonito e com significado, que tenha a minha cara.",
+          "texto": "Compro algo que tenha a minha cara, algo que ninguém mais teria.",
           "mapa": {
             "triade": "emocional",
             "tipo": 4,
@@ -2055,7 +2055,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Falo na hora e deixo claro que não vai ter uma terceira.",
+            "texto": "Falo na hora. Quem deixa passar uma vez ensina que pode de novo.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -2081,7 +2081,7 @@
           },
           {
             "id": "c",
-            "texto": "Deixo passar de novo, mas vai ficando um incômodo que uma hora escapa.",
+            "texto": "Deixo passar de novo. Brigar custa mais caro para mim do que engolir, mas vai entalando.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -2094,7 +2094,7 @@
           },
           {
             "id": "d",
-            "texto": "Não falo nada e passo a fazer do meu jeito, sem avisar.",
+            "texto": "Não falo nada e por dentro paro de contar com a pessoa. Discutir não muda ninguém.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -2107,7 +2107,7 @@
           },
           {
             "id": "e",
-            "texto": "Explico qual era o combinado e por que aquilo não está certo.",
+            "texto": "Explico qual era o combinado. O que me pega não é o transtorno, é a pessoa achar que pode.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 1,
@@ -2259,7 +2259,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Passo por cima e assumo as consequências.",
+            "texto": "Passo por cima e assumo as consequências. Regra sem sentido não manda em mim.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -2285,7 +2285,7 @@
           },
           {
             "id": "c",
-            "texto": "Me acomodo e dou um jeito de conviver com ela.",
+            "texto": "Me acomodo. Bater de frente me tiraria mais a paz do que a própria regra.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -2311,7 +2311,7 @@
           },
           {
             "id": "e",
-            "texto": "Contesto pelos canais certos e proponho uma regra melhor.",
+            "texto": "Contesto pelo caminho certo e proponho uma regra melhor. Errado é deixar como está.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 1,
@@ -2565,7 +2565,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Aumento o tom e tomo a frente.",
+            "texto": "Aumento o tom e tomo a frente. Quem hesita ali vira alvo.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -2591,7 +2591,7 @@
           },
           {
             "id": "c",
-            "texto": "Concordo com todos e me desligo até passar.",
+            "texto": "Concordo com todos e me desligo. Se eu não sentir a briga, ela não me atinge.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -2604,7 +2604,7 @@
           },
           {
             "id": "d",
-            "texto": "Tento acalmar e reconciliar os lados.",
+            "texto": "Tento acalmar os dois lados. Aquele clima dentro de casa é insuportável para mim.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -2667,7 +2667,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Enfrento na frente de todos e imponho a minha posição.",
+            "texto": "Enfrento na frente de todos. Recuar ali seria admitir que podem passar por cima de mim.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -2693,7 +2693,7 @@
           },
           {
             "id": "c",
-            "texto": "Cedo e busco um consenso para desfazer o atrito.",
+            "texto": "Cedo e procuro um meio-termo, só para aquele mal-estar acabar.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -3178,7 +3178,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Ajo. Ligo, resolvo, mexo em alguma coisa.",
+            "texto": "Ajo na hora: ligo, resolvo, mexo em alguma coisa. Parado eu sinto demais.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -3204,7 +3204,7 @@
           },
           {
             "id": "c",
-            "texto": "Como alguma coisa, ligo a TV, deixo o tempo passar.",
+            "texto": "Como alguma coisa, ligo a TV. Se eu não encostar naquilo, uma hora passa.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -3217,7 +3217,7 @@
           },
           {
             "id": "d",
-            "texto": "Sigo a rotina como se nada tivesse acontecido.",
+            "texto": "Sigo a rotina como se nada fosse. É a rotina que me segura de pé.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -3230,7 +3230,7 @@
           },
           {
             "id": "e",
-            "texto": "Transformo em tarefa: organizo, resolvo o que dá.",
+            "texto": "Transformo em tarefa: organizo, resolvo o que dá. Ficar sentindo não conserta nada.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 1,
@@ -3497,7 +3497,7 @@
           },
           {
             "id": "b",
-            "texto": "Distribuo as tarefas e digo quem faz o quê.",
+            "texto": "Distribuo as tarefas e digo quem faz o quê. Se eu não assumir, alguém assume por mim.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -3510,7 +3510,7 @@
           },
           {
             "id": "c",
-            "texto": "Espero alguém decidir e concordo com o que a maioria quiser.",
+            "texto": "Espero alguém decidir e vou com a maioria. Ter uma posição só criaria atrito.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -3701,7 +3701,7 @@
           },
           {
             "id": "b",
-            "texto": "Puxo alguém para alguma coisa, e costuma ir longe.",
+            "texto": "Puxo alguém para alguma coisa, e costuma ir longe. Meio-termo me entedia.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -3714,7 +3714,7 @@
           },
           {
             "id": "c",
-            "texto": "Quase sempre igual, e eu gosto assim.",
+            "texto": "Quase sempre igual. Mudar exige uma energia que eu não quero gastar.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -3727,7 +3727,7 @@
           },
           {
             "id": "d",
-            "texto": "Começo várias coisas e termino no sofá.",
+            "texto": "Começo várias coisas e termino no sofá, sem saber direito o que eu queria mesmo.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -3740,7 +3740,7 @@
           },
           {
             "id": "e",
-            "texto": "Tenho uma lista e cumpro.",
+            "texto": "Tenho uma lista e cumpro. Descansar com pendência me deixa em dívida.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 1,
@@ -3753,7 +3753,7 @@
           },
           {
             "id": "f",
-            "texto": "Aproveito para arrumar o que ficou torto durante a semana.",
+            "texto": "Arrumo o que ficou torto na semana. Aquilo fica me chamando até eu resolver.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 1,
@@ -4023,7 +4023,7 @@
           },
           {
             "id": "c",
-            "texto": "Digo que está tudo bem e sigo funcionando.",
+            "texto": "Digo que está tudo bem e sigo funcionando. Aparecer quebrado é o que eu menos quero.",
             "mapa": {
               "triade": "emocional",
               "tipo": 3,
@@ -4036,7 +4036,7 @@
           },
           {
             "id": "d",
-            "texto": "Desconverso e volto para o trabalho.",
+            "texto": "Desconverso e volto para o que eu estava fazendo. Produzir me tira dali.",
             "mapa": {
               "triade": "emocional",
               "tipo": 3,
@@ -4049,7 +4049,7 @@
           },
           {
             "id": "e",
-            "texto": "Falo e vai fundo. Choro, se for o caso.",
+            "texto": "Falo, e vai fundo. Sentir aquilo inteiro é a coisa mais verdadeira que eu tenho.",
             "mapa": {
               "triade": "emocional",
               "tipo": 4,
@@ -4813,7 +4813,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Já estou mandando mensagem para alguém.",
+            "texto": "Já estou mandando mensagem para alguém. Sozinho, eu não sirvo para nada.",
             "mapa": {
               "triade": "emocional",
               "tipo": 2,
@@ -4839,7 +4839,7 @@
           },
           {
             "id": "c",
-            "texto": "Faço uma lista e começo a adiantar coisas.",
+            "texto": "Faço uma lista e começo a adiantar coisas. Parado, sinto que estou ficando para trás.",
             "mapa": {
               "triade": "emocional",
               "tipo": 3,
@@ -4852,7 +4852,7 @@
           },
           {
             "id": "d",
-            "texto": "Arrumo a casa, resolvo pendências, não consigo ficar parado.",
+            "texto": "Arrumo a casa, resolvo pendências. Sem estar produzindo, é como se eu não valesse nada.",
             "mapa": {
               "triade": "emocional",
               "tipo": 3,
@@ -5426,7 +5426,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Coloquei emoção e gesto, e a mesa acompanhou.",
+            "texto": "Coloquei emoção e gesto, e a mesa foi junto. Eu gosto de ser quem move as pessoas.",
             "mapa": {
               "triade": "emocional",
               "tipo": 2,
@@ -5465,7 +5465,7 @@
           },
           {
             "id": "d",
-            "texto": "Fui direto ao ponto, sem floreio.",
+            "texto": "Fui direto ao ponto. O que conta é o efeito que faz, não o enfeite.",
             "mapa": {
               "triade": "emocional",
               "tipo": 3,
@@ -5530,7 +5530,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Me recolho e resolvo sozinho, no meu tempo.",
+            "texto": "Me recolho e resolvo sozinho. Pedir ajuda já me deixa devendo alguma coisa.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -5543,7 +5543,7 @@
           },
           {
             "id": "b",
-            "texto": "Falo com aquela única pessoa em quem confio de verdade.",
+            "texto": "Falo com a única pessoa em quem confio de verdade, e com mais ninguém.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -5582,7 +5582,7 @@
           },
           {
             "id": "e",
-            "texto": "Deixo as opções em aberto e vou tocando o que é mais leve.",
+            "texto": "Deixo as opções em aberto. Fechar uma é abrir mão de todas as outras.",
             "mapa": {
               "triade": "mental",
               "tipo": 7,
@@ -6245,7 +6245,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Guardo a dúvida e vou juntando informação sozinho.",
+            "texto": "Guardo a dúvida para mim e vou juntando informação. Perguntar seria entregar o que eu penso.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -6258,7 +6258,7 @@
           },
           {
             "id": "b",
-            "texto": "Estudo o assunto até entender melhor do que a maioria.",
+            "texto": "Estudo até dominar o assunto. Entender é a única segurança que não depende de ninguém.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -6758,7 +6758,7 @@
         "alternativas": [
           {
             "id": "a",
-            "texto": "Fico parado, escutando, avaliando antes de qualquer coisa.",
+            "texto": "Fico parado, escutando, avaliando. Agir sem entender é o pior jeito de gastar energia.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -6771,7 +6771,7 @@
           },
           {
             "id": "b",
-            "texto": "Tranco tudo e volto para o meu canto.",
+            "texto": "Tranco tudo e volto para o meu canto, que é onde nada me alcança.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -8113,7 +8113,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Vou direto e digo o que quero.",
+          "texto": "Vou direto e digo o que quero. Rodeio é perder tempo e terreno.",
           "mapa": {
             "triade": "instintiva",
             "tipo": 8,
@@ -9309,7 +9309,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Cuidando de alguém, puxando quem está de fora.",
+          "texto": "Cuidando de alguém, puxando quem ficou de fora. É ali que eu me sinto necessário.",
           "mapa": {
             "triade": "emocional",
             "tipo": 2,
@@ -9321,7 +9321,7 @@
         },
         {
           "id": "b",
-          "texto": "Contando história, animando, fazendo rir.",
+          "texto": "Contando história, animando a mesa. Onde está bom, eu não fico de fora.",
           "mapa": {
             "triade": "mental",
             "tipo": 7,
@@ -9737,7 +9737,7 @@
         },
         {
           "id": "b",
-          "texto": "Foi ótimo. Não senti falta.",
+          "texto": "Foi ótimo. Sozinho eu não gasto nada de mim, e é assim que eu reponho.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -10037,7 +10037,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Eu resolvo: ligo, corro atrás, entrego.",
+          "texto": "Eu resolvo: ligo, corro atrás, entrego. Eu valho pelo que eu entrego.",
           "mapa": {
             "triade": "emocional",
             "tipo": 3,
@@ -10101,7 +10101,7 @@
         },
         {
           "id": "b",
-          "texto": "Evito. Se desse para mandar por escrito, seria melhor.",
+          "texto": "Evito. Falar de mim ali é me expor sem ter escolhido o quanto.",
           "mapa": {
             "triade": "mental",
             "tipo": 5,
@@ -10991,7 +10991,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Arrumo a casa, cozinho, cuido de mim, durmo cedo.",
+          "texto": "Uso para deixar a minha vida em ordem. Com pendência aberta eu não descanso.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11003,7 +11003,7 @@
         },
         {
           "id": "b",
-          "texto": "Chamo o grupo, vou a um encontro, respondo o que está parado.",
+          "texto": "Uso com gente. Muito tempo longe e eu começo a me sentir fora das coisas.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11015,7 +11015,7 @@
         },
         {
           "id": "c",
-          "texto": "Chamo aquela pessoa, ou mergulho em algo que me absorve por completo.",
+          "texto": "Uso inteira numa coisa só, a que está me pegando agora, e nem vejo a hora passar.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11051,7 +11051,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Num canto confortável, perto da comida, poupando energia.",
+          "texto": "Num canto confortável, poupando energia. Aquilo tudo me cansa mais do que me anima.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11063,7 +11063,7 @@
         },
         {
           "id": "b",
-          "texto": "Circulando, sentindo quem é quem e onde eu me encaixo.",
+          "texto": "Circulando, medindo quem é quem e onde eu me encaixo ali.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11075,7 +11075,7 @@
         },
         {
           "id": "c",
-          "texto": "Numa conversa longa com uma pessoa só, esquecendo o resto.",
+          "texto": "Numa conversa longa com uma pessoa só, e o resto da festa deixa de existir.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11233,7 +11233,7 @@
       "alternativas": [
         {
           "id": "a",
-          "texto": "Casa, comida boa, sono, corpo em ordem.",
+          "texto": "Ter o básico de pé: sono, corpo, contas. Com isso resolvido, eu volto.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11245,7 +11245,7 @@
         },
         {
           "id": "b",
-          "texto": "Estar com o meu grupo, sentir que faço parte.",
+          "texto": "Estar entre os meus e sentir que tenho o meu lugar ali.",
           "mapa": {
             "triade": null,
             "tipo": null,
@@ -11257,7 +11257,7 @@
         },
         {
           "id": "c",
-          "texto": "Estar bem perto de alguém, ou mergulhado em algo que me acende.",
+          "texto": "Uma coisa só, forte o bastante para me tirar do resto: alguém, ou algo que me acenda.",
           "mapa": {
             "triade": null,
             "tipo": null,

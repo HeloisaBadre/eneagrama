@@ -22,7 +22,7 @@ do apêndice estão cobertos por itens cruzados ou de desempate, e isso é verif
 
 ## Como as perguntas são escritas
 
-Sete regras governam o banco inteiro. Quatro delas são verificadas por teste automático.
+Oito regras governam o banco inteiro. Quatro delas são verificadas por teste automático.
 
 1. **Toda pergunta é uma situação, não uma auto-avaliação.** Nada de "que imagem você passa"
    ou "o que você sente quando está sozinho": isso exige um acesso ao próprio mundo interno
@@ -31,8 +31,12 @@ Sete regras governam o banco inteiro. Quatro delas são verificadas por teste au
    na sua casa?") e cenas do presente ("o chefe chama você e não diz o assunto: o que passa na
    sua cabeça no caminho?"). Nenhuma alternativa pode ser respondida com "depende".
 2. **O enunciado fixa o comportamento e as alternativas variam a motivação.** Um 8, um 6
-   sexual, um 4 sexual e um 1 sexual podem todos brigar na reunião; o que difere é o que
-   aconteceu por dentro um segundo antes.
+   sexual, um 4 sexual e um 1 sexual podem todos brigar na mesma discussão; o que difere é o
+   que aconteceu por dentro um segundo antes. Por isso nenhuma alternativa pode ser só o ato:
+   cada uma diz a **paixão, a fixação ou a crença** que move aquele tipo ali. "Falo na hora"
+   não separa ninguém; "falo na hora, porque quem deixa passar uma vez ensina que pode de
+   novo" (8) separa de "explico qual era o combinado, porque o que me pega é a pessoa achar
+   que pode" (1). O teste mede paixões e neuroses, e comportamento sozinho não as revela.
 3. **Equilíbrio estrutural.** Na Fase 1, cada item tem exatamente uma alternativa por tipo,
    todas com o mesmo eixo e o mesmo peso. Na Fase 2, cada tipo tem o mesmo número de
    alternativas por item. Nenhum tipo acumula vantagem por aparecer mais vezes.
@@ -45,7 +49,13 @@ Sete regras governam o banco inteiro. Quatro delas são verificadas por teste au
    trabalho como cenário: quem estuda, é autônomo, está sem emprego ou aposentado responderia
    no escuro, e mesmo quem trabalha dependeria de como é aquele trabalho. Quando a pergunta é
    sobre autoridade, ela vale para qualquer uma ("um professor, um chefe, um coordenador").
-7. **O instinto sexual não é só romance.** Para Naranjo ele é união e fusão, e a intensidade
+7. **Os estereótipos não podem ser a única porta.** Cada tipo tem contratipos, e quem é
+   contratipo não se reconhece na descrição de manual. As alternativas do 5 não podem todas
+   supor o recluso ("fico no meu canto"): precisam dizer a avareza, que também aparece em
+   quem é intenso ("pedir já é ficar devendo", "não vou gastar a minha energia com um
+   estranho"). Uma pessoa que só reconhece o próprio tipo uma vez em quatorze não chega a
+   ter o seu centro testado.
+8. **O instinto sexual não é só romance.** Para Naranjo ele é união e fusão, e a intensidade
    pode estar numa pessoa ou numa paixão que absorve (o livro da avareza fala de E5 sexuais
    "cuja motivação básica é o trabalho ou uma causa"). As alternativas sexuais descrevem essa
    qualidade (intensidade, tudo ou nada, fundir-se), e as de autopreservação e social também
@@ -55,7 +65,7 @@ Sete regras governam o banco inteiro. Quatro delas são verificadas por teste au
 
 | Fase | O que faz | Itens no banco | Itens aplicados |
 |---|---|---|---|
-| 1 | Triagem: pontua tríade **e** os nove tipos | 14 (6 de infância e crença, 8 do presente) + 3 desempates | 12 |
+| 1 | Triagem: pontua tríade **e** os nove tipos | 14 (6 de infância e crença, 8 do presente) + 3 de centro | 17 |
 | 2 | Tipo: itens da tríade vencedora, das tríades dos tipos fortes, e itens **cruzados** entre candidatos de tríades diferentes | 50 de tríade + 9 desempates + 62 cruzados (todos os 27 pares de tríades diferentes) | ~19 |
 | 3 | Instinto dominante | 12 + 3 desempates | 6 |
 | 4 | Subtipo dentro do tipo encontrado (27 subtipos de Naranjo) | 27 | 3 |
@@ -163,6 +173,13 @@ com a taxa de um bloco em que o tipo da pessoa nem aparecia. Um 5 sexual que, no
 marcava o mais próximo (o 8) saía 8, mesmo com o 5 à frente na Fase 1 e na tríade mental. Com
 as duas etapas, o tipo e a tríade só divergem da triagem quando um confronto direto mostra isso,
 e o relatório diz qual foi.
+
+Antes disso, no fim da Fase 1, as três perguntas que separam os centros (corpo, emoção,
+mente) são feitas **sempre**, e não só quando a triagem empata. Elas perguntam pelo centro
+diretamente, sem passar pelas alternativas de tipo, e valem como um segundo parecer: se
+apontam um centro diferente do da triagem, esse centro entra na Fase 2 e é testado. Sem isso,
+quem se reconhece pouco nas alternativas do próprio tipo — o caso de um contratipo — teria o
+tipo decidido dentro de um centro que nunca foi o dela.
 
 Se o vencedor ganhou de um tipo de outra tríade **sem nenhuma pergunta cruzada** entre os dois,
 o teste faz até duas antes de fechar (`parParaConfirmar`). Todo par de tipos de tríades

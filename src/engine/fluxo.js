@@ -80,7 +80,15 @@ function intercalar(a, b, passo = 3) {
 export function resultadoFase1(respostas, itens, contexto) {
   const triade = pontuarFase(respostas, itens, 'triade', contexto);
   const tipo = pontuarPorTaxa([{ respostas, itens, peso: 1 }], 'tipo', contexto);
-  return { triade, tipo };
+  // As tres perguntas que separam os centros, pontuadas a parte. Elas perguntam
+  // pelo centro diretamente, sem passar pelas alternativas de tipo, e por isso
+  // valem como um segundo parecer sobre o centro.
+  const itensCentro = itens.filter((i) => Array.isArray(i.separa) && i.separa.length === 2);
+  const idsCentro = new Set(itensCentro.map((i) => i.id));
+  const centro = itensCentro.length
+    ? pontuarFase(respostas.filter((r) => idsCentro.has(r.itemId)), itensCentro, 'triade', contexto)
+    : null;
+  return { triade, tipo, centro };
 }
 
 /**
@@ -111,6 +119,15 @@ export function planejarFase2(banco, res1) {
   }
   for (const t of topTipos) {
     const tr = TRIADE_DE[t];
+    if (tr !== principal && !extras.includes(tr)) extras.push(tr);
+  }
+  // Se as perguntas de centro apontam um centro diferente do que a triagem
+  // apontou, esse centro entra. E o caso de quem nao se reconhece nas
+  // alternativas do proprio tipo, mas reconhece o proprio centro: sem isso, o
+  // centro dela nunca seria testado e o tipo sairia da triade errada.
+  const centro = res1.centro;
+  if (centro && centro.top && centro.top.score > 0 && !centro.ambiguo) {
+    const tr = centro.top.categoria;
     if (tr !== principal && !extras.includes(tr)) extras.push(tr);
   }
   const triades = principal === null ? extras : [principal, ...extras];

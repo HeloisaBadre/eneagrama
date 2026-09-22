@@ -223,18 +223,10 @@ function rodarNovo(persona, rand, opts) {
 
   aplicar('fase1', fluxo.itensFase1(bancoN));
   let ctx = novoEng.calcularContexto(todas(), todos());
-  let res1 = fluxo.resultadoFase1(R.fase1, I.fase1, ctx);
-  if (res1.triade.ambiguo && res1.triade.segundo) {
-    const par = [res1.triade.top.categoria, res1.triade.segundo.categoria];
-    const ex = (bancoN.fase1_desempate || []).filter(
-      (it) => Array.isArray(it.separa) && par.every((p) => it.separa.includes(p))
-    );
-    if (ex.length) {
-      aplicar('fase1', ex);
-      ctx = novoEng.calcularContexto(todas(), todos());
-      res1 = fluxo.resultadoFase1(R.fase1, I.fase1, ctx);
-    }
-  }
+  // As tres perguntas de centro sao feitas sempre, como no app.
+  aplicar('fase1', bancoN.fase1_desempate || []);
+  ctx = novoEng.calcularContexto(todas(), todos());
+  const res1 = fluxo.resultadoFase1(R.fase1, I.fase1, ctx);
   const plano = fluxo.planejarFase2(bancoN, res1);
   const cruzados = new Set(plano.itensCruzados.map((i) => i.id));
   for (const it of plano.itens) aplicar(cruzados.has(it.id) ? 'fase2x' : 'fase2', [it]);

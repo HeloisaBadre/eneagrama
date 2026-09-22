@@ -332,3 +332,42 @@ describe('cobertura dos confrontos diretos', () => {
     expect(faltando).toEqual([]);
   });
 });
+
+describe('perguntas de centro: o contratipo que se reconhece pouco', () => {
+  /** Responde a Fase 1 marcando o proprio tipo so `k` vezes e espalhando o resto. */
+  function fase1Esparsa(k, tipo, espalha) {
+    const respostas = [];
+    banco.fase1.forEach((it, idx) => {
+      const t = idx < k ? tipo : espalha[idx % espalha.length];
+      const alvo = it.alternativas.find((a) => a.mapa && a.mapa.tipo === t);
+      respostas.push({ itemId: it.id, altId: alvo.id, rtMs: RT });
+    });
+    return respostas;
+  }
+
+  function planoDe(k, { centro }) {
+    const itens = [...banco.fase1, ...banco.fase1_desempate];
+    const respostas = fase1Esparsa(k, 5, [8, 1, 4, 9]);
+    for (const it of banco.fase1_desempate) {
+      const alvo = it.alternativas.find((a) => a.mapa && a.mapa.triade === centro) || it.alternativas[0];
+      respostas.push({ itemId: it.id, altId: alvo.id, rtMs: RT });
+    }
+    const ctx = calcularContexto(respostas, itens);
+    return planejarFase2(banco, resultadoFase1(respostas, itens, ctx));
+  }
+
+  it('a triade das perguntas de centro e testada mesmo quando a triagem aponta outra', () => {
+    // Caso real: um 5 marcou a alternativa do 5 em 1 de 14 itens da Fase 1, a
+    // triagem deu instintiva com folga, e o bloco mental nunca foi aplicado.
+    const plano = planoDe(1, { centro: 'mental' });
+    expect(plano.triades[0]).toBe('instintiva');
+    expect(plano.triades).toContain('mental');
+    expect(plano.itens.some((i) => i.id.startsWith('f2m_'))).toBe(true);
+  });
+
+  it('quando o centro confirma a triagem, nao adiciona triade a toa', () => {
+    const plano = planoDe(1, { centro: 'instintiva' });
+    expect(plano.triades[0]).toBe('instintiva');
+    expect(plano.triades).not.toContain('mental');
+  });
+});
