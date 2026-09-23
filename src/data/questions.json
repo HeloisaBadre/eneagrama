@@ -2255,11 +2255,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Uma regra sem sentido está atrapalhando uma coisa que você precisa resolver. O que você faz?",
+        "cenario": "Você foi resolver uma coisa presencialmente e, na sua vez, dizem que falta um documento que não estava na lista. O que você faz?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Passo por cima e assumo as consequências. Regra sem sentido não manda em mim.",
+            "texto": "Exijo falar com quem manda ali. Não vou perder o meu dia por causa de uma exigência que inventaram.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -2272,7 +2272,7 @@
           },
           {
             "id": "b",
-            "texto": "Enfrento quem criou a regra, principalmente se ela estiver prejudicando gente do meu lado.",
+            "texto": "Pressiono até abrirem uma exceção. Quem aceita o primeiro não sai sempre perdendo.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 8,
@@ -2285,7 +2285,7 @@
           },
           {
             "id": "c",
-            "texto": "Me acomodo. Bater de frente me tiraria mais a paz do que a própria regra.",
+            "texto": "Volto outro dia. Discutir ali me custaria mais do que a viagem perdida.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -2298,7 +2298,7 @@
           },
           {
             "id": "d",
-            "texto": "Não discuto, mas vou adiando até ninguém mais cobrar.",
+            "texto": "Não reclamo na hora, e depois vou empurrando com a barriga até resolver de outro jeito.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 9,
@@ -2311,7 +2311,7 @@
           },
           {
             "id": "e",
-            "texto": "Contesto pelo caminho certo e proponho uma regra melhor. Errado é deixar como está.",
+            "texto": "Digo que a informação estava errada e peço que corrijam. O que me revolta é o erro, não a viagem perdida.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 1,
@@ -2324,7 +2324,7 @@
           },
           {
             "id": "f",
-            "texto": "Reclamo alto, porque uma regra injusta não deveria existir.",
+            "texto": "Fico indignado com o descaso, mesmo sabendo que a culpa não é daquela pessoa.",
             "mapa": {
               "triade": "instintiva",
               "tipo": 1,
@@ -5833,11 +5833,11 @@
         "par_gemeo_id": null,
         "indireto": false,
         "flag_desejabilidade_social": false,
-        "cenario": "Alguém novo passa a ter autoridade sobre você (um professor, um chefe, um coordenador). Como você age no começo?",
+        "cenario": "Primeiro dia de um curso. Quem coordena diz que vai avaliar a participação de cada um ao longo das aulas. O que passa na sua cabeça?",
         "alternativas": [
           {
             "id": "a",
-            "texto": "Mantenho distância, faço o que me cabe e preservo o meu espaço.",
+            "texto": "Já calculo o mínimo que preciso aparecer para não me expor mais do que o necessário.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -5850,7 +5850,7 @@
           },
           {
             "id": "b",
-            "texto": "Só respeito de verdade se a pessoa souber mais do que eu.",
+            "texto": "Só vou levar a sério a avaliação dela se ficar claro que ela entende do assunto.",
             "mapa": {
               "triade": "mental",
               "tipo": 5,
@@ -5863,7 +5863,7 @@
           },
           {
             "id": "c",
-            "texto": "Fico oscilando entre confiar e desconfiar dela.",
+            "texto": "Quero saber qual é o critério, e já desconfio que possa ser injusto.",
             "mapa": {
               "triade": "mental",
               "tipo": 6,
@@ -5876,7 +5876,7 @@
           },
           {
             "id": "d",
-            "texto": "Testo os limites dessa pessoa desde cedo.",
+            "texto": "Testo logo até onde vai a régua dela, para saber onde estou pisando.",
             "mapa": {
               "triade": "mental",
               "tipo": 6,
@@ -5889,7 +5889,7 @@
           },
           {
             "id": "e",
-            "texto": "Não levo tão a sério e sigo fazendo do meu jeito.",
+            "texto": "Não levo muito a sério. Dou um jeito de fazer do meu modo e ainda me divertir.",
             "mapa": {
               "triade": "mental",
               "tipo": 7,
@@ -5902,7 +5902,7 @@
           },
           {
             "id": "f",
-            "texto": "Sou prestativo e agradável, mas não aceito ninguém acima de mim.",
+            "texto": "Já me ofereço para ajudar. Sendo útil e simpático, ninguém me cobra de verdade.",
             "mapa": {
               "triade": "mental",
               "tipo": 7,
@@ -13408,6 +13408,1664 @@
             "desejavel": false
           }
         ],
+        "tipo_alvo": 9
+      }
+    ]
+  },
+  "confirmacao": {
+    "1": [
+      {
+        "id": "cf_1a",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Eu enxergo o que está errado antes de enxergar o resto, e sinto que é obrigação minha consertar. Tem um crítico dentro de mim que não desliga.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 1
+      },
+      {
+        "id": "cf_1b",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Fico irritado com o que não está à altura, e engulo essa irritação, porque perder a linha também seria errado.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 1,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 1
+      }
+    ],
+    "2": [
+      {
+        "id": "cf_2a",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Eu me sinto valioso quando sou necessário. Dou muito cuidado esperando, sem dizer, receber carinho de volta.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 2
+      },
+      {
+        "id": "cf_2b",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Não é fácil pedir o que eu quero. Em vez disso, me aproximo e cuido da pessoa, na esperança de que ela retribua sozinha.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 2,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 2
+      }
+    ],
+    "3": [
+      {
+        "id": "cf_3a",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "O meu valor está no que eu consigo entregar. Se eu parar de produzir, é como se eu deixasse de valer.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 3
+      },
+      {
+        "id": "cf_3b",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Eu ajusto quem eu sou conforme o que funciona ali, e às vezes perco de vista o que eu sinto de verdade.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 3,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 3
+      }
+    ],
+    "4": [
+      {
+        "id": "cf_4a",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Sinto que falta em mim alguma coisa que os outros têm, e isso dói mesmo quando ninguém percebe.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 4
+      },
+      {
+        "id": "cf_4b",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Encontro um conforto estranho na tristeza. Às vezes é como se uma parte de mim quisesse sofrer.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "emocional",
+              "tipo": 4,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 4
+      }
+    ],
+    "5": [
+      {
+        "id": "cf_5a",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "As exigências dos outros me esvaziam, e eu me protejo guardando o meu tempo, a minha energia e o que eu sei.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 5
+      },
+      {
+        "id": "cf_5b",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Prefiro observar a vida de uma distância segura a me envolver e ficar dependendo de alguém.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 5,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 5
+      }
+    ],
+    "6": [
+      {
+        "id": "cf_6a",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Tenho a cabeça ligada demais, sempre procurando o que pode dar errado. Relaxar é difícil para mim.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 6
+      },
+      {
+        "id": "cf_6b",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Mantenho a guarda alta com as pessoas. Nunca tenho certeza das intenções delas.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 6,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 6
+      }
+    ],
+    "7": [
+      {
+        "id": "cf_7a",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Estou sempre com a cabeça no próximo plano. Ficar preso numa coisa chata ou dolorosa é o que eu menos suporto.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 7
+      },
+      {
+        "id": "cf_7b",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Quando a dor aparece, eu logo acho um jeito de ver o lado bom e seguir para outra coisa.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "mental",
+              "tipo": 7,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 7
+      }
+    ],
+    "8": [
+      {
+        "id": "cf_8a",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Eu procuro intensidade: o que é morno não me toca. Encaro o que vier e não recuo.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 8
+      },
+      {
+        "id": "cf_8b",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Quando tentam me controlar, sobe uma força em mim. Fraqueza é o que eu menos mostro.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 8,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 8
+      }
+    ],
+    "9": [
+      {
+        "id": "cf_9a",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Custa saber o que eu quero. É como se eu precisasse que alguém apontasse os meus próprios desejos para mim.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
+        "tipo_alvo": 9
+      },
+      {
+        "id": "cf_9b",
+        "fase": 5,
+        "dominio": "geral",
+        "par_gemeo_id": null,
+        "indireto": false,
+        "flag_desejabilidade_social": false,
+        "cenario": "Vou junto com os outros para não criar atrito, e a minha raiva quase nunca chega a aparecer.",
+        "alternativas": [
+          {
+            "id": "a",
+            "texto": "Me identifico completamente.",
+            "valor": 1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "b",
+            "texto": "Me identifico.",
+            "valor": 0.6,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "c",
+            "texto": "Me identifico pouco.",
+            "valor": 0.25,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "d",
+            "texto": "Neutro, não sei dizer.",
+            "valor": 0.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "e",
+            "texto": "Não me identifico.",
+            "valor": -0.5,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          },
+          {
+            "id": "f",
+            "texto": "Não me identifico nada.",
+            "valor": -1.0,
+            "mapa": {
+              "triade": "instintiva",
+              "tipo": 9,
+              "instinto": null
+            },
+            "eixo": "fixacao",
+            "peso": 1.0,
+            "desejavel": false
+          }
+        ],
+        "escala": true,
         "tipo_alvo": 9
       }
     ]

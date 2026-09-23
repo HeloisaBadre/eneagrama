@@ -689,6 +689,111 @@ export function decidirTipo({ fase1, fase2, fase2x }, contexto, pesos = PESOS) {
 }
 
 /**
+ * CONFIRMACAO EM ESCALA
+ * ---------------------
+ * As afirmacoes de confirmacao nao pedem uma escolha entre tipos: pedem o quanto
+ * a pessoa se identifica com uma frase sobre a propria paixao ou a propria ideia
+ * central, de "me identifico completamente" (+1) a "nao me identifico nada" (-1).
+ *
+ * Elas entram so no fim, para o tipo apurado e para o segundo colocado, e servem
+ * para tres coisas:
+ *   - confirmar o tipo quando a pessoa se reconhece nele;
+ *   - corrigir quando ela se reconhece MUITO mais no segundo (a apuracao pode
+ *     errar quando alguem marca poucas vezes o proprio tipo);
+ *   - avisar, quando ela nao se reconhece em nenhum dos dois.
+ *
+ * O autorrelato so derruba a apuracao quando a diferenca e grande: uma frase
+ * sobre a propria neurose e facil de negar, e quem se descreve nao e testemunha
+ * neutra de si (Naranjo insiste nisso). Por isso os limiares sao exigentes.
+ */
+export const CONFIRMACAO = {
+  troca: 0.85, // o quanto o segundo precisa estar acima do primeiro para trocar
+  reconhece: 0.6, // "me identifico" ou mais
+  naoReconhece: 0, // "neutro" ou menos
+};
+
+/** Valor medio (-1 a 1) dado as afirmacoes de cada tipo, com o detalhe por item. */
+export function pontuarConfirmacao(respostas, itens) {
+  const porId = indexarItens(itens);
+  const detalhe = {};
+  for (const r of respostas || []) {
+    const item = porId.get(r.itemId);
+    if (!item || !item.escala) continue;
+    const alt = altDe(item, r.altId);
+    if (!alt || typeof alt.valor !== 'number') continue;
+    const t = item.tipo_alvo;
+    (detalhe[t] = detalhe[t] || []).push({
+      itemId: item.id,
+      afirmacao: item.cenario,
+      resposta: alt.texto,
+      valor: alt.valor,
+    });
+  }
+  const media = {};
+  for (const [t, lst] of Object.entries(detalhe)) {
+    media[t] = lst.reduce((a, b) => a + b.valor, 0) / lst.length;
+  }
+  return { media, detalhe };
+}
+
+/**
+ * Confronta a apuracao com a confirmacao em escala.
+ * Devolve o tipo (trocado ou nao) e o que a confirmacao disse.
+ */
+export function aplicarConfirmacao(tipo, escala) {
+  const vazia = { trocou: false, valorTop: null, valorSegundo: null, notas: [], aplicada: false };
+  if (!tipo || !tipo.top || !escala || !Object.keys(escala.media || {}).length) {
+    return { tipo, confirmacao: vazia };
+  }
+  const vTop = escala.media[tipo.top.categoria];
+  const vSeg = tipo.segundo ? escala.media[tipo.segundo.categoria] : undefined;
+  const info = {
+    trocou: false,
+    aplicada: true,
+    valorTop: vTop ?? null,
+    valorSegundo: vSeg ?? null,
+    detalhe: escala.detalhe,
+    notas: [],
+  };
+
+  const trocar =
+    typeof vTop === 'number' &&
+    typeof vSeg === 'number' &&
+    vSeg - vTop >= CONFIRMACAO.troca &&
+    vSeg >= CONFIRMACAO.reconhece &&
+    vTop < CONFIRMACAO.reconhece;
+
+  let saida = tipo;
+  if (trocar) {
+    saida = { ...tipo, top: tipo.segundo, segundo: tipo.top, trocadoNaConfirmacao: true };
+    info.trocou = true;
+    info.de = tipo.top.categoria;
+    info.para = tipo.segundo.categoria;
+    info.notas.push(
+      `As perguntas de situação apontaram o tipo ${tipo.top.categoria}, mas nas afirmações finais você se ` +
+        `reconheceu bem mais no tipo ${tipo.segundo.categoria}. O resultado seguiu o seu reconhecimento, e o ` +
+        `tipo ${tipo.top.categoria} ficou como segundo candidato.`
+    );
+  } else if (typeof vTop === 'number' && vTop <= CONFIRMACAO.naoReconhece) {
+    info.notas.push(
+      `Você não se reconheceu nas afirmações do tipo ${saida.top.categoria}, que foi o apurado pelas situações. ` +
+        'Leia também a descrição do segundo candidato antes de concluir.'
+    );
+  } else if (
+    typeof vTop === 'number' &&
+    typeof vSeg === 'number' &&
+    vTop >= CONFIRMACAO.reconhece &&
+    vSeg >= CONFIRMACAO.reconhece
+  ) {
+    info.notas.push(
+      `Você se reconheceu tanto nas afirmações do tipo ${saida.top.categoria} quanto nas do tipo ` +
+        `${saida.segundo.categoria}. As situações desempataram a favor do primeiro, mas vale ler os dois.`
+    );
+  }
+  return { tipo: saida, confirmacao: info };
+}
+
+/**
  * Quantas perguntas de subtipo (Fase 4) de cada tipo a pessoa respondeu com
  * "nenhuma dessas". Se ela nao se reconhece nas perguntas do tipo encontrado, o
  * tipo provavelmente esta errado.
@@ -711,10 +816,12 @@ export function analisarFinal(dados) {
   const vazio = { respostas: [], itens: [] };
   const f2x = dados.fase2x || vazio;
   const f4 = dados.fase4 || vazio;
+  const cf = dados.confirmacao || vazio;
   const todas = [
     ...dados.fase1.respostas,
     ...dados.fase2.respostas,
     ...f2x.respostas,
+    ...cf.respostas,
     ...dados.fase3.respostas,
     ...f4.respostas,
   ];
@@ -722,6 +829,7 @@ export function analisarFinal(dados) {
     ...dados.fase1.itens,
     ...dados.fase2.itens,
     ...f2x.itens,
+    ...cf.itens,
     ...dados.fase3.itens,
     ...f4.itens,
   ];
@@ -729,7 +837,10 @@ export function analisarFinal(dados) {
 
   const triade = pontuarFase(dados.fase1.respostas, dados.fase1.itens, 'triade', contexto);
 
-  const tipo = decidirTipo({ fase1: dados.fase1, fase2: dados.fase2, fase2x: f2x }, contexto);
+  const apurado = decidirTipo({ fase1: dados.fase1, fase2: dados.fase2, fase2x: f2x }, contexto);
+  // O autorrelato entra por ultimo, e so com margem larga (ver aplicarConfirmacao).
+  const escala = pontuarConfirmacao(cf.respostas, cf.itens);
+  const { tipo, confirmacao } = aplicarConfirmacao(apurado, escala);
 
   const instinto = pontuarPorTaxa(
     [
@@ -760,12 +871,23 @@ export function analisarFinal(dados) {
     if (confiabilidade.confiancaAutorrelato === 'alto') confiabilidade.confiancaAutorrelato = 'medio';
   }
 
+  for (const n of confirmacao.notas) confiabilidade.notas.push(n);
+  confiabilidade.confirmacao = confirmacao;
+  if (confirmacao.aplicada && typeof confirmacao.valorTop === 'number') {
+    // Nao se reconhecer no proprio resultado e o sinal mais direto de erro de tipo.
+    if (confirmacao.valorTop <= CONFIRMACAO.naoReconhece && confiabilidade.confiancaAutorrelato === 'alto') {
+      confiabilidade.confiancaAutorrelato = 'medio';
+    }
+  }
+
   const subtipo = tipo.top && instinto.top ? `${tipo.top.categoria}-${instinto.top.categoria}` : null;
 
   return {
     contexto,
     triade,
     tipo,
+    tipoApurado: apurado,
+    confirmacao,
     instinto,
     subtipo,
     confiabilidade,

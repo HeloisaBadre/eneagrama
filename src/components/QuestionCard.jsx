@@ -18,6 +18,10 @@ import { tempoDaResposta } from '../engine/navegacao.js';
  * O App recria este componente a cada pergunta (key = item.id), entao o estado
  * sempre nasce limpo, ou com a resposta anterior marcada.
  *
+ * Itens de escala (`item.escala`) sao a excecao: a frase e uma afirmacao sobre a
+ * pessoa, as opcoes vao de "me identifico completamente" a "nao me identifico
+ * nada", e por isso a ordem NAO e embaralhada e nao existe alternativa nula.
+ *
  * @param respostaAnterior { altId, rtMs } se a pessoa ja respondeu esta pergunta
  */
 export default function QuestionCard({ item, alternativas, respostaAnterior, onAvancar, onVoltar }) {
@@ -29,7 +33,8 @@ export default function QuestionCard({ item, alternativas, respostaAnterior, onA
   // `enviando` ser aplicado, e o segundo nao pode confirmar nada.
   const enviandoRef = useRef(false);
 
-  const nula = item.alternativas.find((a) => a.nula) || null;
+  const escala = !!item.escala;
+  const nula = escala ? null : item.alternativas.find((a) => a.nula) || null;
 
   // O cronometro comeca quando a pergunta aparece.
   useEffect(() => {
@@ -76,7 +81,7 @@ export default function QuestionCard({ item, alternativas, respostaAnterior, onA
     <div className="fade-in" key={item.id}>
       <div className="box">
         <div className="box-hd">
-          <span>{rotuloDominio(item.dominio) || 'Cenário'}</span>
+          <span>{escala ? 'Sobre você' : rotuloDominio(item.dominio) || 'Cenário'}</span>
         </div>
         <div className="box-bd">
           <h2
@@ -89,10 +94,12 @@ export default function QuestionCard({ item, alternativas, respostaAnterior, onA
       </div>
 
       <p style={{ fontSize: 12, color: '#33536f', margin: '12px 2px 8px' }}>
-        Escolha a alternativa mais verdadeira para você, mesmo que não seja perfeita, e clique em Avançar:
+        {escala
+          ? 'O quanto esta frase combina com você? Responda pelo que é, não pelo que gostaria que fosse:'
+          : 'Escolha a alternativa mais verdadeira para você, mesmo que não seja perfeita, e clique em Avançar:'}
       </p>
 
-      <div>{alternativas.map((alt) => botao(alt))}</div>
+      <div>{alternativas.map((alt) => botao(alt, escala ? estiloEscala(alt) : undefined))}</div>
 
       {nula && (
         <div style={{ marginTop: 10 }}>{botao(nula, { opacity: 0.8, fontStyle: 'italic' })}</div>
@@ -113,6 +120,21 @@ export default function QuestionCard({ item, alternativas, respostaAnterior, onA
       </div>
     </div>
   );
+}
+
+/**
+ * Na escala, a opcao carrega uma pista visual da propria intensidade: quem
+ * concorda fica em cima, quem nega fica embaixo, e o texto vai clareando. Sem
+ * numeros, para nao virar conta.
+ */
+function estiloEscala(alt) {
+  const v = typeof alt.valor === 'number' ? alt.valor : 0;
+  const forca = Math.abs(v);
+  return {
+    fontWeight: forca >= 1 ? 600 : 400,
+    color: forca === 0 ? '#5a6b7a' : '#1d1d1f',
+    borderLeft: `4px solid ${v > 0 ? 'rgba(53,116,180,' + (0.25 + 0.55 * forca) + ')' : v < 0 ? 'rgba(150,90,70,' + (0.2 + 0.4 * forca) + ')' : 'rgba(140,140,140,0.35)'}`,
+  };
 }
 
 function rotuloDominio(d) {

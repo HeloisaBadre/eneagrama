@@ -199,6 +199,32 @@ export function itensFase4(banco, tipos) {
   return out;
 }
 
+/**
+ * Afirmacoes de confirmacao dos tipos dados (o apurado e o segundo colocado).
+ * Sao as unicas perguntas do teste em que a pessoa fala de si em vez de escolher
+ * uma cena, e por isso vem no fim: ate aqui ela ja respondeu sem saber o que
+ * cada alternativa media.
+ */
+export function candidatosParaConfirmar(prov) {
+  if (!prov || !prov.top) return [];
+  const top = prov.top.categoria;
+  // O segundo do confronto; se o vencedor limpou a triade e nao sobrou rival,
+  // vale o tipo mais pontuado depois dele, contanto que tenha sido escolhido.
+  const seg =
+    (prov.segundo && prov.segundo.categoria) ??
+    ((prov.ranking || []).find((r) => r.categoria !== top && r.score > 0) || {}).categoria;
+  return seg == null ? [top] : [top, seg];
+}
+
+export function itensConfirmacao(banco, tipos) {
+  const out = [];
+  for (const t of tipos || []) {
+    const lst = (banco.confirmacao || {})[String(t)] || [];
+    out.push(...lst);
+  }
+  return out;
+}
+
 /** Tipo provisorio ao fim da Fase 2 (mesma regra do relatorio final). */
 export function tipoProvisorio(fase1, fase2, fase2x, contexto, pesos) {
   return decidirTipo({ fase1, fase2, fase2x }, contexto, pesos);

@@ -67,17 +67,18 @@ Oito regras governam o banco inteiro. Quatro delas são verificadas por teste au
 marca **ao acaso**. Sem viés, os nove tipos saem perto de 11,1% cada: se um tipo for
 um ímã — porque as alternativas dele são mais longas, mais fáceis de concordar, ou
 porque ele aparece em mais itens — ele aparece aqui, e não na simulação com personas,
-onde o respondente já sabe o próprio tipo. Hoje: de 9,7% a 11,9% (amplitude de 2,2
-pontos), centros entre 32,6% e 33,9%, instintos entre 32,1% e 34,7%. `ORIG=<outro
+onde o respondente já sabe o próprio tipo. Hoje: de 10,1% a 12,2% (amplitude de 2,1
+pontos), centros entre 32,7% e 33,8%, instintos entre 32,1% e 34,3%. `ORIG=<outro
 checkout>` compara duas versões do banco lado a lado, que é como se verifica que uma
 rodada de reescrita não puxou o teste para um tipo.
 
-## As quatro fases
+## As fases
 
 | Fase | O que faz | Itens no banco | Itens aplicados |
 |---|---|---|---|
 | 1 | Triagem: pontua tríade **e** os nove tipos | 14 (6 de infância e crença, 8 do presente) + 3 de centro | 17 |
 | 2 | Tipo: itens da tríade vencedora, das tríades dos tipos fortes, e itens **cruzados** entre candidatos de tríades diferentes | 50 de tríade + 9 desempates + 62 cruzados (todos os 27 pares de tríades diferentes) | ~19 |
+| C | Confirmação: afirmações em escala sobre o tipo apurado e o segundo colocado | 18 (2 por tipo) | 4 |
 | 3 | Instinto dominante | 12 + 3 desempates | 6 |
 | 4 | Subtipo dentro do tipo encontrado (27 subtipos de Naranjo) | 27 | 3 |
 
@@ -184,6 +185,29 @@ com a taxa de um bloco em que o tipo da pessoa nem aparecia. Um 5 sexual que, no
 marcava o mais próximo (o 8) saía 8, mesmo com o 5 à frente na Fase 1 e na tríade mental. Com
 as duas etapas, o tipo e a tríade só divergem da triagem quando um confronto direto mostra isso,
 e o relatório diz qual foi.
+
+### A confirmação em escala
+
+Todas as outras perguntas são escolhas entre cenas: a pessoa nunca sabe o que está
+marcando. No fim, depois que o tipo já foi apurado, vêm quatro afirmações em escala
+(`banco.confirmacao`), duas sobre a paixão e a ideia central do tipo apurado e duas
+sobre as do segundo colocado. A resposta vai de "me identifico completamente" (+1) a
+"não me identifico nada" (−1).
+
+Elas vêm por último de propósito: até ali a pessoa respondeu sem saber o que cada
+alternativa media, então a escala não contamina as fases anteriores. E servem para
+três coisas (`aplicarConfirmacao`):
+
+- **confirmar**, quando a pessoa se reconhece no tipo apurado;
+- **corrigir**, quando ela se reconhece muito mais no segundo (diferença de 0,85 numa
+  escala de 2 pontos, com reconhecimento positivo no segundo e ausente no primeiro).
+  A troca é registrada no relatório, com as frases e as respostas dadas;
+- **avisar**, quando ela não se reconhece em nenhum dos dois, o que derruba a confiança.
+
+Os limiares são exigentes porque autorrelato é a evidência mais fraca do teste: uma
+frase sobre a própria neurose é fácil de negar, e ninguém é testemunha neutra de si.
+Na simulação, a confirmação levanta o acerto do respondente confuso (pSelf 0,5) de
+75% para 79%, e não muda o do respondente coerente, que já estava em 99%.
 
 Antes disso, no fim da Fase 1, as três perguntas que separam os centros (corpo, emoção,
 mente) são feitas **sempre**, e não só quando a triagem empata. Elas perguntam pelo centro

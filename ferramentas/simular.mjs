@@ -102,6 +102,19 @@ function responder(item, persona, rand, opts) {
       ? 'tipo'
       : 'triade';
 
+  // Afirmacao em escala: a pessoa diz o quanto se reconhece. Com o mesmo ruido
+  // das outras fases: `pSelf` e a chance de ela responder coerentemente.
+  if (item.escala) {
+    const meu = item.tipo_alvo === persona.tipo;
+    const coerente = rand() < opts.pSelf;
+    const altas = item.alternativas.filter((a) => a.valor >= 0.6);
+    const baixas = item.alternativas.filter((a) => a.valor <= -0.5);
+    const meio = item.alternativas.filter((a) => a.valor > -0.5 && a.valor < 0.6);
+    const pool = coerente ? (meu ? altas : baixas) : meio;
+    const alt = pool[Math.floor(rand() * pool.length)];
+    return { itemId: item.id, altId: alt.id, rtMs: 1500 + Math.floor(rand() * 2000) };
+  }
+
   let escolha = null;
   if (campo === 'instinto') {
     const meus = alts.filter((a) => a.mapa.instinto === persona.instinto);
@@ -210,8 +223,8 @@ function rodarAntigo(persona, rand, opts) {
 
 // --- Fluxo NOVO ------------------------------------------------------------
 function rodarNovo(persona, rand, opts) {
-  const R = { fase1: [], fase2: [], fase2x: [], fase3: [], fase4: [] };
-  const I = { fase1: [], fase2: [], fase2x: [], fase3: [], fase4: [] };
+  const R = { fase1: [], fase2: [], fase2x: [], confirmacao: [], fase3: [], fase4: [] };
+  const I = { fase1: [], fase2: [], fase2x: [], confirmacao: [], fase3: [], fase4: [] };
   const aplicar = (b, itens) => {
     for (const it of itens) {
       I[b].push(it);
@@ -260,6 +273,14 @@ function rodarNovo(persona, rand, opts) {
       );
     }
   }
+  // Confirmacao em escala, sobre o tipo apurado e o segundo colocado.
+  if (fluxo.itensConfirmacao) {
+    const cands = fluxo.candidatosParaConfirmar(prov);
+    aplicar('confirmacao', fluxo.itensConfirmacao(bancoN, cands));
+    const escala = novoEng.pontuarConfirmacao(R.confirmacao, I.confirmacao);
+    prov = novoEng.aplicarConfirmacao(prov, escala).tipo;
+  }
+
   aplicar('fase3', fluxo.itensFase3(bancoN));
   ctx = novoEng.calcularContexto(todas(), todos());
   const inst = novoEng.pontuarPorTaxa([{ respostas: R.fase3, itens: I.fase3, peso: 1 }], 'instinto', ctx);
@@ -278,6 +299,7 @@ function rodarNovo(persona, rand, opts) {
     fase1: { respostas: R.fase1, itens: I.fase1 },
     fase2: { respostas: R.fase2, itens: I.fase2 },
     fase2x: { respostas: R.fase2x, itens: I.fase2x },
+    confirmacao: { respostas: R.confirmacao, itens: I.confirmacao },
     fase3: { respostas: R.fase3, itens: I.fase3 },
     fase4: { respostas: R.fase4, itens: I.fase4 },
   });

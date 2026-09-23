@@ -1,6 +1,13 @@
 import { useRef, useState } from 'react';
 import banco from './data/questions.json';
-import { pontuarPorTaxa, calcularContexto, analisarFinal, PESOS } from './engine/scoring.js';
+import {
+  pontuarPorTaxa,
+  calcularContexto,
+  analisarFinal,
+  pontuarConfirmacao,
+  aplicarConfirmacao,
+  PESOS,
+} from './engine/scoring.js';
 import {
   itensFase1,
   itensFase3,
@@ -10,6 +17,8 @@ import {
   itensFase4,
   tipoProvisorio,
   parParaConfirmar,
+  itensConfirmacao,
+  candidatosParaConfirmar,
 } from './engine/fluxo.js';
 import Landing from './components/Landing.jsx';
 import QuestionCard from './components/QuestionCard.jsx';
@@ -23,18 +32,22 @@ const ASSINATURA_BANCO = assinaturaBanco(banco);
 
 /**
  * Maquina de estados:
- *   fase1  -> triagem (triade + tipo), com desempate de triade
- *   fase2  -> itens da(s) triade(s) candidata(s) + itens cruzados, com desempate de tipo
- *   fase3  -> instinto
- *   fase4  -> confirmacao de subtipo dentro do tipo encontrado
+ *   fase1       -> triagem (triade + tipo), com as perguntas de centro no fim
+ *   fase2       -> itens da(s) triade(s) candidata(s) + itens cruzados, com desempate de tipo
+ *   confirmacao -> afirmacoes em escala sobre o tipo apurado e o segundo colocado
+ *   fase3       -> instinto
+ *   fase4       -> confirmacao de subtipo dentro do tipo encontrado
+ *
+ * A confirmacao vem depois da fase 2 e antes da fase 3 porque ela pode trocar o
+ * tipo, e a fase 4 pergunta pelo subtipo DO tipo encontrado.
  *
  * Os itens cruzados (fase2_cruzada) sao guardados separadamente (fase2x) porque
  * recebem peso proprio na decisao do tipo.
  */
-const FASES = ['fase1', 'fase2', 'fase3', 'fase4'];
+const FASES = ['fase1', 'fase2', 'confirmacao', 'fase3', 'fase4'];
 
 function vazio() {
-  return { fase1: [], fase2: [], fase2x: [], fase3: [], fase4: [] };
+  return { fase1: [], fase2: [], fase2x: [], confirmacao: [], fase3: [], fase4: [] };
 }
 
 export default function App() {
@@ -86,6 +99,8 @@ export default function App() {
   }
 
   function ordemDe(item) {
+    // Itens de escala mantem a ordem: de "me identifico completamente" a "nada".
+    if (item.escala) return item.alternativas;
     if (!ordens.current.has(item.id)) ordens.current.set(item.id, ordemAleatoria(item));
     return ordens.current.get(item.id);
   }
@@ -186,6 +201,13 @@ export default function App() {
         if (anexar(extras, { cruzados: saoCruzados })) return;
       }
       f.tipoFinal = prov;
+      return iniciarFase('confirmacao', itensConfirmacao(banco, candidatosParaConfirmar(prov)));
+    }
+
+    if (f.faseKey === 'confirmacao') {
+      const escala = pontuarConfirmacao(f.respostas.confirmacao, f.itens.confirmacao);
+      const { tipo } = aplicarConfirmacao(f.tipoFinal, escala);
+      f.tipoFinal = tipo;
       return iniciarFase('fase3', itensFase3(banco));
     }
 
@@ -228,6 +250,7 @@ export default function App() {
       fase1: { respostas: f.respostas.fase1, itens: f.itens.fase1 },
       fase2: { respostas: f.respostas.fase2, itens: f.itens.fase2 },
       fase2x: { respostas: f.respostas.fase2x, itens: f.itens.fase2x },
+      confirmacao: { respostas: f.respostas.confirmacao, itens: f.itens.confirmacao },
       fase3: { respostas: f.respostas.fase3, itens: f.itens.fase3 },
       fase4: { respostas: f.respostas.fase4, itens: f.itens.fase4 },
     });

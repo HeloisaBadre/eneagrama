@@ -281,13 +281,13 @@ INST = [
         (9, '“Já passou, não vou remoer isso.”', '“Ele deve estar passando por alguma coisa.”'),
         (1, '“Eu jamais trataria alguém assim.”', '“Isso está errado e eu não vou deixar barato.”'),
     ], **FIX),
-    f2('f2i_03', 'Uma regra sem sentido está atrapalhando uma coisa que você precisa resolver. O que você faz?', [
-        (8, 'Passo por cima e assumo as consequências. Regra sem sentido não manda em mim.',
-            'Enfrento quem criou a regra, principalmente se ela estiver prejudicando gente do meu lado.'),
-        (9, 'Me acomodo. Bater de frente me tiraria mais a paz do que a própria regra.',
-            'Não discuto, mas vou adiando até ninguém mais cobrar.'),
-        (1, 'Contesto pelo caminho certo e proponho uma regra melhor. Errado é deixar como está.',
-            'Reclamo alto, porque uma regra injusta não deveria existir.'),
+    f2('f2i_03', 'Você foi resolver uma coisa presencialmente e, na sua vez, dizem que falta um documento que não estava na lista. O que você faz?', [
+        (8, 'Exijo falar com quem manda ali. Não vou perder o meu dia por causa de uma exigência que inventaram.',
+            'Pressiono até abrirem uma exceção. Quem aceita o primeiro não sai sempre perdendo.'),
+        (9, 'Volto outro dia. Discutir ali me custaria mais do que a viagem perdida.',
+            'Não reclamo na hora, e depois vou empurrando com a barriga até resolver de outro jeito.'),
+        (1, 'Digo que a informação estava errada e peço que corrijam. O que me revolta é o erro, não a viagem perdida.',
+            'Fico indignado com o descaso, mesmo sabendo que a culpa não é daquela pessoa.'),
     ], dominio='geral', **FIX),
     f2('f2i_04', 'Você ficou muito bravo esta semana. Como foi?', [
         (8, 'Explodi, resolvi na hora e depois já tinha passado.',
@@ -507,10 +507,13 @@ MENT = [
         (6, 'Fico pesando riscos e adiando.', 'Às vezes vou com tudo de uma vez, para não me deixar paralisar.'),
         (7, 'Vou atrás. Adiar prazer é desperdício.', 'Seguro em nome de algo maior e fico com a sensação de estar perdendo a vida.'),
     ], **FIX),
-    f2('f2m_04', 'Alguém novo passa a ter autoridade sobre você (um professor, um chefe, um coordenador). Como você age no começo?', [
-        (5, 'Mantenho distância, faço o que me cabe e preservo o meu espaço.', 'Só respeito de verdade se a pessoa souber mais do que eu.'),
-        (6, 'Fico oscilando entre confiar e desconfiar dela.', 'Testo os limites dessa pessoa desde cedo.'),
-        (7, 'Não levo tão a sério e sigo fazendo do meu jeito.', 'Sou prestativo e agradável, mas não aceito ninguém acima de mim.'),
+    f2('f2m_04', 'Primeiro dia de um curso. Quem coordena diz que vai avaliar a participação de cada um ao longo das aulas. O que passa na sua cabeça?', [
+        (5, 'Já calculo o mínimo que preciso aparecer para não me expor mais do que o necessário.',
+            'Só vou levar a sério a avaliação dela se ficar claro que ela entende do assunto.'),
+        (6, 'Quero saber qual é o critério, e já desconfio que possa ser injusto.',
+            'Testo logo até onde vai a régua dela, para saber onde estou pisando.'),
+        (7, 'Não levo muito a sério. Dou um jeito de fazer do meu modo e ainda me divertir.',
+            'Já me ofereço para ajudar. Sendo útil e simpático, ninguém me cobra de verdade.'),
     ], dominio='geral', **EMO),
     f2('f2m_05', 'Na sua casa, quando criança, o que dava segurança (ou o que faltava)?', [
         (5, 'Eu tinha pouco espaço só meu, e sumir era a minha saída.', 'Eu preferia entender as pessoas de longe a lidar com elas.'),
@@ -1026,6 +1029,57 @@ F4 = {
         'Com uma pessoa, uma cena romântica, detalhe por detalhe.')],
 }
 
+
+# ===========================================================================
+# CONFIRMACAO — afirmacoes em escala de identificacao
+# ===========================================================================
+# Duas por tipo: a paixao (a emocao que move) e a ideia central (a crenca sobre a
+# realidade). Aqui a pessoa NAO escolhe entre tipos: ela diz o quanto uma frase
+# sobre ela mesma bate, de "completamente" a "nada". Sao aplicadas so no fim, para
+# o tipo apurado e para o segundo colocado, e servem para confirmar ou corrigir a
+# decisao antes de o resultado aparecer.
+ESCALA = [
+    ('Me identifico completamente.', 1.0),
+    ('Me identifico.', 0.6),
+    ('Me identifico pouco.', 0.25),
+    ('Neutro, não sei dizer.', 0.0),
+    ('Não me identifico.', -0.5),
+    ('Não me identifico nada.', -1.0),
+]
+
+
+def cf(id_, tipo, afirmacao):
+    alts = [{"id": LETRAS[i], "texto": t, "valor": v,
+             "mapa": {"triade": TRIADE[tipo], "tipo": tipo, "instinto": None},
+             "eixo": "fixacao", "peso": 1.0, "desejavel": False}
+            for i, (t, v) in enumerate(ESCALA)]
+    return {"id": id_, "fase": 5, "dominio": "geral", "par_gemeo_id": None,
+            "indireto": False, "flag_desejabilidade_social": False,
+            "cenario": afirmacao, "alternativas": alts,
+            "escala": True, "tipo_alvo": tipo}
+
+
+CONF = {
+ 1: [cf('cf_1a', 1, 'Eu enxergo o que está errado antes de enxergar o resto, e sinto que é obrigação minha consertar. Tem um crítico dentro de mim que não desliga.'),
+     cf('cf_1b', 1, 'Fico irritado com o que não está à altura, e engulo essa irritação, porque perder a linha também seria errado.')],
+ 2: [cf('cf_2a', 2, 'Eu me sinto valioso quando sou necessário. Dou muito cuidado esperando, sem dizer, receber carinho de volta.'),
+     cf('cf_2b', 2, 'Não é fácil pedir o que eu quero. Em vez disso, me aproximo e cuido da pessoa, na esperança de que ela retribua sozinha.')],
+ 3: [cf('cf_3a', 3, 'O meu valor está no que eu consigo entregar. Se eu parar de produzir, é como se eu deixasse de valer.'),
+     cf('cf_3b', 3, 'Eu ajusto quem eu sou conforme o que funciona ali, e às vezes perco de vista o que eu sinto de verdade.')],
+ 4: [cf('cf_4a', 4, 'Sinto que falta em mim alguma coisa que os outros têm, e isso dói mesmo quando ninguém percebe.'),
+     cf('cf_4b', 4, 'Encontro um conforto estranho na tristeza. Às vezes é como se uma parte de mim quisesse sofrer.')],
+ 5: [cf('cf_5a', 5, 'As exigências dos outros me esvaziam, e eu me protejo guardando o meu tempo, a minha energia e o que eu sei.'),
+     cf('cf_5b', 5, 'Prefiro observar a vida de uma distância segura a me envolver e ficar dependendo de alguém.')],
+ 6: [cf('cf_6a', 6, 'Tenho a cabeça ligada demais, sempre procurando o que pode dar errado. Relaxar é difícil para mim.'),
+     cf('cf_6b', 6, 'Mantenho a guarda alta com as pessoas. Nunca tenho certeza das intenções delas.')],
+ 7: [cf('cf_7a', 7, 'Estou sempre com a cabeça no próximo plano. Ficar preso numa coisa chata ou dolorosa é o que eu menos suporto.'),
+     cf('cf_7b', 7, 'Quando a dor aparece, eu logo acho um jeito de ver o lado bom e seguir para outra coisa.')],
+ 8: [cf('cf_8a', 8, 'Eu procuro intensidade: o que é morno não me toca. Encaro o que vier e não recuo.'),
+     cf('cf_8b', 8, 'Quando tentam me controlar, sobe uma força em mim. Fraqueza é o que eu menos mostro.')],
+ 9: [cf('cf_9a', 9, 'Custa saber o que eu quero. É como se eu precisasse que alguém apontasse os meus próprios desejos para mim.'),
+     cf('cf_9b', 9, 'Vou junto com os outros para não criar atrito, e a minha raiva quase nunca chega a aparecer.')],
+}
+
 banco = {
     "_meta": {
         "descricao": "Banco de perguntas do teste de eneagrama (v3, cenas concretas).",
@@ -1046,6 +1100,7 @@ banco = {
     "fase3": F3,
     "fase3_desempate": F3_DES,
     "fase4": {str(k): v for k, v in F4.items()},
+    "confirmacao": {str(k): v for k, v in CONF.items()},
 }
 
 # ---- validacoes ----------------------------------------------------------
@@ -1073,6 +1128,11 @@ for tri, lst in banco['fase2'].items():
     for it in lst:
         c = Counter(a['mapa']['tipo'] for a in it['alternativas'] if not a.get('nula'))
         assert len(set(c.values())) == 1 and len(c) == 3, it['id']
+for t, lst in CONF.items():
+    for it in lst:
+        assert it.get('escala') and len(it['alternativas']) == 6, it['id']
+        assert all(a['mapa']['tipo'] == t for a in it['alternativas']), it['id']
+        assert [a['valor'] for a in it['alternativas']] == [1.0, 0.6, 0.25, 0.0, -0.5, -1.0], it['id']
 for t, lst in F4.items():
     for it in lst:
         ins = sorted(a['mapa']['instinto'] for a in it['alternativas'] if not a.get('nula'))
@@ -1082,4 +1142,5 @@ out = sys.argv[1] if len(sys.argv) > 1 else 'questions.json'
 json.dump(banco, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
 print('ok', out, 'itens:', len(todos), '| f1', len(F1), '| f2',
       sum(len(v) for v in banco['fase2'].values()), '| cruz', len(CRUZ),
-      '| f3', len(F3), '| f4', sum(len(v) for v in F4.values()))
+      '| f3', len(F3), '| f4', sum(len(v) for v in F4.values()),
+      '| conf', sum(len(v) for v in CONF.values()))

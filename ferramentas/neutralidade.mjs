@@ -36,8 +36,8 @@ function rng(seed) {
 }
 
 function umaAplicacao({ banco, fluxo, eng }, rand) {
-  const R = { fase1: [], fase2: [], fase2x: [], fase3: [], fase4: [] };
-  const I = { fase1: [], fase2: [], fase2x: [], fase3: [], fase4: [] };
+  const R = { fase1: [], fase2: [], fase2x: [], confirmacao: [], fase3: [], fase4: [] };
+  const I = { fase1: [], fase2: [], fase2x: [], confirmacao: [], fase3: [], fase4: [] };
   const responder = (item) => {
     const nula = item.alternativas.find((a) => a.nula);
     const ativos = item.alternativas.filter((a) => !a.nula);
@@ -78,6 +78,11 @@ function umaAplicacao({ banco, fluxo, eng }, rand) {
       prov = fluxo.tipoProvisorio(...argsTipo());
     }
   }
+  if (fluxo.itensConfirmacao) {
+    const cands = fluxo.candidatosParaConfirmar(prov);
+    aplicar('confirmacao', fluxo.itensConfirmacao(banco, cands));
+    prov = eng.aplicarConfirmacao(prov, eng.pontuarConfirmacao(R.confirmacao, I.confirmacao)).tipo;
+  }
   aplicar('fase3', fluxo.itensFase3(banco));
   const tipos = prov.top ? [prov.top.categoria] : [];
   if (prov.ambiguo && prov.segundo) tipos.push(prov.segundo.categoria);
@@ -87,6 +92,7 @@ function umaAplicacao({ banco, fluxo, eng }, rand) {
     fase1: { respostas: R.fase1, itens: I.fase1 },
     fase2: { respostas: R.fase2, itens: I.fase2 },
     fase2x: { respostas: R.fase2x, itens: I.fase2x },
+    confirmacao: { respostas: R.confirmacao, itens: I.confirmacao },
     fase3: { respostas: R.fase3, itens: I.fase3 },
     fase4: { respostas: R.fase4, itens: I.fase4 },
   });

@@ -106,6 +106,8 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
             </div>
           )}
 
+          <Confirmacao confirmacao={analise.confirmacao} tipos={tipos} />
+
           <PorQue
             rotulo={`Como este tipo foi inferido dentro do centro ${(triadeInfo?.nome || '').toLowerCase()}`}
             scores={soDaTriade(tipo.scores, triadeFinalKey)}
@@ -466,6 +468,58 @@ function Confrontos({ tipo }) {
         ))}
       </ul>
     </details>
+  );
+}
+
+/**
+ * O que a pessoa respondeu nas afirmacoes finais sobre si mesma, e o que isso
+ * mudou. E a unica parte do teste em que ela fala de si diretamente, entao vale
+ * mostrar por inteiro: as frases, a resposta dada, e se elas confirmaram ou
+ * corrigiram o que as situacoes tinham apurado.
+ */
+function Confirmacao({ confirmacao, tipos }) {
+  if (!confirmacao || !confirmacao.aplicada) return null;
+  const nome = (t) => tipos[t]?.nome || `Tipo ${t}`;
+  const grau = (v) =>
+    v >= 0.8 ? 'se reconheceu por completo' : v >= 0.4 ? 'se reconheceu' : v > 0 ? 'se reconheceu um pouco' : v === 0 ? 'ficou neutro' : v > -0.75 ? 'não se reconheceu' : 'não se reconheceu nada';
+  const pares = Object.entries(confirmacao.detalhe || {});
+  return (
+    <>
+      {confirmacao.trocou && (
+        <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
+          <div className="bar-olive">O seu reconhecimento mudou o resultado</div>
+          <div className="box-bd" style={{ fontSize: 13 }}>
+            As perguntas de situação tinham apontado o {nome(confirmacao.de)}, mas nas afirmações finais
+            você se reconheceu bem mais no {nome(confirmacao.para)}. O resultado seguiu o seu
+            reconhecimento. O {nome(confirmacao.de)} continua como segundo candidato, na seção 5.
+          </div>
+        </div>
+      )}
+      <details style={{ marginTop: 8 }}>
+        <summary className="retro-link" style={{ fontSize: 12.5 }}>
+          O que você respondeu nas afirmações finais
+        </summary>
+        <p style={{ marginTop: 8, fontSize: 12.5, color: '#333' }}>
+          Estas foram as únicas perguntas em que você falou de si diretamente. Elas vêm por último, de
+          propósito: até ali você respondeu sem saber o que cada alternativa media. Elas confirmam o tipo,
+          ou o corrigem quando a diferença é grande.
+        </p>
+        {pares.map(([t, lst]) => (
+          <div key={t} style={{ marginTop: 10 }}>
+            <div style={{ fontWeight: 700, fontSize: 12.5, color: '#12325e' }}>
+              {nome(Number(t))} — você {grau(lst.reduce((a, b) => a + b.valor, 0) / lst.length)}
+            </div>
+            <ul style={{ marginTop: 4, paddingLeft: 18, fontSize: 12.5, lineHeight: 1.6 }}>
+              {lst.map((d) => (
+                <li key={d.itemId}>
+                  “{d.afirmacao}” <span style={{ color: '#5a6b7a' }}>→ {d.resposta}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </details>
+    </>
   );
 }
 

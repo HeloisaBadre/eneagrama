@@ -1,7 +1,21 @@
 import { describe, it, expect } from 'vitest';
 import banco from '../data/questions.json';
-import { calcularContexto, pontuarPorTaxa, analisarFinal } from './scoring.js';
-import { resultadoFase1, planejarFase2, itensFase4, parParaConfirmar, TRIADE_DE } from './fluxo.js';
+import {
+  calcularContexto,
+  pontuarPorTaxa,
+  analisarFinal,
+  pontuarConfirmacao,
+  aplicarConfirmacao,
+} from './scoring.js';
+import {
+  resultadoFase1,
+  planejarFase2,
+  itensFase4,
+  itensConfirmacao,
+  candidatosParaConfirmar,
+  parParaConfirmar,
+  TRIADE_DE,
+} from './fluxo.js';
 
 const RT = 1500;
 
@@ -369,5 +383,144 @@ describe('perguntas de centro: o contratipo que se reconhece pouco', () => {
     const plano = planoDe(1, { centro: 'instintiva' });
     expect(plano.triades[0]).toBe('instintiva');
     expect(plano.triades).not.toContain('mental');
+  });
+});
+
+describe('confirmacao em escala', () => {
+  const tipos = (t) => banco.confirmacao[String(t)];
+
+  it('sao duas afirmacoes por tipo, com a mesma escala de seis pontos', () => {
+    for (let t = 1; t <= 9; t++) {
+      const lst = tipos(t);
+      expect(lst, `tipo ${t}`).toHaveLength(2);
+      for (const it of lst) {
+        expect(it.escala).toBe(true);
+        expect(it.tipo_alvo).toBe(t);
+        expect(it.alternativas.map((a) => a.valor)).toEqual([1, 0.6, 0.25, 0, -0.5, -1]);
+        expect(it.alternativas.every((a) => a.mapa.tipo === t)).toBe(true);
+        expect(it.alternativas.some((a) => a.nula)).toBe(false);
+      }
+    }
+  });
+
+  it('itensConfirmacao traz as afirmacoes do tipo apurado e do segundo', () => {
+    const itens = itensConfirmacao(banco, [5, 8]);
+    expect(itens.map((i) => i.id)).toEqual(['cf_5a', 'cf_5b', 'cf_8a', 'cf_8b']);
+  });
+
+  /** Responde as afirmacoes do tipo `t` com o valor pedido. */
+  function responderEscala(itens, valores) {
+    return itens.map((it) => {
+      const v = valores[it.tipo_alvo];
+      const alt = it.alternativas.find((a) => a.valor === v);
+      return { itemId: it.id, altId: alt.id, rtMs: RT };
+    });
+  }
+
+  const apurado = (top, segundo) => ({
+    top: { categoria: top, score: 10 },
+    segundo: { categoria: segundo, score: 8 },
+    ranking: [],
+    scores: {},
+  });
+
+  it('troca o tipo quando a pessoa se reconhece muito mais no segundo', () => {
+    const itens = itensConfirmacao(banco, [8, 5]);
+    const escala = pontuarConfirmacao(responderEscala(itens, { 8: -0.5, 5: 1 }), itens);
+    const { tipo, confirmacao } = aplicarConfirmacao(apurado(8, 5), escala);
+    expect(confirmacao.trocou).toBe(true);
+    expect(tipo.top.categoria).toBe(5);
+    expect(tipo.segundo.categoria).toBe(8);
+  });
+
+  it('nao troca quando a pessoa se reconhece no tipo apurado', () => {
+    const itens = itensConfirmacao(banco, [8, 5]);
+    const escala = pontuarConfirmacao(responderEscala(itens, { 8: 1, 5: 1 }), itens);
+    const { tipo, confirmacao } = aplicarConfirmacao(apurado(8, 5), escala);
+    expect(confirmacao.trocou).toBe(false);
+    expect(tipo.top.categoria).toBe(8);
+    expect(confirmacao.notas.join(' ')).toMatch(/reconheceu tanto/i);
+  });
+
+  it('nao troca por pouca diferenca', () => {
+    const itens = itensConfirmacao(banco, [8, 5]);
+    const escala = pontuarConfirmacao(responderEscala(itens, { 8: 0.25, 5: 0.6 }), itens);
+    const { tipo, confirmacao } = aplicarConfirmacao(apurado(8, 5), escala);
+    expect(confirmacao.trocou).toBe(false);
+    expect(tipo.top.categoria).toBe(8);
+  });
+
+  it('avisa quando a pessoa nao se reconhece no tipo apurado nem no segundo', () => {
+    const itens = itensConfirmacao(banco, [8, 5]);
+    const escala = pontuarConfirmacao(responderEscala(itens, { 8: -1, 5: -1 }), itens);
+    const { tipo, confirmacao } = aplicarConfirmacao(apurado(8, 5), escala);
+    expect(confirmacao.trocou).toBe(false);
+    expect(tipo.top.categoria).toBe(8);
+    expect(confirmacao.notas.join(' ')).toMatch(/não se reconheceu/i);
+  });
+
+  it('o relatorio final aplica a confirmacao sobre o tipo apurado', () => {
+    // Fase 1 com o 8 na frente e o 5 atras, e os dois blocos aplicados: assim a
+    // apuracao tem um primeiro e um segundo colocado de centros diferentes.
+    const f1 = banco.fase1;
+    const resp1 = f1.map((it, idx) => {
+      const t = idx < 9 ? 8 : 5;
+      const alt = it.alternativas.find((a) => a.mapa && a.mapa.tipo === t);
+      return { itemId: it.id, altId: alt.id, rtMs: RT };
+    });
+    const blocoI = banco.fase2.instintiva;
+    const blocoM = banco.fase2.mental;
+    const f2itens = [...blocoI, ...blocoM];
+    const f2resp = [...responderPorTipo(blocoI, 8), ...responderPorTipo(blocoM, 5)];
+    const vazio = { respostas: [], itens: [] };
+    const base = {
+      fase1: { respostas: resp1, itens: f1 },
+      fase2: { respostas: f2resp, itens: f2itens },
+      fase2x: vazio,
+      fase3: vazio,
+      fase4: vazio,
+    };
+
+    const semConf = analisarFinal(base);
+    const top = Number(semConf.tipo.top.categoria);
+    const segundo = Number(semConf.tipo.segundo.categoria);
+    expect([top, segundo].sort()).toEqual([5, 8]);
+
+    // A pessoa nega o tipo apurado e se reconhece por completo no segundo.
+    const itensConf = itensConfirmacao(banco, [top, segundo]);
+    const fim = analisarFinal({
+      ...base,
+      confirmacao: { respostas: responderEscala(itensConf, { [top]: -1, [segundo]: 1 }), itens: itensConf },
+    });
+    expect(Number(fim.tipoApurado.top.categoria)).toBe(top);
+    expect(Number(fim.tipo.top.categoria)).toBe(segundo);
+    expect(Number(fim.tipo.segundo.categoria)).toBe(top);
+    expect(fim.confirmacao.trocou).toBe(true);
+    expect(fim.confiabilidade.notas.join(' ')).toMatch(/afirmações finais/i);
+  });
+});
+
+describe('candidatos da confirmacao', () => {
+  it('usa o segundo do confronto quando existe', () => {
+    const prov = { top: { categoria: 5, score: 1 }, segundo: { categoria: 8, score: 0.8 }, ranking: [] };
+    expect(candidatosParaConfirmar(prov)).toEqual([5, 8]);
+  });
+
+  it('cai no mais pontuado depois do vencedor quando nao houve rival', () => {
+    const prov = {
+      top: { categoria: 5, score: 1 },
+      segundo: null,
+      ranking: [
+        { categoria: 5, score: 1 },
+        { categoria: 6, score: 0 },
+        { categoria: 4, score: 0.3 },
+      ],
+    };
+    expect(candidatosParaConfirmar(prov)).toEqual([5, 4]);
+  });
+
+  it('confirma so o vencedor quando nenhum outro tipo foi escolhido', () => {
+    const prov = { top: { categoria: 5, score: 1 }, segundo: null, ranking: [{ categoria: 5, score: 1 }] };
+    expect(candidatosParaConfirmar(prov)).toEqual([5]);
   });
 });
