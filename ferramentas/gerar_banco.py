@@ -15,6 +15,8 @@ Regras de escrita (alem das de equilibrio da v2):
 import json, sys
 from collections import Counter
 
+from banco_en import EN as EN_TEXTOS, NULA_EN, ESCALA_EN
+
 TRIADE = {8: 'instintiva', 9: 'instintiva', 1: 'instintiva',
           2: 'emocional', 3: 'emocional', 4: 'emocional',
           5: 'mental', 6: 'mental', 7: 'mental'}
@@ -1138,9 +1140,38 @@ for t, lst in F4.items():
         ins = sorted(a['mapa']['instinto'] for a in it['alternativas'] if not a.get('nula'))
         assert ins == [SP, SX, SO], it['id']
 
+# ---- traducao (ingles ao lado do portugues) -------------------------------
+# Os dois idiomas moram no MESMO item: `cenario_en` e `texto_en`. Assim trocar de
+# idioma no meio do teste nao perde resposta nenhuma, porque o item e o mesmo
+# objeto, e a assinatura do banco (que so olha os textos em portugues) nao muda
+# quando uma traducao entra.
+sem_traducao = []
+for it in todos:
+    tr = EN_TEXTOS.get(it['id'])
+    if tr is None:
+        sem_traducao.append(it['id'])
+        continue
+    it['cenario_en'] = tr['c']
+    if it.get('escala'):
+        for a, t in zip(it['alternativas'], ESCALA_EN):
+            a['texto_en'] = t
+        continue
+    ativos = [a for a in it['alternativas'] if not a.get('nula')]
+    assert len(ativos) == len(tr['a']), ('numero de alternativas', it['id'], len(ativos), len(tr['a']))
+    for a, t in zip(ativos, tr['a']):
+        a['texto_en'] = t
+    for a in it['alternativas']:
+        if a.get('nula'):
+            a['texto_en'] = NULA_EN
+
 out = sys.argv[1] if len(sys.argv) > 1 else 'questions.json'
 json.dump(banco, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
 print('ok', out, 'itens:', len(todos), '| f1', len(F1), '| f2',
       sum(len(v) for v in banco['fase2'].values()), '| cruz', len(CRUZ),
       '| f3', len(F3), '| f4', sum(len(v) for v in F4.values()),
       '| conf', sum(len(v) for v in CONF.values()))
+if sem_traducao:
+    print('EN faltando:', len(sem_traducao), 'de', len(todos), '->', ' '.join(sem_traducao[:12]),
+          '...' if len(sem_traducao) > 12 else '')
+else:
+    print('EN completo:', len(todos), 'itens')

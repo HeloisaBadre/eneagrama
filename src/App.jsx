@@ -26,6 +26,7 @@ import ProgressBar from './components/ProgressBar.jsx';
 import Report from './components/Report.jsx';
 import { assinaturaBanco } from './engine/exportar.js';
 import { clonarEstado, ordemAleatoria } from './engine/navegacao.js';
+import { useIdioma, SeletorIdioma } from './i18n/index.jsx';
 
 // Identifica a versao do banco no arquivo de respostas que a pessoa pode baixar.
 const ASSINATURA_BANCO = assinaturaBanco(banco);
@@ -51,6 +52,7 @@ function vazio() {
 }
 
 export default function App() {
+  const { t } = useIdioma();
   const [stage, setStage] = useState('landing'); // landing | quiz | report
   const [itemAtual, setItemAtual] = useState(null);
   const [respondidas, setRespondidas] = useState(0);
@@ -274,8 +276,10 @@ export default function App() {
               <span className="light y" />
               <span className="light g" />
             </div>
-            <div className="title">Teste de Eneagrama</div>
-            <div style={{ width: 44 }} />
+            <div className="title">{t.titulo}</div>
+            <div style={{ width: 44, display: 'flex', justifyContent: 'flex-end' }}>
+              <SeletorIdioma />
+            </div>
           </div>
 
           {stage === 'quiz' && (

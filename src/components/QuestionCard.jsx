@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { tempoDaResposta } from '../engine/navegacao.js';
+import { useIdioma, textoNoIdioma } from '../i18n/index.jsx';
 
 /**
  * Renderiza um item. Clicar numa alternativa so a marca (a pessoa pode trocar);
@@ -25,6 +26,7 @@ import { tempoDaResposta } from '../engine/navegacao.js';
  * @param respostaAnterior { altId, rtMs } se a pessoa ja respondeu esta pergunta
  */
 export default function QuestionCard({ item, alternativas, respostaAnterior, onAvancar, onVoltar }) {
+  const { t, idioma } = useIdioma();
   const inicioRef = useRef(0);
   const rtSelecaoRef = useRef(null);
   const [selecionada, setSelecionada] = useState(respostaAnterior ? respostaAnterior.altId : null);
@@ -72,7 +74,7 @@ export default function QuestionCard({ item, alternativas, respostaAnterior, onA
         aria-pressed={ativa}
         style={extraStyle}
       >
-        {alt.texto}
+        {textoNoIdioma(alt, 'texto', idioma)}
       </button>
     );
   }
@@ -81,22 +83,20 @@ export default function QuestionCard({ item, alternativas, respostaAnterior, onA
     <div className="fade-in" key={item.id}>
       <div className="box">
         <div className="box-hd">
-          <span>{escala ? 'Sobre você' : rotuloDominio(item.dominio) || 'Cenário'}</span>
+          <span>{escala ? t.quiz.cabecalhoEscala : t.quiz.dominio[item.dominio] || t.quiz.cabecalhoCenario}</span>
         </div>
         <div className="box-bd">
           <h2
             className="serif-title"
             style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.3, color: '#1d1d1f', margin: 0 }}
           >
-            {item.cenario}
+            {textoNoIdioma(item, 'cenario', idioma)}
           </h2>
         </div>
       </div>
 
       <p style={{ fontSize: 12, color: '#33536f', margin: '12px 2px 8px' }}>
-        {escala
-          ? 'O quanto esta frase combina com você? Responda pelo que é, não pelo que gostaria que fosse:'
-          : 'Escolha a alternativa mais verdadeira para você, mesmo que não seja perfeita, e clique em Avançar:'}
+        {escala ? t.quiz.instrucaoEscala : t.quiz.instrucao}
       </p>
 
       <div>{alternativas.map((alt) => botao(alt, escala ? estiloEscala(alt) : undefined))}</div>
@@ -107,7 +107,7 @@ export default function QuestionCard({ item, alternativas, respostaAnterior, onA
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginTop: 16 }}>
         <button onClick={voltar} disabled={!onVoltar || enviando} className="bevel-btn">
-          Voltar
+          {t.quiz.voltar}
         </button>
         <button
           onClick={avancar}
@@ -115,7 +115,7 @@ export default function QuestionCard({ item, alternativas, respostaAnterior, onA
           className="aqua-btn"
           style={{ fontSize: 14, padding: '7px 26px' }}
         >
-          Avançar
+          {t.quiz.avancar}
         </button>
       </div>
     </div>
@@ -135,15 +135,4 @@ function estiloEscala(alt) {
     color: forca === 0 ? '#5a6b7a' : '#1d1d1f',
     borderLeft: `4px solid ${v > 0 ? 'rgba(53,116,180,' + (0.25 + 0.55 * forca) + ')' : v < 0 ? 'rgba(150,90,70,' + (0.2 + 0.4 * forca) + ')' : 'rgba(140,140,140,0.35)'}`,
   };
-}
-
-function rotuloDominio(d) {
-  const map = {
-    trabalho: 'No trabalho',
-    familia: 'Na família',
-    amizade: 'Entre amigos',
-    romance: 'No amor',
-    geral: '',
-  };
-  return map[d] ?? '';
 }

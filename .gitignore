@@ -5,3 +5,7 @@ dist
 
 # Respostas de pessoas reais (anonimas, mas nunca publicar)
 respostas/
+
+# Cache do Python (gerador do banco)
+__pycache__/
+*.pyc

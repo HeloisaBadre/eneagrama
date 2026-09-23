@@ -1,9 +1,12 @@
+import { useIdioma } from '../i18n/index.jsx';
+
 /**
  * Barra de progresso DELIBERADAMENTE nao-reveladora: nao mostra
  * "pergunta X de Y" nem "fase X de 3". Avanca de forma suave e assintotica.
  * Visual: barra Aqua com listras diagonais (Mac OS X).
  */
 export default function ProgressBar({ respondidas }) {
+  const { t } = useIdioma();
   // Curva assintotica: nunca chega a 100% ate o fim real.
   const pct = Math.min(92, 100 * (1 - Math.pow(0.94, respondidas)));
   return (
@@ -12,7 +15,7 @@ export default function ProgressBar({ respondidas }) {
         <div className="aqua-progress-fill" style={{ width: `${pct}%` }} />
       </div>
       <p style={{ fontSize: 11, color: '#33536f', marginTop: 5, marginBottom: 0 }}>
-        Em andamento. Responda com honestidade, sem calcular.
+        {t.quiz.andamento}
       </p>
     </div>
   );

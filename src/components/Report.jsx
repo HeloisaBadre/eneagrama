@@ -1,15 +1,23 @@
 import { useState } from 'react';
-import { triades, tipos, instintos, subtipos, rotulos } from '../data/results.js';
 import { TRIADE_DE } from '../engine/fluxo.js';
 import { montarRegistro } from '../engine/exportar.js';
+import { useIdioma, textoNoIdioma } from '../i18n/index.jsx';
 
 /**
- * Relatorio final (repintura retro; lógica de dados inalterada). Recebe:
+ * Relatorio final. Recebe:
  *  - analise: saida de analisarFinal()
  *  - itensPorId: mapa id->item para citar textos de respostas decisivas
  *  - respostasPorFase, assinatura: para o arquivo de respostas opcional (secao 6)
+ *
+ * Os textos vem do idioma escolhido: os rotulos de `useIdioma().t`, e as
+ * descricoes de tipo e subtipo de `useIdioma().conteudo` (results.js ou
+ * results.en.js). A logica de dados nao muda com o idioma.
  */
 export default function Report({ analise, itensPorId, respostasPorFase, assinatura, onRestart }) {
+  const { t, conteudo } = useIdioma();
+  const tr = t.relatorio;
+  const { triades, tipos, instintos, subtipos, rotulos } = conteudo;
+
   const { triade, tipo, instinto, confiabilidade } = analise;
   const tipoNum = tipo.top ? tipo.top.categoria : null;
   const triadeTriagem = triade.top ? triade.top.categoria : null;
@@ -26,42 +34,35 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
     <div className="fade-in">
       <div style={{ textAlign: 'center', marginBottom: 12 }}>
         <h1 className="serif-title" style={{ fontSize: 28, fontWeight: 700, color: '#12325e', margin: '4px 0 0' }}>
-          Resultado
+          {tr.titulo}
         </h1>
       </div>
 
       {/* 1. TRIADE */}
-      <Secao numero="1" titulo="Centro dominante (tríade)">
+      <Secao numero="1" titulo={tr.s1}>
         {triadeInfo ? (
           <>
             <div className="pill" style={{ fontSize: 15 }}>{triadeInfo.nome}</div>
             <p style={{ marginTop: 12 }}>{triadeInfo.texto}</p>
             <p style={{ marginTop: 10, fontSize: 13, color: '#4a4a4a' }}>
-              A emoção reativa de fundo aqui é <strong>{triadeInfo.emocao}</strong>. A pergunta
-              silenciosa que organiza suas reações: <em>“{triadeInfo.pergunta}”</em>
+              {tr.emocaoDeFundo(triadeInfo.emocao, triadeInfo.pergunta)}
             </p>
           </>
         ) : (
-          <SemResultado>
-            Suas respostas não apontaram um centro dominante. Isso acontece quando quase nenhuma
-            alternativa pareceu com você.
-          </SemResultado>
+          <SemResultado>{tr.semTriade}</SemResultado>
         )}
         {triadeDivergiu && (
           <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
-            <div className="bar-olive">A triagem inicial apontou outro centro</div>
+            <div className="bar-olive">{tr.triagemOutroCentro}</div>
             <div className="box-bd" style={{ fontSize: 13 }}>
-              Nas primeiras perguntas, o centro que mais apareceu foi{' '}
-              <strong>{(triades[triadeTriagem]?.nome || '').toLowerCase()}</strong>. Mas o tipo é
-              decidido comparando os candidatos só nas perguntas em que os dois apareciam juntos
-              <ConfrontoDecisivo tipo={tipo} />. Isso é comum em quem tem um comportamento parecido
-              com o de outro centro (por exemplo, um 6 sexual ou um 4 sexual que se comportam como 8).
-              O centro exibido acima é o do tipo encontrado.
+              {tr.triagemOutroCentroTexto((triades[triadeTriagem]?.nome || '').toLowerCase())}
+              <ConfrontoDecisivo tipo={tipo} />
+              {tr.triagemOutroCentroFim}
             </div>
           </div>
         )}
         <PorQue
-          rotulo="Como a triagem inicial pontuou os centros"
+          rotulo={tr.comoTriagemPontuou}
           scores={triade.scores}
           decisivo={analise.decisivos.triade}
           itensPorId={itensPorId}
@@ -73,35 +74,32 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
 
       {/* 2. TIPO */}
       {tipoInfo ? (
-        <Secao numero="2" titulo="Eneatipo">
+        <Secao numero="2" titulo={tr.s2}>
           <div className="pill" style={{ fontSize: 15 }}>{tipoInfo.nome}</div>
           <p style={{ marginTop: 12 }}>{tipoInfo.nucleo}</p>
           <p style={{ marginTop: 10 }}>
-            <span style={{ fontWeight: 700, color: '#12325e' }}>A dor por trás: </span>
+            <span style={{ fontWeight: 700, color: '#12325e' }}>{tr.dorPorTras}</span>
             {tipoInfo.dorDeFundo}
           </p>
-          <p className="ficha">
-            Ficha técnica (linguagem de análise): paixão, {tipoInfo.paixao}; fixação,{' '}
-            {tipoInfo.fixacao}.
-          </p>
+          <p className="ficha">{tr.ficha(tipoInfo.paixao, tipoInfo.fixacao)}</p>
 
           {tipo.ambiguo && tipo.segundo && (
             <Ambiguidade
               a={tipos[tipo.top.categoria]?.nome}
               b={tipos[tipo.segundo.categoria]?.nome}
-              diferenca={diferencaTipos(tipo.top.categoria, tipo.segundo.categoria)}
+              diferenca={diferencaTipos(conteudo, tipo.top.categoria, tipo.segundo.categoria)}
             />
           )}
 
           {confiabilidade.subtipoNaoReconhecido && (
             <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
-              <div className="bar-olive">Você não se reconheceu nas variantes deste tipo</div>
+              <div className="bar-olive">{tr.naoReconheceuSubtipo}</div>
               <div className="box-bd" style={{ fontSize: 13 }}>
-                Nas perguntas de subtipo do Tipo {confiabilidade.subtipoNaoReconhecido.tipo}, você marcou
-                “nenhuma dessas” em {confiabilidade.subtipoNaoReconhecido.nulas} de{' '}
-                {confiabilidade.subtipoNaoReconhecido.total}. Quando a pessoa não se reconhece nas três
-                variantes do tipo encontrado, é comum o tipo ser outro. Leia com atenção a descrição do
-                segundo candidato, na seção 5.
+                {tr.naoReconheceuSubtipoTexto(
+                  confiabilidade.subtipoNaoReconhecido.tipo,
+                  confiabilidade.subtipoNaoReconhecido.nulas,
+                  confiabilidade.subtipoNaoReconhecido.total
+                )}
               </div>
             </div>
           )}
@@ -109,28 +107,24 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
           <Confirmacao confirmacao={analise.confirmacao} tipos={tipos} />
 
           <PorQue
-            rotulo={`Como este tipo foi inferido dentro do centro ${(triadeInfo?.nome || '').toLowerCase()}`}
+            rotulo={tr.comoTipoInferido((triadeInfo?.nome || '').toLowerCase())}
             scores={soDaTriade(tipo.scores, triadeFinalKey)}
             decisivo={analise.decisivos.tipo}
             itensPorId={itensPorId}
             ambiguo={tipo.ambiguo}
             segundo={tipo.segundo}
-            rotuladorNome={(k) => `Tipo ${k}`}
+            rotuladorNome={(k) => tr.rotuloTipo(k)}
           />
           <Confrontos tipo={tipo} />
         </Secao>
       ) : (
-        <Secao numero="2" titulo="Eneatipo">
-          <SemResultado>
-            Não foi possível identificar o seu tipo, porque você não se reconheceu nas alternativas
-            das perguntas que distinguem os tipos. Refazer o teste escolhendo a opção mais próxima,
-            mesmo quando nenhuma for perfeita, costuma resolver.
-          </SemResultado>
+        <Secao numero="2" titulo={tr.s2}>
+          <SemResultado>{tr.semTipo}</SemResultado>
         </Secao>
       )}
 
       {/* 3. INSTINTO / SUBTIPO */}
-      <Secao numero="3" titulo="Instinto dominante (subtipo)">
+      <Secao numero="3" titulo={tr.s3}>
         {instintoKey && (
           <>
             <div className="pill" style={{ fontSize: 15 }}>{instintos[instintoKey]?.nome}</div>
@@ -144,13 +138,11 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
           </>
         ) : (
           <p style={{ marginTop: 12, fontSize: 13, color: '#4a4a4a' }}>
-            {instintoKey
-              ? 'O texto do subtipo depende do tipo, que não pôde ser identificado. O instinto dominante está indicado acima.'
-              : 'Suas respostas não apontaram um instinto dominante.'}
+            {instintoKey ? tr.subtipoSemTipo : tr.semInstinto}
           </p>
         )}
         <PorQue
-          rotulo="Como este instinto foi inferido"
+          rotulo={tr.comoInstintoInferido}
           scores={instinto.scores}
           decisivo={null}
           itensPorId={itensPorId}
@@ -161,7 +153,7 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
       </Secao>
 
       {/* 4. CONFIABILIDADE */}
-      <Secao numero="4" titulo="Índice de confiabilidade do autorrelato">
+      <Secao numero="4" titulo={tr.s4}>
         <span
           style={{
             display: 'inline-block',
@@ -172,39 +164,44 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
             ...corConfianca(confiabilidade.confiancaAutorrelato),
           }}
         >
-          Confiança {rotulos.confianca[confiabilidade.confiancaAutorrelato]}
+          {tr.confianca(rotulos.confianca[confiabilidade.confiancaAutorrelato])}
         </span>
 
         <ul style={{ marginTop: 12, paddingLeft: 18, fontSize: 13, lineHeight: 1.6 }}>
           <li>
-            <strong>“Nenhuma dessas”:</strong>{' '}
+            <strong>{tr.nulasRotulo}</strong>{' '}
             {confiabilidade.nulas
-              ? `${confiabilidade.nulas.marcadas} de ${confiabilidade.nulas.total} perguntas (nível ${confiabilidade.nulas.nivel}).`
-              : 'não medido.'}
+              ? tr.nulasTexto(confiabilidade.nulas.marcadas, confiabilidade.nulas.total, confiabilidade.nulas.nivel)
+              : tr.naoMedido}
           </li>
           <li>
-            <strong>Desejabilidade social:</strong> {confiabilidade.desejabilidade.marcadas} de{' '}
-            {confiabilidade.desejabilidade.total} itens elogiáveis marcados (nível{' '}
-            {confiabilidade.desejabilidade.nivel}).
+            <strong>{tr.desejabilidadeRotulo}</strong>{' '}
+            {tr.desejabilidadeTexto(
+              confiabilidade.desejabilidade.marcadas,
+              confiabilidade.desejabilidade.total,
+              confiabilidade.desejabilidade.nivel
+            )}
           </li>
           <li>
-            <strong>Deliberação em itens viscerais:</strong> nível {confiabilidade.deliberacao.nivel}
-            {confiabilidade.deliberacao.total > 0
-              ? ` (${confiabilidade.deliberacao.deliberadas}/${confiabilidade.deliberacao.total})`
-              : ''}
-            .
+            <strong>{tr.deliberacaoRotulo}</strong>{' '}
+            {tr.deliberacaoTexto(
+              confiabilidade.deliberacao.nivel,
+              confiabilidade.deliberacao.total > 0
+                ? ` (${confiabilidade.deliberacao.deliberadas}/${confiabilidade.deliberacao.total})`
+                : ''
+            )}
           </li>
           <li>
-            <strong>Consistência entre itens gêmeos:</strong>{' '}
+            <strong>{tr.gemeosRotulo}</strong>{' '}
             {confiabilidade.divergenciasGemeas.length === 0
-              ? 'sem divergências registradas.'
-              : `${confiabilidade.divergenciasGemeas.length} divergência(s), ver abaixo.`}
+              ? tr.gemeosSem
+              : tr.gemeosCom(confiabilidade.divergenciasGemeas.length)}
           </li>
         </ul>
 
         {confiabilidade.notas.length > 0 && (
           <div style={{ marginTop: 10 }}>
-            {confiabilidade.notas.map((n, i) => (
+            {notasTraduzidas(confiabilidade, tr).map((n, i) => (
               <p
                 key={i}
                 style={{ fontSize: 13, color: '#333', borderLeft: '3px solid var(--aqua-2)', paddingLeft: 10, margin: '8px 0' }}
@@ -217,23 +214,20 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
 
         {confiabilidade.divergenciasGemeas.length > 0 && (
           <div style={{ marginTop: 10 }}>
-            <p style={{ fontWeight: 700, color: '#12325e', marginBottom: 6 }}>
-              Divergências entre cenários quase-idênticos
-            </p>
+            <p style={{ fontWeight: 700, color: '#12325e', marginBottom: 6 }}>{tr.divergenciasTitulo}</p>
             {confiabilidade.divergenciasGemeas.map((d, i) => (
               <div key={i} className="box" style={{ marginBottom: 8 }}>
                 <div className="box-bd" style={{ fontSize: 13 }}>
                   {d.contextos.map((c) => (
                     <div key={c.itemId}>
                       <span style={{ color: 'var(--aqua-2)', fontWeight: 700 }}>
-                        {rotuloDominio(c.dominio)}:
+                        {tr.dominioCurto[c.dominio] || c.dominio}:
                       </span>{' '}
                       “{c.textoEscolha}”
                     </div>
                   ))}
                   <p style={{ marginTop: 8, marginBottom: 0, fontSize: 11.5, color: '#666' }}>
-                    A mesma tensão produziu escolhas diferentes conforme o contexto, sinal de onde
-                    sua defesa relaxa e onde a persona fica mais vigiada.
+                    {tr.divergenciasTexto}
                   </p>
                 </div>
               </div>
@@ -256,12 +250,9 @@ export default function Report({ analise, itensPorId, respostasPorFase, assinatu
       )}
 
       <hr className="rule" />
-      <p style={{ fontSize: 11.5, color: '#5a5a5a', marginTop: 0 }}>
-        Lembrete: os pesos e limiares deste instrumento são heurísticas transparentes, não valores
-        validados por amostra. Trate o resultado como um espelho para reflexão, não como um veredito.
-      </p>
+      <p style={{ fontSize: 11.5, color: '#5a5a5a', marginTop: 0 }}>{tr.ressalva}</p>
       <div style={{ marginTop: 10 }}>
-        <button onClick={onRestart} className="bevel-btn">Refazer</button>
+        <button onClick={onRestart} className="bevel-btn">{tr.refazer}</button>
       </div>
     </div>
   );
@@ -292,45 +283,34 @@ function Secao({ numero, titulo, children }) {
  * candidato (quando ele teve alguma pontuacao) e a diferenca central entre os dois.
  */
 function ProximoPasso({ tipo }) {
+  const { t, conteudo } = useIdioma();
+  const tr = t.relatorio;
   const a = tipo.top ? tipo.top.categoria : null;
   const b = tipo.segundo && tipo.segundo.score > 0 ? tipo.segundo.categoria : null;
-  const segundoInfo = a != null && b != null ? tipos[b] : null;
+  const segundoInfo = a != null && b != null ? conteudo.tipos[b] : null;
 
   return (
-    <Secao numero="5" titulo="O que fazer com este resultado">
+    <Secao numero="5" titulo={tr.s5}>
       <p style={{ marginTop: 0 }}>
-        Um teste escrito não substitui o reconhecimento. Naranjo tratava a leitura das
-        descrições como o instrumento de diagnóstico: o tipo certo é aquele em que a pessoa se
-        reconhece por inteiro, não o que soma mais pontos. Então o primeiro passo é ler a
-        descrição acima
-        {segundoInfo
-          ? ' e a do segundo candidato, e ver qual delas incomoda mais.'
-          : ' com calma, e ver o quanto ela incomoda.'}
+        {tr.passo1}
+        {segundoInfo ? tr.passo1ComSegundo : tr.passo1SemSegundo}
       </p>
       {segundoInfo && (
         <>
-          <p>
-            O segundo candidato nas suas respostas foi o <strong>{segundoInfo.nome}</strong>. A
-            diferença central entre os dois: {diferencaTipos(a, b)}
-          </p>
+          <p>{tr.segundoCandidato(segundoInfo.nome, diferencaTipos(conteudo, a, b))}</p>
           <details style={{ marginTop: 4 }}>
             <summary className="retro-link" style={{ fontSize: 12.5 }}>
-              Ler a descrição do {segundoInfo.nome}
+              {tr.lerDescricao(segundoInfo.nome)}
             </summary>
             <p style={{ marginTop: 8 }}>{segundoInfo.nucleo}</p>
             <p style={{ marginTop: 8 }}>
-              <span style={{ fontWeight: 700, color: '#12325e' }}>A dor por trás: </span>
+              <span style={{ fontWeight: 700, color: '#12325e' }}>{tr.dorPorTras}</span>
               {segundoInfo.dorDeFundo}
             </p>
           </details>
         </>
       )}
-      <p>
-        O passo seguinte que ele recomendava é escrever uma autobiografia focada na paixão e na
-        fixação encontradas: começar pelas cenas concretas da infância, sobretudo as dolorosas,
-        e acompanhar como o caráter foi se formando como defesa diante delas. Sem pressa e sem
-        abstração: o som, a imagem, o que foi dito, o que você concluiu ali.
-      </p>
+      <p>{tr.passo2}</p>
     </Secao>
   );
 }
@@ -340,6 +320,8 @@ function ProximoPasso({ tipo }) {
  * Nada e enviado: o arquivo e gerado no navegador e baixado pela propria pessoa.
  */
 function Contribuir({ analise, itensPorId, respostasPorFase, assinatura }) {
+  const { t, conteudo } = useIdioma();
+  const tr = t.relatorio;
   const [tipo, setTipo] = useState('');
   const [instinto, setInstinto] = useState('');
   const [fonte, setFonte] = useState('');
@@ -370,52 +352,47 @@ function Contribuir({ analise, itensPorId, respostasPorFase, assinatura }) {
   const estiloSelect = { fontSize: 13, padding: '3px 6px', maxWidth: '100%' };
 
   return (
-    <Secao numero="6" titulo="Contribuir com a validação do teste (opcional)">
-      <p style={{ marginTop: 0, fontSize: 13 }}>
-        Este teste ainda está sendo validado. Para ajudar, baixe um arquivo com as suas respostas e
-        entregue a quem indicou o teste. O arquivo não tem nome nem dados pessoais, só as alternativas
-        escolhidas, o tempo de cada resposta e o resultado. Nada é enviado pela internet.
-      </p>
-      <p style={{ fontSize: 13 }}>
-        Se você já conhece o seu tipo por outro caminho, indique abaixo. É isso que permite medir se o
-        teste acerta.
-      </p>
+    <Secao numero="6" titulo={tr.s6}>
+      <p style={{ marginTop: 0, fontSize: 13 }}>{tr.contribuirP1}</p>
+      <p style={{ fontSize: 13 }}>{tr.contribuirP2}</p>
 
       <label style={estiloCampo}>
-        <span style={estiloRotulo}>Meu tipo, se já sei:</span>
+        <span style={estiloRotulo}>{tr.meuTipo}</span>
         <select value={tipo} onChange={(e) => setTipo(e.target.value)} style={estiloSelect}>
-          <option value="">Não sei</option>
+          <option value="">{tr.naoSei}</option>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
             <option key={n} value={n}>
-              Tipo {n}
+              {tr.tipoN(n)}
             </option>
           ))}
         </select>
       </label>
       <label style={estiloCampo}>
-        <span style={estiloRotulo}>Meu instinto, se já sei:</span>
+        <span style={estiloRotulo}>{tr.meuInstinto}</span>
         <select value={instinto} onChange={(e) => setInstinto(e.target.value)} style={estiloSelect}>
-          <option value="">Não sei</option>
-          <option value="autopreservacao">Autopreservação</option>
-          <option value="social">Social</option>
-          <option value="sexual">Sexual</option>
+          <option value="">{tr.naoSei}</option>
+          {['autopreservacao', 'social', 'sexual'].map((k) => (
+            <option key={k} value={k}>
+              {conteudo.rotulos.instinto[k]}
+            </option>
+          ))}
         </select>
       </label>
       <label style={estiloCampo}>
-        <span style={estiloRotulo}>Como sei:</span>
+        <span style={estiloRotulo}>{tr.comoSei}</span>
         <select value={fonte} onChange={(e) => setFonte(e.target.value)} style={estiloSelect} disabled={!tipo}>
-          <option value="">Prefiro não dizer</option>
-          <option value="entrevista">Entrevista com alguém que conhece o modelo</option>
-          <option value="outro-teste">Outro teste</option>
-          <option value="auto-observacao">Observação de mim mesmo</option>
+          <option value="">{tr.prefiroNaoDizer}</option>
+          <option value="entrevista">{tr.fonteEntrevista}</option>
+          <option value="outro-teste">{tr.fonteOutroTeste}</option>
+          <option value="auto-observacao">{tr.fonteAutoObservacao}</option>
         </select>
       </label>
 
       <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
         <button onClick={baixar} className="aqua-btn" style={{ fontSize: 13, padding: '6px 18px' }}>
-          Baixar minhas respostas
+          {tr.baixar}
         </button>
-        {baixado && <span style={{ fontSize: 12, color: '#1c5c1c' }}>Arquivo gerado.</span>}
+        {baixado && <span style={{ fontSize: 12, color: '#1c5c1c' }}>{tr.baixado}</span>}
       </div>
     </Secao>
   );
@@ -428,17 +405,13 @@ function soDaTriade(scores, triadeKey) {
 
 /** Frase curta com o confronto direto que decidiu o tipo (para o aviso de divergencia). */
 function ConfrontoDecisivo({ tipo }) {
+  const { t } = useIdioma();
   const c = tipo.confrontoFinal;
   if (!c || !tipo.top) return null;
   const venc = tipo.top.categoria;
   const rival = c.a === venc ? c.b : c.a;
   const [ev, er] = c.a === venc ? [c.escolhasA, c.escolhasB] : [c.escolhasB, c.escolhasA];
-  return (
-    <>
-      , e nelas o <strong>Tipo {venc}</strong> ficou à frente do <strong>Tipo {rival}</strong> ({ev}{' '}
-      {ev === 1 ? 'escolha' : 'escolhas'} contra {er})
-    </>
-  );
+  return t.relatorio.confrontoDecisivo(venc, rival, ev, er);
 }
 
 /**
@@ -446,25 +419,18 @@ function ConfrontoDecisivo({ tipo }) {
  * que os dois tipos eram opcao (Fase 1 e itens cruzados daquele par).
  */
 function Confrontos({ tipo }) {
+  const { t } = useIdioma();
+  const tr = t.relatorio;
   if (!tipo.confrontos || !tipo.confrontos.length) return null;
   return (
     <details style={{ marginTop: 8 }}>
       <summary className="retro-link" style={{ fontSize: 12.5 }}>
-        Como os candidatos de centros diferentes foram comparados
+        {tr.comoComparados}
       </summary>
-      <p style={{ marginTop: 8, fontSize: 12.5, color: '#333' }}>
-        Cada centro testado tem um vencedor. Entre eles, a decisão usa só as perguntas em que os dois
-        tipos eram opção ao mesmo tempo, para nenhum tipo levar vantagem por ter sido medido em
-        perguntas mais fáceis para ele.
-      </p>
+      <p style={{ marginTop: 8, fontSize: 12.5, color: '#333' }}>{tr.comoComparadosTexto}</p>
       <ul style={{ marginTop: 4, paddingLeft: 18, fontSize: 12.5, lineHeight: 1.6 }}>
         {tipo.confrontos.map((c) => (
-          <li key={`${c.a}-${c.b}`}>
-            Tipo {c.a} × Tipo {c.b}: {c.escolhasA} × {c.escolhasB}{' '}
-            {c.escolhasA + c.escolhasB === 1 ? 'escolha' : 'escolhas'} em {c.itens}{' '}
-            {c.itens === 1 ? 'pergunta' : 'perguntas'}
-            {c.cruzados ? ` (${c.cruzados} feitas só para comparar os dois)` : ''}.
-          </li>
+          <li key={`${c.a}-${c.b}`}>{tr.confrontoLinha(c)}</li>
         ))}
       </ul>
     </details>
@@ -478,41 +444,39 @@ function Confrontos({ tipo }) {
  * corrigiram o que as situacoes tinham apurado.
  */
 function Confirmacao({ confirmacao, tipos }) {
+  const { t, idioma } = useIdioma();
+  const tr = t.relatorio;
   if (!confirmacao || !confirmacao.aplicada) return null;
-  const nome = (t) => tipos[t]?.nome || `Tipo ${t}`;
-  const grau = (v) =>
-    v >= 0.8 ? 'se reconheceu por completo' : v >= 0.4 ? 'se reconheceu' : v > 0 ? 'se reconheceu um pouco' : v === 0 ? 'ficou neutro' : v > -0.75 ? 'não se reconheceu' : 'não se reconheceu nada';
+  const nome = (n) => tipos[n]?.nome || tr.rotuloTipo(n);
   const pares = Object.entries(confirmacao.detalhe || {});
   return (
     <>
       {confirmacao.trocou && (
         <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
-          <div className="bar-olive">O seu reconhecimento mudou o resultado</div>
+          <div className="bar-olive">{tr.confirmouTroca}</div>
           <div className="box-bd" style={{ fontSize: 13 }}>
-            As perguntas de situação tinham apontado o {nome(confirmacao.de)}, mas nas afirmações finais
-            você se reconheceu bem mais no {nome(confirmacao.para)}. O resultado seguiu o seu
-            reconhecimento. O {nome(confirmacao.de)} continua como segundo candidato, na seção 5.
+            {tr.confirmouTrocaTexto(nome(confirmacao.de), nome(confirmacao.para))}
           </div>
         </div>
       )}
       <details style={{ marginTop: 8 }}>
         <summary className="retro-link" style={{ fontSize: 12.5 }}>
-          O que você respondeu nas afirmações finais
+          {tr.confirmacaoResumo}
         </summary>
-        <p style={{ marginTop: 8, fontSize: 12.5, color: '#333' }}>
-          Estas foram as únicas perguntas em que você falou de si diretamente. Elas vêm por último, de
-          propósito: até ali você respondeu sem saber o que cada alternativa media. Elas confirmam o tipo,
-          ou o corrigem quando a diferença é grande.
-        </p>
-        {pares.map(([t, lst]) => (
-          <div key={t} style={{ marginTop: 10 }}>
+        <p style={{ marginTop: 8, fontSize: 12.5, color: '#333' }}>{tr.confirmacaoTexto}</p>
+        {pares.map(([n, lst]) => (
+          <div key={n} style={{ marginTop: 10 }}>
             <div style={{ fontWeight: 700, fontSize: 12.5, color: '#12325e' }}>
-              {nome(Number(t))} — você {grau(lst.reduce((a, b) => a + b.valor, 0) / lst.length)}
+              {tr.confirmacaoLinha(
+                nome(Number(n)),
+                tr.confirmacaoGrau(lst.reduce((a, b) => a + b.valor, 0) / lst.length)
+              )}
             </div>
             <ul style={{ marginTop: 4, paddingLeft: 18, fontSize: 12.5, lineHeight: 1.6 }}>
               {lst.map((d) => (
                 <li key={d.itemId}>
-                  “{d.afirmacao}” <span style={{ color: '#5a6b7a' }}>→ {d.resposta}</span>
+                  “{textoNoIdioma(d, 'afirmacao', idioma)}”{' '}
+                  <span style={{ color: '#5a6b7a' }}>→ {textoNoIdioma(d, 'resposta', idioma)}</span>
                 </li>
               ))}
             </ul>
@@ -524,9 +488,10 @@ function Confirmacao({ confirmacao, tipos }) {
 }
 
 function SemResultado({ children }) {
+  const { t } = useIdioma();
   return (
     <div className="box" style={{ borderColor: '#c9b96a' }}>
-      <div className="bar-olive">Resultado inconclusivo</div>
+      <div className="bar-olive">{t.relatorio.resultadoInconclusivo}</div>
       <div className="box-bd" style={{ fontSize: 13, lineHeight: 1.55 }}>
         {children}
       </div>
@@ -535,19 +500,22 @@ function SemResultado({ children }) {
 }
 
 function Ambiguidade({ a, b, diferenca }) {
+  const { t } = useIdioma();
+  const tr = t.relatorio;
   return (
     <div className="box" style={{ marginTop: 12, borderColor: '#c9b96a' }}>
-      <div className="bar-olive">Ambiguidade não resolvida entre dois tipos</div>
+      <div className="bar-olive">{tr.ambiguidadeTitulo}</div>
       <div className="box-bd" style={{ fontSize: 13 }}>
-        Suas respostas ficaram tecnicamente próximas entre <strong>{a}</strong> e{' '}
-        <strong>{b}</strong>. Em vez de forçar uma resposta única: {diferenca}
+        {tr.ambiguidadeTexto(a, b, diferenca)}
       </div>
     </div>
   );
 }
 
-/** Mostra a distribuicao e cita a resposta decisiva (requisito 7). */
+/** Mostra a distribuicao e cita a resposta decisiva. */
 function PorQue({ rotulo, scores, decisivo, itensPorId, ambiguo, segundo, rotuladorNome }) {
+  const { t, idioma } = useIdioma();
+  const tr = t.relatorio;
   const entradas = Object.entries(scores)
     .map(([k, v]) => ({ k: coerce(k), v }))
     .sort((a, b) => b.v - a.v);
@@ -604,14 +572,16 @@ function PorQue({ rotulo, scores, decisivo, itensPorId, ambiguo, segundo, rotula
       </div>
       {altDecisiva && (
         <p style={{ marginTop: 10, fontSize: 12, color: '#333' }}>
-          <strong>Resposta mais decisiva:</strong> no cenário “{truncar(itemDecisivo.cenario, 70)}”,
-          sua escolha “{truncar(altDecisiva.texto, 80)}” pesou mais para essa inferência.
+          <strong>{tr.respostaDecisiva}</strong>{' '}
+          {tr.respostaDecisivaTexto(
+            truncar(textoNoIdioma(itemDecisivo, 'cenario', idioma), 70),
+            truncar(textoNoIdioma(altDecisiva, 'texto', idioma), 80)
+          )}
         </p>
       )}
       {ambiguo && segundo && (
         <p style={{ marginTop: 6, fontSize: 11.5, color: '#666' }}>
-          Margem estreita em relação à segunda hipótese ({rotuladorNome(segundo.categoria)}), por isso
-          foram aplicadas perguntas de desempate.
+          {tr.margemEstreita(rotuladorNome(segundo.categoria))}
         </p>
       )}
     </details>
@@ -619,8 +589,19 @@ function PorQue({ rotulo, scores, decisivo, itensPorId, ambiguo, segundo, rotula
 }
 
 // ---------------------------------------------------------------------------
-// Helpers (inalterados)
+// Helpers
 // ---------------------------------------------------------------------------
+
+/**
+ * As notas de confiabilidade nascem em portugues dentro do motor. Quando a nota
+ * tem codigo, o relatorio a escreve no idioma da tela; sem codigo, usa o texto
+ * como veio.
+ */
+function notasTraduzidas(confiabilidade, tr) {
+  const codigos = confiabilidade.notasCodigos || [];
+  if (!codigos.length) return confiabilidade.notas;
+  return codigos.map((c, i) => (tr.notas[c.codigo] ? tr.notas[c.codigo](c) : confiabilidade.notas[i]));
+}
 
 function coerce(k) {
   const n = Number(k);
@@ -633,66 +614,19 @@ function corConfianca(nivel) {
   return { background: '#f7d6d6', color: '#8a2020', border: '1px solid #cf7a7a' };
 }
 
-function rotuloDominio(d) {
-  const map = { trabalho: 'Trabalho', familia: 'Família', amizade: 'Amizade', romance: 'Amor', geral: 'Geral' };
-  return map[d] || d;
-}
-
 function truncar(s, n) {
   return s.length > n ? s.slice(0, n - 1) + '…' : s;
 }
 
 /**
- * Diferenca central entre dois tipos (36 pares, do apendice de diagnostico
- * diferencial de Caracter e neurose). Se faltar um par, usa paixao e fixacao.
+ * Diferenca central entre dois tipos. O mapa dos 36 pares mora no conteudo
+ * (results.js / results.en.js), porque e texto e precisa existir nos dois
+ * idiomas. Se faltar um par, cai na paixao e na fixacao de cada um.
  */
-function diferencaTipos(a, b) {
+function diferencaTipos(conteudo, a, b) {
   const par = [a, b].sort((x, y) => x - y).join('-');
-  // Adaptado do apendice de diagnostico diferencial de Caracter e neurose.
-  const mapa = {
-    '1-2': 'no 1 o motor é o dever e a correção; no 2 é o vínculo e a necessidade de ser querido.',
-    '1-3': 'os dois se controlam e são formais, mas o 1 é contido e sério, guiado pelo que é certo; o 3 é expansivo e animado, guiado pelo que os outros valorizam.',
-    '1-4': 'no 1 o que dói é ter feito errado; no 4, ter confirmado que vale menos que os outros.',
-    '1-5': 'os dois são controlados e perfeccionistas, mas o 1 é assertivo e direto, enquanto o 5 é tímido e inibido na expressão.',
-    '1-6': 'os dois levam o dever a sério; o 1 é mais assertivo e decide, o 6 trava na decisão e teme o erro.',
-    '1-7': 'no 1 o prazer só vem depois do dever; no 7 o prazer vem primeiro, e sem culpa.',
-    '1-8': 'no 1 a raiva é internalizada e vira correção e dever; no 8 ela é externalizada e vira impacto e limite.',
-    '1-9': 'no 1 há uma tensão ativa de corrigir o que está errado; no 9 há acomodação, que evita o conflito e apaga o próprio querer.',
-    '2-3': 'os dois cuidam da aparência e querem atenção, mas o 2 é mais solto, espontâneo e invasivo; o 3 é controlado e atento aos limites.',
-    '2-4': 'o 2 esconde a carência e se apresenta cheio; o 4 vive e mostra a falta.',
-    '2-5': 'o 2 se move na direção do vínculo; o 5 se retira dele.',
-    '2-6': 'no 2 o carinho busca um lugar especial; no 6, proteção e segurança.',
-    '2-7': 'os dois seduzem e gostam de prazer, mas o 2 é emocional de verdade, enquanto no 7 a simpatia convive com independência e um fundo de não envolvimento.',
-    '2-8': 'o 2 também pode ser impulsivo e arrogante, mas é emocional e sedutor; o 8 é ativo e vai direto ao poder.',
-    '2-9': 'os dois são generosos, mas o 2 é dramático, impaciente e romântico, e cobra pelo que dá; o 9 é discreto, paciente e prático, e se esquece de si sem cobrar.',
-    '3-4': 'o 3 controla a emoção e se identifica com a sua melhor versão; o 4 expressa a emoção e se identifica com a falta.',
-    '3-5': 'o 3 é eficiente, social e enfrenta; o 5 é pouco prático e evita o contato e o confronto.',
-    '3-6': 'a ansiedade do 3 gira em torno de se expor e ser deixado de lado; a do 6, em torno de errar e de não saber qual é o caminho.',
-    '3-7': 'o 3 se disciplina para conquistar; o 7 evita o esforço e busca o prazer, com pouca preocupação com convenção.',
-    '3-8': 'o 3 é controlado e se adapta ao que se espera; o 8 é impulsivo e rebelde.',
-    '3-9': 'os dois podem trabalhar muito e viver na superfície, mas o 3 é energético e dirigido pelo olhar dos outros, e o 9 é relaxado e dirigido pelo costume.',
-    '4-5': 'os dois se sentem por baixo, mas o 4 se agarra à relação e chora, e o 5 desiste e seca.',
-    '4-6': 'o 4 é emocional e expressivo; o 6 é mental e inibido.',
-    '4-7': 'o 4 pende para a tristeza e a culpa; o 7, para a euforia e o "está tudo bem". O 4 mostra a raiva, o 7 é gentil por compulsão.',
-    '4-8': 'nos dois há intensidade, mas no 4 a raiva dura e vem junto com uma proibição interna do próprio desejo; no 8 ela explode, passa, e o desejo vira ação. O 8 invade, o 4 cobra pelo sofrimento.',
-    '4-9': 'os dois podem deprimir, mas no 4 a depressão reclama e pede atenção, e no 9 ela é resignada e sem drama.',
-    '5-6': 'os dois desconfiam, mas o 5 se afasta e o 6 se apega a quem protege e leva a autoridade mais em conta.',
-    '5-7': 'o 5 reduz o próprio desejo; o 7 multiplica.',
-    '5-8': 'o 5 se retira do embate; o 8 avança.',
-    '5-9': 'nos dois há resignação e auto-esquecimento, mas no 5 é retirada e pouca disponibilidade, e no 9 é participação e generosidade.',
-    '6-7': 'o 6 sente culpa e enxerga hierarquia; o 7 quase não sente culpa, trata todos como iguais e é mais charmoso e adaptável.',
-    '6-8': 'o 6 duvida e tem medo, mesmo quando parte para cima; o 8 é assertivo sem dúvida, mais impulsivo e menos disciplinado.',
-    '6-9': 'o 6 é introvertido, mental e orientado à hierarquia; o 9 é voltado para fora, sensório-motor, e recusa a hierarquia.',
-    '7-8': 'o 7 é mente e charme, e cede mais; o 8 é ação e domínio.',
-    '7-9': 'no 7 a vida de fantasia é intensa, com astúcia e autoindulgência; no 9 há pouca vida interior, ingenuidade e facilidade em adiar o próprio desejo.',
-    '8-9': 'no 8 a raiva explode e se impõe; no 9 ela é anestesiada e a vontade se dissolve para manter a paz.',
-  };
-  if (mapa[par]) return mapa[par];
-  const [ta, tb] = [tipos[a], tipos[b]];
-  if (!ta || !tb) return 'observe qual paixão/fixação ressoa mais com sua experiência interna.';
-  return (
-    `no ${a} a paixão é ${ta.paixao.toLowerCase()}, e a fixação, ${ta.fixacao.toLowerCase()}. ` +
-    `No ${b} a paixão é ${tb.paixao.toLowerCase()}, e a fixação, ${tb.fixacao.toLowerCase()}. ` +
-    'Observe qual das duas descreve melhor o que acontece por dentro, e não só o comportamento.'
-  );
+  if (conteudo.diferencas[par]) return conteudo.diferencas[par];
+  const [ta, tb] = [conteudo.tipos[a], conteudo.tipos[b]];
+  if (!ta || !tb) return conteudo.semPar;
+  return conteudo.porPaixao(a, ta, b, tb);
 }

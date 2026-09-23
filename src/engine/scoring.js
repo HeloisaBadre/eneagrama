@@ -725,7 +725,9 @@ export function pontuarConfirmacao(respostas, itens) {
     (detalhe[t] = detalhe[t] || []).push({
       itemId: item.id,
       afirmacao: item.cenario,
+      afirmacao_en: item.cenario_en,
       resposta: alt.texto,
+      resposta_en: alt.texto_en,
       valor: alt.valor,
     });
   }
@@ -741,7 +743,7 @@ export function pontuarConfirmacao(respostas, itens) {
  * Devolve o tipo (trocado ou nao) e o que a confirmacao disse.
  */
 export function aplicarConfirmacao(tipo, escala) {
-  const vazia = { trocou: false, valorTop: null, valorSegundo: null, notas: [], aplicada: false };
+  const vazia = { trocou: false, valorTop: null, valorSegundo: null, notas: [], codigos: [], aplicada: false };
   if (!tipo || !tipo.top || !escala || !Object.keys(escala.media || {}).length) {
     return { tipo, confirmacao: vazia };
   }
@@ -754,6 +756,7 @@ export function aplicarConfirmacao(tipo, escala) {
     valorSegundo: vSeg ?? null,
     detalhe: escala.detalhe,
     notas: [],
+    codigos: [],
   };
 
   const trocar =
@@ -769,12 +772,14 @@ export function aplicarConfirmacao(tipo, escala) {
     info.trocou = true;
     info.de = tipo.top.categoria;
     info.para = tipo.segundo.categoria;
+    info.codigos.push({ codigo: 'confirmacaoTrocou', de: tipo.top.categoria, para: tipo.segundo.categoria });
     info.notas.push(
       `As perguntas de situação apontaram o tipo ${tipo.top.categoria}, mas nas afirmações finais você se ` +
         `reconheceu bem mais no tipo ${tipo.segundo.categoria}. O resultado seguiu o seu reconhecimento, e o ` +
         `tipo ${tipo.top.categoria} ficou como segundo candidato.`
     );
   } else if (typeof vTop === 'number' && vTop <= CONFIRMACAO.naoReconhece) {
+    info.codigos.push({ codigo: 'confirmacaoNaoReconheceu', tipo: saida.top.categoria });
     info.notas.push(
       `Você não se reconheceu nas afirmações do tipo ${saida.top.categoria}, que foi o apurado pelas situações. ` +
         'Leia também a descrição do segundo candidato antes de concluir.'
@@ -785,6 +790,7 @@ export function aplicarConfirmacao(tipo, escala) {
     vTop >= CONFIRMACAO.reconhece &&
     vSeg >= CONFIRMACAO.reconhece
   ) {
+    info.codigos.push({ codigo: 'confirmacaoAmbos', a: saida.top.categoria, b: saida.segundo.categoria });
     info.notas.push(
       `Você se reconheceu tanto nas afirmações do tipo ${saida.top.categoria} quanto nas do tipo ` +
         `${saida.segundo.categoria}. As situações desempataram a favor do primeiro, mas vale ler os dois.`
@@ -857,12 +863,20 @@ export function analisarFinal(dados) {
     [triade.consistenciaInterna, tipo.consistenciaInterna, instinto.consistenciaInterna]
   );
 
+  confiabilidade.notasCodigos = [];
+
   // A pessoa nao se reconheceu na maioria das perguntas de subtipo do tipo encontrado:
   // sinal forte de que o tipo pode ser outro. Entra como nota e limita a confianca.
   const f4Nulas = tipo.top ? nulasFase4PorTipo(f4)[tipo.top.categoria] : null;
   const subtipoNaoReconhecido = !!f4Nulas && f4Nulas.total >= 2 && f4Nulas.nulas / f4Nulas.total >= 2 / 3;
   confiabilidade.subtipoNaoReconhecido = subtipoNaoReconhecido ? { tipo: tipo.top.categoria, ...f4Nulas } : null;
   if (subtipoNaoReconhecido) {
+    confiabilidade.notasCodigos.push({
+      codigo: 'subtipoNaoReconhecido',
+      tipo: tipo.top.categoria,
+      nulas: f4Nulas.nulas,
+      total: f4Nulas.total,
+    });
     confiabilidade.notas.push(
       `Nas perguntas de subtipo do tipo ${tipo.top.categoria}, você marcou "nenhuma dessas" em ${f4Nulas.nulas} de ` +
         `${f4Nulas.total}. Quando a pessoa não se reconhece nas variantes do tipo encontrado, o tipo pode ser outro: ` +
@@ -872,6 +886,7 @@ export function analisarFinal(dados) {
   }
 
   for (const n of confirmacao.notas) confiabilidade.notas.push(n);
+  for (const c of confirmacao.codigos || []) confiabilidade.notasCodigos.push(c);
   confiabilidade.confirmacao = confirmacao;
   if (confirmacao.aplicada && typeof confirmacao.valorTop === 'number') {
     // Nao se reconhecer no proprio resultado e o sinal mais direto de erro de tipo.

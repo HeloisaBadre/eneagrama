@@ -650,3 +650,54 @@ export const rotulos = {
     baixo: 'Baixa',
   },
 };
+
+/**
+ * Diferenca central entre dois tipos (36 pares, do apendice de diagnostico
+ * diferencial de Caracter e neurose). Fica aqui, e nao no componente, porque e
+ * conteudo, e porque precisa existir nos dois idiomas.
+ */
+export const diferencas = {
+  '1-2': 'no 1 o motor é o dever e a correção; no 2 é o vínculo e a necessidade de ser querido.',
+  '1-3': 'os dois se controlam e são formais, mas o 1 é contido e sério, guiado pelo que é certo; o 3 é expansivo e animado, guiado pelo que os outros valorizam.',
+  '1-4': 'no 1 o que dói é ter feito errado; no 4, ter confirmado que vale menos que os outros.',
+  '1-5': 'os dois são controlados e perfeccionistas, mas o 1 é assertivo e direto, enquanto o 5 é tímido e inibido na expressão.',
+  '1-6': 'os dois levam o dever a sério; o 1 é mais assertivo e decide, o 6 trava na decisão e teme o erro.',
+  '1-7': 'no 1 o prazer só vem depois do dever; no 7 o prazer vem primeiro, e sem culpa.',
+  '1-8': 'no 1 a raiva é internalizada e vira correção e dever; no 8 ela é externalizada e vira impacto e limite.',
+  '1-9': 'no 1 há uma tensão ativa de corrigir o que está errado; no 9 há acomodação, que evita o conflito e apaga o próprio querer.',
+  '2-3': 'os dois cuidam da aparência e querem atenção, mas o 2 é mais solto, espontâneo e invasivo; o 3 é controlado e atento aos limites.',
+  '2-4': 'o 2 esconde a carência e se apresenta cheio; o 4 vive e mostra a falta.',
+  '2-5': 'o 2 se move na direção do vínculo; o 5 se retira dele.',
+  '2-6': 'no 2 o carinho busca um lugar especial; no 6, proteção e segurança.',
+  '2-7': 'os dois seduzem e gostam de prazer, mas o 2 é emocional de verdade, enquanto no 7 a simpatia convive com independência e um fundo de não envolvimento.',
+  '2-8': 'o 2 também pode ser impulsivo e arrogante, mas é emocional e sedutor; o 8 é ativo e vai direto ao poder.',
+  '2-9': 'os dois são generosos, mas o 2 é dramático, impaciente e romântico, e cobra pelo que dá; o 9 é discreto, paciente e prático, e se esquece de si sem cobrar.',
+  '3-4': 'o 3 controla a emoção e se identifica com a sua melhor versão; o 4 expressa a emoção e se identifica com a falta.',
+  '3-5': 'o 3 é eficiente, social e enfrenta; o 5 é pouco prático e evita o contato e o confronto.',
+  '3-6': 'a ansiedade do 3 gira em torno de se expor e ser deixado de lado; a do 6, em torno de errar e de não saber qual é o caminho.',
+  '3-7': 'o 3 se disciplina para conquistar; o 7 evita o esforço e busca o prazer, com pouca preocupação com convenção.',
+  '3-8': 'o 3 é controlado e se adapta ao que se espera; o 8 é impulsivo e rebelde.',
+  '3-9': 'os dois podem trabalhar muito e viver na superfície, mas o 3 é energético e dirigido pelo olhar dos outros, e o 9 é relaxado e dirigido pelo costume.',
+  '4-5': 'os dois se sentem por baixo, mas o 4 se agarra à relação e chora, e o 5 desiste e seca.',
+  '4-6': 'o 4 é emocional e expressivo; o 6 é mental e inibido.',
+  '4-7': 'o 4 pende para a tristeza e a culpa; o 7, para a euforia e o "está tudo bem". O 4 mostra a raiva, o 7 é gentil por compulsão.',
+  '4-8': 'nos dois há intensidade, mas no 4 a raiva dura e vem junto com uma proibição interna do próprio desejo; no 8 ela explode, passa, e o desejo vira ação. O 8 invade, o 4 cobra pelo sofrimento.',
+  '4-9': 'os dois podem deprimir, mas no 4 a depressão reclama e pede atenção, e no 9 ela é resignada e sem drama.',
+  '5-6': 'os dois desconfiam, mas o 5 se afasta e o 6 se apega a quem protege e leva a autoridade mais em conta.',
+  '5-7': 'o 5 reduz o próprio desejo; o 7 multiplica.',
+  '5-8': 'o 5 se retira do embate; o 8 avança.',
+  '5-9': 'nos dois há resignação e auto-esquecimento, mas no 5 é retirada e pouca disponibilidade, e no 9 é participação e generosidade.',
+  '6-7': 'o 6 sente culpa e enxerga hierarquia; o 7 quase não sente culpa, trata todos como iguais e é mais charmoso e adaptável.',
+  '6-8': 'o 6 duvida e tem medo, mesmo quando parte para cima; o 8 é assertivo sem dúvida, mais impulsivo e menos disciplinado.',
+  '6-9': 'o 6 é introvertido, mental e orientado à hierarquia; o 9 é voltado para fora, sensório-motor, e recusa a hierarquia.',
+  '7-8': 'o 7 é mente e charme, e cede mais; o 8 é ação e domínio.',
+  '7-9': 'no 7 a vida de fantasia é intensa, com astúcia e autoindulgência; no 9 há pouca vida interior, ingenuidade e facilidade em adiar o próprio desejo.',
+  '8-9': 'no 8 a raiva explode e se impõe; no 9 ela é anestesiada e a vontade se dissolve para manter a paz.',
+};
+
+export const semPar = 'observe qual paixão/fixação ressoa mais com sua experiência interna.';
+
+export const porPaixao = (a, ta, b, tb) =>
+  `no ${a} a paixão é ${ta.paixao.toLowerCase()}, e a fixação, ${ta.fixacao.toLowerCase()}. ` +
+  `No ${b} a paixão é ${tb.paixao.toLowerCase()}, e a fixação, ${tb.fixacao.toLowerCase()}. ` +
+  'Observe qual das duas descreve melhor o que acontece por dentro, e não só o comportamento.';

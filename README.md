@@ -45,10 +45,13 @@ Oito regras governam o banco inteiro. Quatro delas são verificadas por teste au
    (o 6 contrafóbico, o 4 tenaz da autopreservação, o 3 antivaidoso, o 7 antissete social).
 5. **Ninguém é obrigado a mentir.** Toda pergunta oferece "Nenhuma dessas se parece comigo".
    Ela não pontua, não conta como exposição do tipo, e entra no índice de confiabilidade.
-6. **A cena tem que caber na vida de qualquer pessoa.** Nada de chefe, reunião ou entrega de
-   trabalho como cenário: quem estuda, é autônomo, está sem emprego ou aposentado responderia
-   no escuro, e mesmo quem trabalha dependeria de como é aquele trabalho. Quando a pergunta é
-   sobre autoridade, ela vale para qualquer uma ("um professor, um chefe, um coordenador").
+6. **A cena tem que caber na vida de qualquer pessoa, e tem que ser uma cena.** Nada de chefe,
+   reunião ou entrega de trabalho como cenário: quem estuda, é autônomo, está sem emprego ou
+   aposentado responderia no escuro. E nada de categoria no lugar de situação: "uma regra sem
+   sentido está atrapalhando" ou "alguém passa a ter autoridade sobre você" dependem de QUAL
+   regra e de QUE autoridade, então cada pessoa responde a pergunta que imaginou. No lugar
+   delas entraram um balcão que recusa o atendimento por um documento fora da lista e o
+   primeiro dia de um curso em que a participação vai ser avaliada.
 7. **Os estereótipos não podem ser a única porta.** Cada tipo tem contratipos, e quem é
    contratipo não se reconhece na descrição de manual. As alternativas do 5 não podem todas
    supor o recluso ("fico no meu canto"): precisam dizer a avareza, que também aparece em
@@ -60,6 +63,26 @@ Oito regras governam o banco inteiro. Quatro delas são verificadas por teste au
    "cuja motivação básica é o trabalho ou uma causa"). As alternativas sexuais descrevem essa
    qualidade (intensidade, tudo ou nada, fundir-se), e as de autopreservação e social também
    descrevem a motivação, não só "a casa" e "o grupo".
+
+## Dois idiomas no mesmo item
+
+O teste abre em português e tem um botão pequeno no canto da barra de título que
+troca para inglês. A tradução não vive num arquivo separado: cada item do banco
+carrega os dois textos (`cenario` e `cenario_en`, `texto` e `texto_en`), gerados a
+partir de `ferramentas/banco_en_*.py`. Três consequências que importam:
+
+- **trocar de idioma no meio do teste não perde resposta nenhuma**, porque o item é
+  o mesmo objeto e só o texto exibido muda;
+- **a assinatura do banco ignora a tradução** (ela só olha os textos em português),
+  então acrescentar ou corrigir uma tradução não invalida os arquivos de resposta
+  já coletados. Isso é verificado por teste;
+- **não existe teste meio traduzido**: o gerador confere item a item, e um teste
+  falha se qualquer cenário ou alternativa ficar sem `_en`.
+
+O conteúdo do relatório (descrições de tipo e subtipo, os 36 pares de diferenças)
+fica em `src/data/results.js` e `results.en.js`, e os rótulos da interface em
+`src/i18n/textos.jsx`. As notas que o motor escreve carregam um código, para o
+relatório poder redigi-las no idioma da tela.
 
 ## O banco não pode favorecer nenhum tipo
 

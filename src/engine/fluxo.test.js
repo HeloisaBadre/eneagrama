@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import banco from '../data/questions.json';
+import { assinaturaBanco } from './exportar.js';
 import {
   calcularContexto,
   pontuarPorTaxa,
@@ -522,5 +523,38 @@ describe('candidatos da confirmacao', () => {
   it('confirma so o vencedor quando nenhum outro tipo foi escolhido', () => {
     const prov = { top: { categoria: 5, score: 1 }, segundo: null, ranking: [{ categoria: 5, score: 1 }] };
     expect(candidatosParaConfirmar(prov)).toEqual([5]);
+  });
+});
+
+describe('traducao do banco', () => {
+  const todos = Object.entries(banco)
+    .filter(([k]) => k !== '_meta')
+    .flatMap(([, v]) => (Array.isArray(v) ? v : Object.values(v).flat()));
+
+  it('todo item tem o cenario nos dois idiomas', () => {
+    const sem = todos.filter((i) => !i.cenario_en).map((i) => i.id);
+    expect(sem).toEqual([]);
+  });
+
+  it('toda alternativa tem o texto nos dois idiomas', () => {
+    const sem = [];
+    for (const it of todos) {
+      for (const a of it.alternativas) if (!a.texto_en) sem.push(`${it.id}.${a.id}`);
+    }
+    expect(sem).toEqual([]);
+  });
+
+  it('a assinatura do banco ignora a traducao', () => {
+    // Se a assinatura mudasse com o ingles, os arquivos de resposta ja coletados
+    // deixariam de bater com o banco que os gerou.
+    const copia = JSON.parse(JSON.stringify(banco));
+    for (const [k, v] of Object.entries(copia)) {
+      if (k === '_meta') continue;
+      for (const it of Array.isArray(v) ? v : Object.values(v).flat()) {
+        delete it.cenario_en;
+        for (const a of it.alternativas) delete a.texto_en;
+      }
+    }
+    expect(assinaturaBanco(copia)).toBe(assinaturaBanco(banco));
   });
 });
